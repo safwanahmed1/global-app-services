@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent">
+	<ScrollView android:layout_height="wrap_content"
+		android:layout_width="fill_parent" android:id="@+id/scrollView1">
+		<LinearLayout android:id="@+id/linearLayout1"
+			android:orientation="vertical" android:layout_width="fill_parent"
+			android:layout_height="fill_parent">
+			<LinearLayout android:id="@+id/linearLayout2"
+				android:orientation="horizontal" android:layout_height="wrap_content"
+				android:layout_width="fill_parent">
+				<TextView android:text="Player" android:textSize="20dp"
+					android:width="100dp" android:id="@+id/textView1"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+				<EditText android:width="210dp" android:id="@+id/editPlayer"
+					android:layout_width="wrap_content" android:layout_height="wrap_content" android:singleLine="true"></EditText>
+
+			</LinearLayout>
+			<LinearLayout android:id="@+id/linearLayout3"
+				android:orientation="horizontal" android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+				<TextView android:text="Level" android:textSize="20dp"
+					android:width="100dp" android:id="@+id/textView1"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+				<EditText android:width="210dp" android:id="@+id/editLevel"
+					android:layout_width="wrap_content" android:layout_height="wrap_content" android:singleLine="true"></EditText>
+			</LinearLayout>
+			<LinearLayout android:id="@+id/linearLayout3"
+				android:orientation="horizontal" android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+				<TextView android:text="Highscore" android:textSize="20dp"
+					android:width="100dp" android:id="@+id/textView1"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+				<EditText android:width="210dp" android:id="@+id/editScore"
+					android:layout_width="wrap_content" android:layout_height="wrap_content" android:singleLine="true"></EditText>
+			</LinearLayout>
+			<LinearLayout android:id="@+id/linearLayout3"
+				android:orientation="horizontal" android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+				<TextView android:text="During" android:textSize="20dp"
+					android:width="100dp" android:id="@+id/textView1"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+				<EditText android:width="210dp" android:id="@+id/editDuring"
+					android:layout_width="wrap_content" android:layout_height="wrap_content" android:singleLine="true"></EditText>
+			</LinearLayout>
+			<LinearLayout android:id="@+id/linearLayout3"
+				android:orientation="horizontal" android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+				<TextView android:text="Date" android:textSize="20dp"
+					android:width="100dp" android:id="@+id/textView1"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+				<EditText android:width="210dp" android:id="@+id/editDate"
+					android:layout_width="wrap_content" android:layout_height="wrap_content" android:singleLine="true"></EditText>
+			</LinearLayout>
+			<LinearLayout android:id="@+id/linearLayout3"
+				android:orientation="horizontal" android:layout_width="fill_parent"
+				android:layout_height="wrap_content">
+				<TextView android:text="Location" android:textSize="20dp"
+					android:width="100dp" android:id="@+id/textView1"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+				<EditText android:width="210dp" android:id="@+id/editLocation"
+					android:layout_width="wrap_content" android:layout_height="wrap_content" android:singleLine="true"></EditText>
+			</LinearLayout>
+
+			<TextView android:text="Comment" android:textSize="20dp"
+				android:width="100dp" android:id="@+id/textView1"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+			<EditText android:width="310dp" android:id="@+id/editComment"
+				android:layout_width="fill_parent" android:layout_height="wrap_content" ></EditText>
+
+			<LinearLayout android:id="@+id/linearLayout3"
+				android:orientation="horizontal" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:gravity="center_horizontal">
+				<Button android:layout_height="wrap_content"
+					android:layout_width="100dp" android:text="Button" android:id="@+id/btnSubmit"></Button>
+			</LinearLayout>
+
+
+
+		</LinearLayout>
+	</ScrollView>
+
+
+</LinearLayout>
