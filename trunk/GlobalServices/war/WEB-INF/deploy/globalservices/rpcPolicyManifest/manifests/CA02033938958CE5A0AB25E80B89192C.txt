@@ -1,0 +1,2 @@
+serviceClass: global.services.client.rpc.AdvertisementService
+path: B6674F4D67D691B35F4FAA21A1A417EE.gwt.rpc

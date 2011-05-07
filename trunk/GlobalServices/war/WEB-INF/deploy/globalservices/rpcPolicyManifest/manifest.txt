@@ -1,0 +1,6 @@
+# Module globalservices
+# RPC service class, partial path of RPC policy file
+global.services.client.rpc.NotificationService, DC6F3FCAD61194F67AD2D27B41C858B8.gwt.rpc
+global.services.client.rpc.AppScoreService, DD46A83D4074F2C8AA565C43DD54CC95.gwt.rpc
+global.services.client.rpc.AdvertisementService, B6674F4D67D691B35F4FAA21A1A417EE.gwt.rpc
+global.services.client.rpc.LoginService, 7E95AC2A9169AAB4FC2BE80DD62D7A75.gwt.rpc
