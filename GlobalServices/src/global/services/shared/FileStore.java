@@ -11,7 +11,7 @@ import javax.jdo.annotations.PrimaryKey;
 import com.google.gwt.view.client.ProvidesKey;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class File implements Serializable  {
+public class FileStore implements Serializable  {
 	/**
 	 * 
 	 */
@@ -34,15 +34,15 @@ public class File implements Serializable  {
 	/**
      * The key provider that provides the unique ID of a contact.
      */
-    public static final ProvidesKey<File> KEY_PROVIDER = new ProvidesKey<File>() {
-      public Object getKey(File app) {
+    public static final ProvidesKey<FileStore> KEY_PROVIDER = new ProvidesKey<FileStore>() {
+      public Object getKey(FileStore app) {
         return app == null ? null : app.getId();
       }
     };
     
     
-	public File() {}
-	public File(String appID) {
+	public FileStore() {}
+	public FileStore(String appID) {
 		fileName_ = appID;
 	}
 	

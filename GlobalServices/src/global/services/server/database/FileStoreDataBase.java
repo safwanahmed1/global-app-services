@@ -2,6 +2,7 @@ package global.services.server.database;
 
 import global.services.server.PMF;
 import global.services.shared.AppScore;
+import global.services.shared.FileStore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,16 +10,18 @@ import java.util.List;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
+import com.google.appengine.repackaged.com.google.common.io.Files;
+
 public class FileStoreDataBase {
-	private AppScore application_;
+	private FileStore file_;
 	private PersistenceManager pm_;
 
 	public FileStoreDataBase() {
 		pm_ = PMF.get().getPersistenceManager();
 	}
 
-	public FileStoreDataBase(AppScore app) {
-		application_ = app;
+	public FileStoreDataBase(FileStore file) {
+		file_ = file;
 		pm_ = PMF.get().getPersistenceManager();
 	}
 
@@ -26,23 +29,23 @@ public class FileStoreDataBase {
 		pm_.close();
 	}
 
-	public Long DeleteApp(String userId, String appId) {
+	public Long DeleteFile(String userId, String fileId) {
 		// TODO Auto-generated method stub
 		Long ret = null;
 		Query query = pm_.newQuery(AppScore.class);
 		if ((userId != null) && !userId.isEmpty())
 			query.setFilter("userId_ == \"" + userId + "\"");
-		if ((appId != null) && !appId.isEmpty())
-			query.setFilter("appId_ == \"" + appId + "\"");
+		if ((fileId != null) && !fileId.isEmpty())
+			query.setFilter("fileId_ == \"" + fileId + "\"");
 		ret = query.deletePersistentAll();
 		return ret;
 
 	}
 
-	public Long DeleteApps(String userId) {
+	public Long DeleteFiles(String userId) {
 		// TODO Auto-generated method stub
 		Long ret = null;
-		Query query = pm_.newQuery(AppScore.class);
+		Query query = pm_.newQuery(FileStore.class);
 		if ((userId != null) && !userId.isEmpty())
 			query.setFilter("userId_ == \"" + userId + "\"");
 		ret = query.deletePersistentAll();
@@ -50,54 +53,54 @@ public class FileStoreDataBase {
 
 	}
 
-	public Long InsertApp(AppScore app) {
+	public Long InsertFile(FileStore file) {
 		// TODO Auto-generated method stub
 		Long ret = null;
 
-		ret = pm_.makePersistent(app).getId();
+		ret = pm_.makePersistent(file).getId();
 		return ret;
 	}
 
-	public Long UpdateApp(AppScore app) {
+	public Long UpdateApp(FileStore file) {
 		// TODO Auto-generated method stub
 		Long ret = null;
 		return ret;
 	}
 
-	public AppScore SelectApp(String userId, String appId) {
+	public FileStore SelectFile(String userId, String fileId) {
 		// TODO Auto-generated method stub
-		String strQuery = "select from " + AppScore.class.getName();
+		String strQuery = "select from " + FileStore.class.getName();
 		// + HighScore.class.getName() ;
 		Query query = pm_.newQuery(strQuery);
 		// query.setOrdering("highScore desc, during asc");
 		if ((userId != null) && !userId.isEmpty())
 			query.setFilter("userId_ == \"" + userId + "\"");
-		if ((appId != null) && !appId.isEmpty())
-			query.setFilter("appId_ == \"" + appId + "\"");
+		if ((fileId != null) && !fileId.isEmpty())
+			query.setFilter("fileId_ == \"" + fileId + "\"");
 
-		List<AppScore> appscores = (List<AppScore>) query.execute();
+		List<FileStore> filescores = (List<FileStore>) query.execute();
 
-		return appscores.get(0);
+		return filescores.get(0);
 	}
 
-	public List<AppScore> SelectApps(String userId) {
+	public List<FileStore> SelectFiles(String userId) {
 		// TODO Auto-generated method stub
-		String strQuery = "select from " + AppScore.class.getName();
+		String strQuery = "select from " + FileStore.class.getName();
 		// + HighScore.class.getName() ;
 		Query query = pm_.newQuery(strQuery);
 		// query.setOrdering("highScore desc, during asc");
 		if (userId != null)
 			query.setFilter("userId_ == \"" + userId + "\"");
-		List<AppScore> retApps = new ArrayList<AppScore>();
-		List<AppScore> selectedApps = (List<AppScore>) query.execute();
-		for (AppScore app : selectedApps) {
-			retApps.add(app);
+		List<FileStore> retFiles = new ArrayList<FileStore>();
+		List<FileStore> selectedFiles = (List<FileStore>) query.execute();
+		for (FileStore file : selectedFiles) {
+			retFiles.add(file);
 		}
 		/*
 		 * AppScore oneApp = new AppScore("AppTest"); oneApp.setId((long) 0);
 		 * oneApp.setAppTittle("Tittle for one app"); appscores.add(oneApp);
 		 */
-		return retApps;
+		return retFiles;
 	}
 
 }
