@@ -25,7 +25,28 @@
 		<servlet-name>AppScoreServiceImpl</servlet-name>
 		<url-pattern>/globalservices/appScores</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>AdvertisementServiceImpl</servlet-name>
+		<servlet-class>global.services.server.rpc.AdvertisementServiceImpl</servlet-class>
+	</servlet>
 
+	<servlet-mapping>
+		<servlet-name>AdvertisementServiceImpl</servlet-name>
+		<url-pattern>/globalservices/advertisement</url-pattern>
+	</servlet-mapping>
+	
+	
+	<servlet>
+		<servlet-name>AppScoreServiceImpl</servlet-name>
+		<servlet-class>global.services.server.rpc.AppScoreServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>AppScoreServiceImpl</servlet-name>
+		<url-pattern>/globalservices/appScores</url-pattern>
+	</servlet-mapping>
+	
 
 	<servlet>
 		<servlet-name>SubmitScore</servlet-name>
