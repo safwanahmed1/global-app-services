@@ -8,7 +8,7 @@ import java.util.List;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
-@RemoteServiceRelativePath("appScores")
+@RemoteServiceRelativePath("advertisement")
 public interface AdvertisementService extends RemoteService {
 
 	public Long InsertAdv(Advertisement adv);
