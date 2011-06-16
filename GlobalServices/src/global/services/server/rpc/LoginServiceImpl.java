@@ -12,10 +12,11 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class LoginServiceImpl extends RemoteServiceServlet implements
 		LoginService {
 
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -7488613358277639303L;
+	private static final long serialVersionUID = 1L;
 
 	public LoginInfo login(String requestUri) {
 		UserService userService = UserServiceFactory.getUserService();

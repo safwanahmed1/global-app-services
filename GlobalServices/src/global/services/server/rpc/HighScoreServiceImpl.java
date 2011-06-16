@@ -12,6 +12,11 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class HighScoreServiceImpl extends RemoteServiceServlet implements
 		HighScoreService {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	public Long DeleteScore(String userId, Long id) {
 		// TODO Auto-generated method stub

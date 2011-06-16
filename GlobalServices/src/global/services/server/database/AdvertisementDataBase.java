@@ -5,6 +5,8 @@ import java.util.List;
 
 import global.services.server.PMF;
 import global.services.shared.Advertisement;
+import global.services.shared.AppScore;
+
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
@@ -62,14 +64,17 @@ public class AdvertisementDataBase {
 		return retAdv.get(0);
 
 	}
-
+	@SuppressWarnings("unchecked")
 	public List<Advertisement> SelectAdvs(String userId) {
 		String strQuery = "select from " + Advertisement.class.getName();
 		Query query = pm_.newQuery(strQuery);
 		if ((userId != null) && !userId.isEmpty())
 			query.setFilter("userId_ == \"" + userId + "\"");
-		List<Advertisement> retAdvs = (List<Advertisement>) query.execute();
-		
+		List<Advertisement> retAdvs = new ArrayList<Advertisement>();
+		List<Advertisement> selectedAdvs = (List<Advertisement>) query.execute();
+		for (Advertisement adv : selectedAdvs) {
+			retAdvs.add(adv);
+		}
 		return retAdvs;
 	}
 

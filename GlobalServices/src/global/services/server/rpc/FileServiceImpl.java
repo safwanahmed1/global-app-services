@@ -14,7 +14,7 @@ FileService {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 8196471416318393392L;
+	private static final long serialVersionUID = 1L;
 
 	@Override
 	public Long DeleteFile(String userId, String fileId) {

@@ -79,7 +79,7 @@ public class AppScoreDataBase {
 
 		return appscores.get(0);
 	}
-
+	@SuppressWarnings("unchecked")
 	public List<AppScore> SelectApps(String userId) {
 		// TODO Auto-generated method stub
 		String strQuery = "select from " + AppScore.class.getName();

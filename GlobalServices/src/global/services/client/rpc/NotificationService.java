@@ -8,7 +8,7 @@ import java.util.List;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
-@RemoteServiceRelativePath("appScores")
+@RemoteServiceRelativePath("notifications")
 public interface NotificationService extends RemoteService {
 
 	public Long InsertNote(Notification note);
