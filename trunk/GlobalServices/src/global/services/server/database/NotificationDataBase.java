@@ -2,6 +2,8 @@ package global.services.server.database;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import global.services.server.PMF;
 import global.services.shared.AppScore;
@@ -11,7 +13,7 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
 public class NotificationDataBase {
-
+	private static final Logger LOG = Logger.getLogger(AdvertisementDataBase.class.getName());
 	private Notification notification_;
 	private PersistenceManager pm_;
 
@@ -76,6 +78,7 @@ public class NotificationDataBase {
 		for (Notification note : selectedNotes) {
 			retNotes.add(note);
 		}
+		LOG.log(Level.INFO, String.valueOf(retNotes.size()));
 		return retNotes;
 	}
 

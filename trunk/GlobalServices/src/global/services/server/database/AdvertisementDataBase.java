@@ -1,16 +1,16 @@
 package global.services.server.database;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
 import global.services.server.PMF;
 import global.services.shared.Advertisement;
-import global.services.shared.AppScore;
-
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
 public class AdvertisementDataBase {
+	private static final Logger LOG = Logger.getLogger(AdvertisementDataBase.class.getName());
 	private Advertisement advertisement_;
 	private PersistenceManager pm_;
 
@@ -75,6 +75,7 @@ public class AdvertisementDataBase {
 		for (Advertisement adv : selectedAdvs) {
 			retAdvs.add(adv);
 		}
+		LOG.log(Level.INFO, String.valueOf(retAdvs.size()));
 		return retAdvs;
 	}
 

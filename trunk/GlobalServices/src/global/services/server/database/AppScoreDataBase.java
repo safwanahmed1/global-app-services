@@ -5,11 +5,14 @@ import global.services.shared.AppScore;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
 public class AppScoreDataBase {
+	private static final Logger LOG = Logger.getLogger(AdvertisementDataBase.class.getName());
 	private AppScore application_;
 	private PersistenceManager pm_;
 
@@ -97,6 +100,7 @@ public class AppScoreDataBase {
 		 * AppScore oneApp = new AppScore("AppTest"); oneApp.setId((long) 0);
 		 * oneApp.setAppTittle("Tittle for one app"); appscores.add(oneApp);
 		 */
+		LOG.log(Level.INFO, String.valueOf(retApps.size()));
 		return retApps;
 	}
 

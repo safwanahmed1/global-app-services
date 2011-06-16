@@ -1,4 +1,4 @@
 <!-- Indices written at Wed, 4 May 2011 14:59:19 UTC -->
 
-<datastore-indexes/>
+<datastore-indexes xmlns="http://appengine.google.com/ns/datastore-indexes/1.0" autoGenerate="false"/>
 
