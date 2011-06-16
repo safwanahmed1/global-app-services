@@ -287,7 +287,7 @@ public class GlobalServices implements EntryPoint {
 		AsyncCallback<List<AppScore>> callback = new AsyncCallback<List<AppScore>>() {
 			public void onFailure(Throwable caught) {
 				// TODO: Do something with errors.
-				Window.alert("Fail roi");
+				Window.alert(caught.getMessage());
 			}
 
 			public void onSuccess(List<AppScore> result) {
@@ -452,7 +452,7 @@ public class GlobalServices implements EntryPoint {
 		AsyncCallback<List<Advertisement>> callback = new AsyncCallback<List<Advertisement>>() {
 			public void onFailure(Throwable caught) {
 				// TODO: Do something with errors.
-				Window.alert("Fail roi");
+				Window.alert(caught.getMessage());
 			}
 
 			public void onSuccess(List<Advertisement> result) {
@@ -615,7 +615,7 @@ public class GlobalServices implements EntryPoint {
 			AsyncCallback<List<Notification>> callback = new AsyncCallback<List<Notification>>() {
 				public void onFailure(Throwable caught) {
 					// TODO: Do something with errors.
-					Window.alert("Fail roi");
+					Window.alert(caught.getMessage());
 				}
 
 				public void onSuccess(List<Notification> result) {
