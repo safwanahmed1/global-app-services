@@ -3,15 +3,18 @@ package global.services.server.rpc;
 import java.util.List;
 
 import global.services.client.rpc.NotificationService;
-import global.services.server.database.AdvertisementDataBase;
 import global.services.server.database.NotificationDataBase;
-import global.services.shared.AppScore;
 import global.services.shared.Notification;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 public class NotificationServiceImpl extends RemoteServiceServlet implements
 NotificationService {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Override
 	public Long DeleteNote(String userId, String appId) {

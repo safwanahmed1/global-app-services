@@ -33,20 +33,30 @@
 
 	<servlet-mapping>
 		<servlet-name>AdvertisementServiceImpl</servlet-name>
-		<url-pattern>/globalservices/advertisement</url-pattern>
+		<url-pattern>/globalservices/advertisements</url-pattern>
 	</servlet-mapping>
 	
 	
 	<servlet>
-		<servlet-name>AppScoreServiceImpl</servlet-name>
-		<servlet-class>global.services.server.rpc.AppScoreServiceImpl</servlet-class>
+		<servlet-name>NotificationServiceImpl</servlet-name>
+		<servlet-class>global.services.server.rpc.NotificationServiceImpl</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>AppScoreServiceImpl</servlet-name>
-		<url-pattern>/globalservices/appScores</url-pattern>
+		<servlet-name>NotificationServiceImpl</servlet-name>
+		<url-pattern>/globalservices/notifications</url-pattern>
 	</servlet-mapping>
-	
+
+	<servlet>
+		<servlet-name>FileServiceImpl</servlet-name>
+		<servlet-class>global.services.server.rpc.FileServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>FileServiceImpl</servlet-name>
+		<url-pattern>/globalservices/files</url-pattern>
+	</servlet-mapping>
+		
 
 	<servlet>
 		<servlet-name>SubmitScore</servlet-name>

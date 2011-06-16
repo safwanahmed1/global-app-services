@@ -1,8 +1,10 @@
 package global.services.server.database;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import global.services.server.PMF;
+import global.services.shared.AppScore;
 import global.services.shared.Notification;
 
 import javax.jdo.PersistenceManager;
@@ -51,7 +53,7 @@ public class NotificationDataBase {
 		return query.deletePersistentAll();
 
 	}
-
+	@SuppressWarnings("unchecked")
 	public Notification SelectNote(String userId, String appId) {
 		String strQuery = "select from " + Notification.class.getName();
 		Query query = pm_.newQuery(strQuery);
@@ -63,15 +65,18 @@ public class NotificationDataBase {
 		return retAdvs.get(0);
 
 	}
-
+	@SuppressWarnings("unchecked")
 	public List<Notification> SelectNotes(String userId) {
 		String strQuery = "select from " + Notification.class.getName();
 		Query query = pm_.newQuery(strQuery);
 		if ((userId != null) && !userId.isEmpty())
 			query.setFilter("userId_ == \"" + userId + "\"");
-		List<Notification> retAdvs = (List<Notification>) query.execute();
-
-		return retAdvs;
+		List<Notification> retNotes = new ArrayList<Notification>();
+		List<Notification> selectedNotes = (List<Notification>) query.execute();
+		for (Notification note : selectedNotes) {
+			retNotes.add(note);
+		}
+		return retNotes;
 	}
 
 }

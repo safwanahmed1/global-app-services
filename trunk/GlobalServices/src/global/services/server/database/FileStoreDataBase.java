@@ -61,7 +61,7 @@ public class FileStoreDataBase {
 		return ret;
 	}
 
-	public Long UpdateApp(FileStore file) {
+	public Long UpdateFile(FileStore file) {
 		// TODO Auto-generated method stub
 		Long ret = null;
 		return ret;
@@ -82,7 +82,7 @@ public class FileStoreDataBase {
 
 		return filescores.get(0);
 	}
-
+	@SuppressWarnings("unchecked")
 	public List<FileStore> SelectFiles(String userId) {
 		// TODO Auto-generated method stub
 		String strQuery = "select from " + FileStore.class.getName();

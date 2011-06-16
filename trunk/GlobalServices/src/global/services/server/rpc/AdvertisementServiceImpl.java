@@ -4,14 +4,16 @@ import java.util.List;
 
 import global.services.client.rpc.AdvertisementService;
 import global.services.server.database.AdvertisementDataBase;
-import global.services.server.database.AppScoreDataBase;
 import global.services.shared.Advertisement;
-import global.services.shared.AppScore;
-
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 public class AdvertisementServiceImpl extends RemoteServiceServlet implements
 AdvertisementService {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Override
 	public Long DeleteAdv(String userId, String appId) {
