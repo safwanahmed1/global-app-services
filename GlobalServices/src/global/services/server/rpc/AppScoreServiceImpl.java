@@ -1,11 +1,13 @@
 package global.services.server.rpc;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import global.services.client.rpc.AppScoreService;
 import global.services.server.database.AppScoreDataBase;
 import global.services.shared.AppScore;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 public class AppScoreServiceImpl extends RemoteServiceServlet implements
@@ -69,7 +71,13 @@ public class AppScoreServiceImpl extends RemoteServiceServlet implements
 	public List<AppScore> SelectApps(String userId) {
 		// TODO Auto-generated method stub
 		AppScoreDataBase appDB = new AppScoreDataBase();
-		return appDB.SelectApps(userId);
+		List<AppScore> selectedApps = appDB.SelectApps(userId);
+		List<AppScore> retApps = new ArrayList<AppScore>();
+		for (AppScore app : selectedApps) {
+			retApps.add(app);
+		}
+		Window.alert("selectedApps size in Service implement: " + selectedApps.size());
+		return retApps;
 	}
 
 }

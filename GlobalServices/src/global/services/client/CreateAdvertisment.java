@@ -8,7 +8,6 @@ import global.services.shared.LoginInfo;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -89,11 +88,9 @@ public class CreateAdvertisment {
 						AsyncCallback<Long> callback = new AsyncCallback<Long>() {
 							public void onFailure(Throwable caught) {
 								// TODO: Do something with errors.
-								Window.alert("Fail roi");
 							}
 
 							public void onSuccess(Long result) {
-								Window.alert("Id: " + result);
 							}
 						};
 						advSvc = GWT.create(AdvertisementService.class);

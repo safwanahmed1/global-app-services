@@ -11,6 +11,8 @@ import java.util.logging.Logger;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
+import com.google.gwt.user.client.Window;
+
 public class AppScoreDataBase {
 	private static final Logger LOG = Logger.getLogger(AdvertisementDataBase.class.getName());
 	private AppScore application_;
@@ -96,11 +98,7 @@ public class AppScoreDataBase {
 		for (AppScore app : selectedApps) {
 			retApps.add(app);
 		}
-		/*
-		 * AppScore oneApp = new AppScore("AppTest"); oneApp.setId((long) 0);
-		 * oneApp.setAppTittle("Tittle for one app"); appscores.add(oneApp);
-		 */
-		LOG.log(Level.INFO, String.valueOf(retApps.size()));
+		Window.alert("selectedApps size in database: " + selectedApps.size());
 		return retApps;
 	}
 
