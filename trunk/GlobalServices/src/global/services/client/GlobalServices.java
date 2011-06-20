@@ -259,7 +259,7 @@ public class GlobalServices implements EntryPoint {
 				return app.getAppTittle();
 			}
 		};
-		appIdColumn.setSortable(true);
+		appTittleColumn.setSortable(true);
 		gamesCellTable.addColumn(appTittleColumn, "Tittle");
 
 		// Create entries column.
@@ -269,7 +269,7 @@ public class GlobalServices implements EntryPoint {
 				return String.valueOf(app.getScoreEntries());
 			}
 		};
-		appIdColumn.setSortable(true);
+		entriesColumn.setSortable(true);
 		gamesCellTable.addColumn(entriesColumn, "Entries");
 
 		// Create a data provider.
@@ -287,11 +287,10 @@ public class GlobalServices implements EntryPoint {
 		AsyncCallback<List<AppScore>> callback = new AsyncCallback<List<AppScore>>() {
 			public void onFailure(Throwable caught) {
 				// TODO: Do something with errors.
-				Window.alert(caught.getMessage());
 			}
 
 			public void onSuccess(List<AppScore> result) {
-				Window.alert("List count: " + result.size());
+				
 				listApp.clear();
 				listApp.addAll(result);
 			}
@@ -452,11 +451,10 @@ public class GlobalServices implements EntryPoint {
 		AsyncCallback<List<Advertisement>> callback = new AsyncCallback<List<Advertisement>>() {
 			public void onFailure(Throwable caught) {
 				// TODO: Do something with errors.
-				Window.alert(caught.getMessage());
 			}
 
 			public void onSuccess(List<Advertisement> result) {
-				Window.alert("List count: " + result.size());
+				
 				listAdvs.clear();
 				listAdvs.addAll(result);
 			}
@@ -615,11 +613,9 @@ public class GlobalServices implements EntryPoint {
 			AsyncCallback<List<Notification>> callback = new AsyncCallback<List<Notification>>() {
 				public void onFailure(Throwable caught) {
 					// TODO: Do something with errors.
-					Window.alert(caught.getMessage());
 				}
 
 				public void onSuccess(List<Notification> result) {
-					Window.alert("List count: " + result.size());
 					listNotes.clear();
 					listNotes.addAll(result);
 				}
