@@ -71,5 +71,18 @@ FileService {
 
 	}
 
+	@Override
+	public int DeleteFiles(String userId, List<String> listFileId) {
+		// TODO Auto-generated method stub
+		Long tmpRet = (long) 0;
+		int ret = 0;
+		for (String fileId : listFileId) {
+			tmpRet = DeleteFile(userId, fileId);
+			if (tmpRet != null) 
+				ret++;
+		}
+		return ret;
+	}
+
 
 }

@@ -76,8 +76,22 @@ public class AppScoreServiceImpl extends RemoteServiceServlet implements
 		for (AppScore app : selectedApps) {
 			retApps.add(app);
 		}
-		Window.alert("selectedApps size in Service implement: " + selectedApps.size());
+		//Window.alert("selectedApps size in Service implement: " + selectedApps.size());
 		return retApps;
+	}
+
+	@Override
+	public int DeleteApps(String userId, List<String> listAppId) {
+		// TODO Auto-generated method stub
+		Long tmpRet = (long) 0;
+		int ret = 0;
+		AppScoreDataBase appDB = new AppScoreDataBase();
+		for (String appId : listAppId) {
+			tmpRet = appDB.DeleteApp(userId, appId);
+			if (tmpRet != null) 
+				ret++;
+		}
+		return ret;
 	}
 
 }

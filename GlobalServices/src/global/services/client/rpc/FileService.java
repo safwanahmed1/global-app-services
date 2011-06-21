@@ -13,6 +13,7 @@ public interface FileService extends RemoteService {
 	public Long InsertFile(FileStore file);
 	public Long UpdateFile(FileStore file);
 	public Long DeleteFile(String userId, String fileId);
+	public int DeleteFiles(String userId, List<String> listFileId);
 	public Long DeleteFiles(String userId);
 	public FileStore SelectFile(String userId, String appId);
 	public List<FileStore> SelectFiles(String userId);
