@@ -71,5 +71,18 @@ NotificationService {
 		return null;
 	}
 
+	@Override
+	public int DeleteNotes(String userId, List<String> listAppId) {
+		// TODO Auto-generated method stub
+		Long tmpRet = (long) 0;
+		int ret = 0;
+		for (String appId : listAppId) {
+			tmpRet = DeleteNote(userId, appId);
+			if (tmpRet != null) 
+				ret++;
+		}
+		return ret;
+	}
+
 
 }

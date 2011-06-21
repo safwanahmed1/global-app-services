@@ -21,7 +21,7 @@ AdvertisementService {
 		Long ret = null;
 		if (userId != null) {
 			AdvertisementDataBase advDB = new AdvertisementDataBase();
-			ret = advDB.DeleteAdv(userId, userId);
+			ret = advDB.DeleteAdv(userId, appId);
 		}
 			
 		return ret;
@@ -68,6 +68,19 @@ AdvertisementService {
 		// TODO Auto-generated method stub
 		return null;
 
+	}
+
+	@Override
+	public int DeleteAdvs(String userId, List<String> listAppId) {
+		// TODO Auto-generated method stub
+		Long tmpRet = (long) 0;
+		int ret = 0;
+		for (String appId : listAppId) {
+			tmpRet = DeleteAdv(userId, appId);
+			if (tmpRet != null) 
+				ret++;
+		}
+		return ret;
 	}
 
 

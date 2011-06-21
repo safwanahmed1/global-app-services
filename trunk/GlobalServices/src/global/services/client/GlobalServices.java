@@ -91,10 +91,11 @@ public class GlobalServices implements EntryPoint {
 	private List<AppScore> listApp;
 	private List<Advertisement> listAdvs;
 	private List<Notification> listNotes;
-	
+
 	private List<String> selectedApps = new ArrayList<String>();
 	private List<String> selectedAdvs = new ArrayList<String>();
 	private List<String> selectedNotes = new ArrayList<String>();
+
 	public void onModuleLoad() {
 
 		LoginServiceAsync loginService = GWT.create(LoginService.class);
@@ -194,20 +195,42 @@ public class GlobalServices implements EntryPoint {
 			@Override
 			public void onClick(ClickEvent event) {
 				// TODO Auto-generated method stub
-				Window.alert("Delete: userId: " + loginInfo.getEmailAddress()
-						+ ",appId: " + selectedApps.get(0));
-				AppScoreServiceAsync appScoreService = GWT
-						.create(AppScoreService.class);
-				appScoreService.DeleteApp(loginInfo.getEmailAddress(),
-						selectedApps.get(0), new AsyncCallback<Long>() {
-							public void onFailure(Throwable caught) {
-							}
+				if (selectedApps.size() == 0) {
+					Window.alert("You have to chose at least an application to delete.");
+				} else {
+					if (Window.confirm("Would you want to delete applications")) {
+						AppScoreServiceAsync appScoreService = GWT
+								.create(AppScoreService.class);
+						appScoreService.DeleteApps(loginInfo.getEmailAddress(),
+								selectedApps, new AsyncCallback<Integer>() {
+									public void onFailure(Throwable caught) {
+									}
 
-							public void onSuccess(Long result) {
-								// TODO Auto-generated method stub
+									public void onSuccess(Integer result) {
+										// TODO Auto-generated method stub
+										Window.alert(result
+												+ " Applications have been deleted successful.");
+										appScoreSvc.SelectApps(
+												loginInfo.getEmailAddress(),
+												new AsyncCallback<List<AppScore>>() {
+													public void onFailure(
+															Throwable caught) {
+														// TODO: Do something
+														// with
+														// errors.
+													}
 
-							}
-						});
+													public void onSuccess(
+															List<AppScore> result) {
+
+														listApp.clear();
+														listApp.addAll(result);
+													}
+												});
+									}
+								});
+					}
+				}
 
 			}
 		}));
@@ -216,7 +239,7 @@ public class GlobalServices implements EntryPoint {
 
 		highScorePanel.add(tableGamesHeaderPanel);
 
-			final SelectionModel<AppScore> selectionModel = new MultiSelectionModel<AppScore>(
+		final SelectionModel<AppScore> selectionModel = new MultiSelectionModel<AppScore>(
 				AppScore.KEY_PROVIDER);
 		gamesCellTable
 				.setSelectionModel(selectionModel, DefaultSelectionEventManager
@@ -238,8 +261,8 @@ public class GlobalServices implements EntryPoint {
 				return selectionModel.isSelected(app);
 			}
 		};
-		gamesCellTable.addColumn(checkColumn, SafeHtmlUtils
-				.fromSafeConstant("<br/>"));
+		gamesCellTable.addColumn(checkColumn,
+				SafeHtmlUtils.fromSafeConstant("<br/>"));
 		gamesCellTable.setColumnWidth(checkColumn, 40, Unit.PX);
 
 		// Create appId column.
@@ -290,7 +313,7 @@ public class GlobalServices implements EntryPoint {
 			}
 
 			public void onSuccess(List<AppScore> result) {
-				
+
 				listApp.clear();
 				listApp.addAll(result);
 			}
@@ -312,7 +335,8 @@ public class GlobalServices implements EntryPoint {
 		tableAdvsHeaderPanel.add(new Label("‹ Prev 20 1-3 of 3 Next 20 ›"));
 		VerticalPanel tableAdvsFooterPanel = new VerticalPanel();
 		HorizontalPanel tableAdvsInfoPanel = new HorizontalPanel();
-		tableAdvsInfoPanel.add(new Label("You have 7 advertisement remaining."));
+		tableAdvsInfoPanel
+				.add(new Label("You have 7 advertisement remaining."));
 		tableAdvsInfoPanel.add(new Label("‹ Prev 20 1-3 of 3 Next 20 ›"));
 		HorizontalPanel tableAdvsCtrPanel = new HorizontalPanel();
 		tableAdvsCtrPanel.add(new Button("Create adv", new ClickHandler() {
@@ -334,20 +358,43 @@ public class GlobalServices implements EntryPoint {
 			@Override
 			public void onClick(ClickEvent event) {
 				// TODO Auto-generated method stub
-				
-				AppScoreServiceAsync appScoreService = GWT
-						.create(AppScoreService.class);
-				appScoreService.DeleteApp(loginInfo.getEmailAddress(),
-						selectedApps.get(0), new AsyncCallback<Long>() {
-							public void onFailure(Throwable caught) {
-							}
+				if (selectedAdvs.size() == 0) {
+					Window.alert("You have to chose at least an advertisement to delete.");
+				} else {
+					if (Window
+							.confirm("Would you want to delete advertisements")) {
+						AdvertisementServiceAsync advertisementService = GWT
+								.create(AdvertisementService.class);
+						advertisementService.DeleteAdvs(loginInfo.getEmailAddress(),
+								selectedAdvs, new AsyncCallback<Integer>() {
+									public void onFailure(Throwable caught) {
+									}
 
-							public void onSuccess(Long result) {
-								// TODO Auto-generated method stub
+									public void onSuccess(Integer result) {
+										// TODO Auto-generated method stub
+										Window.alert(result + " Advertisements have been deleted successful.");
+										advSvc.SelectAdvs(
+												loginInfo.getEmailAddress(),
+												new AsyncCallback<List<Advertisement>>() {
+													public void onFailure(
+															Throwable caught) {
+														// TODO: Do something
+														// with
+														// errors.
+													}
 
-							}
-						});
+													public void onSuccess(
+															List<Advertisement> result) {
 
+														listAdvs.clear();
+														listAdvs.addAll(result);
+													}
+												});
+
+									}
+								});
+					}
+				}
 			}
 		}));
 		tableAdvsFooterPanel.add(tableAdvsInfoPanel);
@@ -357,8 +404,8 @@ public class GlobalServices implements EntryPoint {
 
 		final SelectionModel<Advertisement> selectionModel = new MultiSelectionModel<Advertisement>(
 				Advertisement.KEY_PROVIDER);
-		advsCellTable
-				.setSelectionModel(selectionModel, DefaultSelectionEventManager
+		advsCellTable.setSelectionModel(selectionModel,
+				DefaultSelectionEventManager
 						.<Advertisement> createCheckboxManager());
 
 		Column<Advertisement, Boolean> checkColumn = new Column<Advertisement, Boolean>(
@@ -377,23 +424,20 @@ public class GlobalServices implements EntryPoint {
 				return selectionModel.isSelected(adv);
 			}
 		};
-		advsCellTable.addColumn(checkColumn, SafeHtmlUtils
-				.fromSafeConstant("<br/>"));
+		advsCellTable.addColumn(checkColumn,
+				SafeHtmlUtils.fromSafeConstant("<br/>"));
 		advsCellTable.setColumnWidth(checkColumn, 40, Unit.PX);
 		// Create icon column.
-		/* Tam thoi gem lai xem sao
-		Column<Advertisement, Image> iconColumn = new Column<Advertisement, Image> (null) {
-
-			@Override
-			public Image getValue(Advertisement adv) {
-				// TODO Auto-generated method stub
-				Image img = new Image(adv.getIconUrl());
-				return img;
-			}
-			
-		};
-		advsCellTable.addColumn(iconColumn);
-		*/
+		/*
+		 * Tam thoi gem lai xem sao Column<Advertisement, Image> iconColumn =
+		 * new Column<Advertisement, Image> (null) {
+		 * 
+		 * @Override public Image getValue(Advertisement adv) { // TODO
+		 * Auto-generated method stub Image img = new Image(adv.getIconUrl());
+		 * return img; }
+		 * 
+		 * }; advsCellTable.addColumn(iconColumn);
+		 */
 		// Create appId column.
 		TextColumn<Advertisement> appIdColumn = new TextColumn<Advertisement>() {
 			@Override
@@ -423,7 +467,7 @@ public class GlobalServices implements EntryPoint {
 		};
 		contentColumn.setSortable(true);
 		advsCellTable.addColumn(contentColumn, "Content");
-		
+
 		// Create Type column.
 		TextColumn<Advertisement> typeColumn = new TextColumn<Advertisement>() {
 			@Override
@@ -433,8 +477,6 @@ public class GlobalServices implements EntryPoint {
 		};
 		typeColumn.setSortable(true);
 		advsCellTable.addColumn(typeColumn, "Type");
-
-		
 
 		// Create a data provider.
 		ListDataProvider<Advertisement> dataProvider = new ListDataProvider<Advertisement>();
@@ -454,7 +496,7 @@ public class GlobalServices implements EntryPoint {
 			}
 
 			public void onSuccess(List<Advertisement> result) {
-				
+
 				listAdvs.clear();
 				listAdvs.addAll(result);
 			}
@@ -468,164 +510,184 @@ public class GlobalServices implements EntryPoint {
 	}
 
 	public void CreateNotificationPanel() {
-			VerticalPanel notesPanel = new VerticalPanel();
-			notesPanel.setStyleName("tabBackgroud");
+		VerticalPanel notesPanel = new VerticalPanel();
+		notesPanel.setStyleName("tabBackgroud");
 
-			HorizontalPanel tableNotesHeaderPanel = new HorizontalPanel();
+		HorizontalPanel tableNotesHeaderPanel = new HorizontalPanel();
 
-			tableNotesHeaderPanel.add(new Label("‹ Prev 20 1-3 of 3 Next 20 ›"));
-			VerticalPanel tableNotesFooterPanel = new VerticalPanel();
-			HorizontalPanel tableNotesInfoPanel = new HorizontalPanel();
-			tableNotesInfoPanel.add(new Label("You have 7 notification remaining."));
-			tableNotesInfoPanel.add(new Label("‹ Prev 20 1-3 of 3 Next 20 ›"));
-			HorizontalPanel tableNotesCtrPanel = new HorizontalPanel();
-			tableNotesCtrPanel.add(new Button("Create note", new ClickHandler() {
+		tableNotesHeaderPanel.add(new Label("‹ Prev 20 1-3 of 3 Next 20 ›"));
+		VerticalPanel tableNotesFooterPanel = new VerticalPanel();
+		HorizontalPanel tableNotesInfoPanel = new HorizontalPanel();
+		tableNotesInfoPanel
+				.add(new Label("You have 7 notification remaining."));
+		tableNotesInfoPanel.add(new Label("‹ Prev 20 1-3 of 3 Next 20 ›"));
+		HorizontalPanel tableNotesCtrPanel = new HorizontalPanel();
+		tableNotesCtrPanel.add(new Button("Create note", new ClickHandler() {
 
-				@Override
-				public void onClick(ClickEvent event) {
-					mainPanel.clear();
-					mainPanel.addNorth(headerPanel, 50);
-					mainPanel.addSouth(footerPanel, 50);
-					CreateNotification createNote = new CreateNotification();
-					createNote.setLoginInfo(loginInfo);
-					mainPanel.add(createNote.Initialize());
+			@Override
+			public void onClick(ClickEvent event) {
+				mainPanel.clear();
+				mainPanel.addNorth(headerPanel, 50);
+				mainPanel.addSouth(footerPanel, 50);
+				CreateNotification createNote = new CreateNotification();
+				createNote.setLoginInfo(loginInfo);
+				mainPanel.add(createNote.Initialize());
 
-				}
-			}));
+			}
+		}));
 
-			tableNotesCtrPanel.add(new Button("Delete notes", new ClickHandler() {
+		tableNotesCtrPanel.add(new Button("Delete notes", new ClickHandler() {
 
-				@Override
-				public void onClick(ClickEvent event) {
-					// TODO Auto-generated method stub
-					
-					NotificationServiceAsync noteService = GWT
-							.create(NotificationService.class);
-					noteService.DeleteNote(loginInfo.getEmailAddress(),
-							selectedNotes.get(0), new AsyncCallback<Long>() {
-								public void onFailure(Throwable caught) {
-								}
+			@Override
+			public void onClick(ClickEvent event) {
+				// TODO Auto-generated method stub
+				if (selectedNotes.size() == 0) {
+					Window.alert("You have to chose at least a notification to delete.");
+				} else {
+					if (Window
+							.confirm("Would you want to delete notifications")) {
+						NotificationServiceAsync noteService = GWT
+								.create(NotificationService.class);
+						noteService.DeleteNotes(loginInfo.getEmailAddress(),
+								selectedNotes, new AsyncCallback<Integer>() {
+									public void onFailure(Throwable caught) {
+									}
 
-								public void onSuccess(Long result) {
-									// TODO Auto-generated method stub
+									public void onSuccess(Integer result) {
+										// TODO Auto-generated method stub
+										Window.alert(result + " Notifications have been deleted successful.");
+										noteSvc.SelectNotes(
+												loginInfo.getEmailAddress(),
+												new AsyncCallback<List<Notification>>() {
+													public void onFailure(
+															Throwable caught) {
+														// TODO: Do something
+														// with
+														// errors.
+													}
 
-								}
-							});
-
-				}
-			}));
-			tableNotesFooterPanel.add(tableNotesInfoPanel);
-			tableNotesFooterPanel.add(tableNotesCtrPanel);
-
-			notesPanel.add(tableNotesHeaderPanel);
-
-			final SelectionModel<Notification> selectionModel = new MultiSelectionModel<Notification>(
-					Notification.KEY_PROVIDER);
-			notesCellTable
-					.setSelectionModel(selectionModel, DefaultSelectionEventManager
-							.<Notification> createCheckboxManager());
-
-			Column<Notification, Boolean> checkColumn = new Column<Notification, Boolean>(
-					new CheckboxCell(true, false)) {
-
-				@Override
-				public Boolean getValue(Notification note) {
-					// TODO Auto-generated method stub
-					if (selectionModel.isSelected(note)) {
-						if (!selectedNotes.contains(note.getAppId()))
-							selectedNotes.add(note.getAppId());
-					} else {
-						if (selectedNotes.contains(note.getAppId()))
-							selectedNotes.remove(note.getAppId());
+													public void onSuccess(
+															List<Notification> result) {
+														listNotes.clear();
+														listNotes
+																.addAll(result);
+													}
+												});
+									}
+								});
 					}
-					return selectionModel.isSelected(note);
 				}
-			};
-			notesCellTable.addColumn(checkColumn, SafeHtmlUtils
-					.fromSafeConstant("<br/>"));
-			notesCellTable.setColumnWidth(checkColumn, 40, Unit.PX);
-		
-			// Create appId column.
-			TextColumn<Notification> appIdColumn = new TextColumn<Notification>() {
-				@Override
-				public String getValue(Notification adv) {
-					return adv.getAppId();
+			}
+		}));
+		tableNotesFooterPanel.add(tableNotesInfoPanel);
+		tableNotesFooterPanel.add(tableNotesCtrPanel);
+
+		notesPanel.add(tableNotesHeaderPanel);
+
+		final SelectionModel<Notification> selectionModel = new MultiSelectionModel<Notification>(
+				Notification.KEY_PROVIDER);
+		notesCellTable.setSelectionModel(selectionModel,
+				DefaultSelectionEventManager
+						.<Notification> createCheckboxManager());
+
+		Column<Notification, Boolean> checkColumn = new Column<Notification, Boolean>(
+				new CheckboxCell(true, false)) {
+
+			@Override
+			public Boolean getValue(Notification note) {
+				// TODO Auto-generated method stub
+				if (selectionModel.isSelected(note)) {
+					if (!selectedNotes.contains(note.getAppId()))
+						selectedNotes.add(note.getAppId());
+				} else {
+					if (selectedNotes.contains(note.getAppId()))
+						selectedNotes.remove(note.getAppId());
 				}
-			};
-			appIdColumn.setSortable(true);
-			notesCellTable.addColumn(appIdColumn, "AppId");
+				return selectionModel.isSelected(note);
+			}
+		};
+		notesCellTable.addColumn(checkColumn,
+				SafeHtmlUtils.fromSafeConstant("<br/>"));
+		notesCellTable.setColumnWidth(checkColumn, 40, Unit.PX);
 
-			// Create appTittle column.
-			TextColumn<Notification> appTittleColumn = new TextColumn<Notification>() {
-				@Override
-				public String getValue(Notification note) {
-					return note.getTittle();
-				}
-			};
-			appTittleColumn.setSortable(true);
-			notesCellTable.addColumn(appTittleColumn, "Tittle");
+		// Create appId column.
+		TextColumn<Notification> appIdColumn = new TextColumn<Notification>() {
+			@Override
+			public String getValue(Notification adv) {
+				return adv.getAppId();
+			}
+		};
+		appIdColumn.setSortable(true);
+		notesCellTable.addColumn(appIdColumn, "AppId");
 
-			// Create Content column.
-			TextColumn<Notification> contentColumn = new TextColumn<Notification>() {
-				@Override
-				public String getValue(Notification adv) {
-					return String.valueOf(adv.getContent());
-				}
-			};
-			contentColumn.setSortable(true);
-			notesCellTable.addColumn(contentColumn, "Content");
-			
-			// Create from date column.
-			TextColumn<Notification> fromDateColumn = new TextColumn<Notification>() {
-				@Override
-				public String getValue(Notification note) {
-					return String.valueOf(note.getFromDate());
-				}
-			};
-			fromDateColumn.setSortable(true);
-			notesCellTable.addColumn(fromDateColumn, "From");
+		// Create appTittle column.
+		TextColumn<Notification> appTittleColumn = new TextColumn<Notification>() {
+			@Override
+			public String getValue(Notification note) {
+				return note.getTittle();
+			}
+		};
+		appTittleColumn.setSortable(true);
+		notesCellTable.addColumn(appTittleColumn, "Tittle");
 
-			
-			// Create to date column.
-			TextColumn<Notification> toDateColumn = new TextColumn<Notification>() {
-				@Override
-				public String getValue(Notification note) {
-					return String.valueOf(note.getToDate());
-				}
-			};
-			toDateColumn.setSortable(true);
-			notesCellTable.addColumn(fromDateColumn, "To");
+		// Create Content column.
+		TextColumn<Notification> contentColumn = new TextColumn<Notification>() {
+			@Override
+			public String getValue(Notification adv) {
+				return String.valueOf(adv.getContent());
+			}
+		};
+		contentColumn.setSortable(true);
+		notesCellTable.addColumn(contentColumn, "Content");
 
-			
+		// Create from date column.
+		TextColumn<Notification> fromDateColumn = new TextColumn<Notification>() {
+			@Override
+			public String getValue(Notification note) {
+				return String.valueOf(note.getFromDate());
+			}
+		};
+		fromDateColumn.setSortable(true);
+		notesCellTable.addColumn(fromDateColumn, "From");
 
-			// Create a data provider.
-			ListDataProvider<Notification> dataProvider = new ListDataProvider<Notification>();
+		// Create to date column.
+		TextColumn<Notification> toDateColumn = new TextColumn<Notification>() {
+			@Override
+			public String getValue(Notification note) {
+				return String.valueOf(note.getToDate());
+			}
+		};
+		toDateColumn.setSortable(true);
+		notesCellTable.addColumn(fromDateColumn, "To");
 
-			// Connect the table to the data provider.
-			dataProvider.addDataDisplay(notesCellTable);
+		// Create a data provider.
+		ListDataProvider<Notification> dataProvider = new ListDataProvider<Notification>();
 
-			// Add the data to the data provider, which automatically pushes it to
-			// the
-			// widget.
-			listNotes = dataProvider.getList();
+		// Connect the table to the data provider.
+		dataProvider.addDataDisplay(notesCellTable);
 
-			// Set up the callback object.
-			AsyncCallback<List<Notification>> callback = new AsyncCallback<List<Notification>>() {
-				public void onFailure(Throwable caught) {
-					// TODO: Do something with errors.
-				}
+		// Add the data to the data provider, which automatically pushes it to
+		// the
+		// widget.
+		listNotes = dataProvider.getList();
 
-				public void onSuccess(List<Notification> result) {
-					listNotes.clear();
-					listNotes.addAll(result);
-				}
-			};
-			noteSvc = GWT.create(NotificationService.class);
-			noteSvc.SelectNotes(loginInfo.getEmailAddress(), callback);
+		// Set up the callback object.
+		AsyncCallback<List<Notification>> callback = new AsyncCallback<List<Notification>>() {
+			public void onFailure(Throwable caught) {
+				// TODO: Do something with errors.
+			}
 
-			notesPanel.add(notesCellTable);
-			notesPanel.add(tableNotesFooterPanel);
-			servicesTabPanel.add(notesPanel, "Notification");
+			public void onSuccess(List<Notification> result) {
+				listNotes.clear();
+				listNotes.addAll(result);
+			}
+		};
+		noteSvc = GWT.create(NotificationService.class);
+		noteSvc.SelectNotes(loginInfo.getEmailAddress(), callback);
+
+		notesPanel.add(notesCellTable);
+		notesPanel.add(tableNotesFooterPanel);
+		servicesTabPanel.add(notesPanel, "Notification");
 
 	}
 }

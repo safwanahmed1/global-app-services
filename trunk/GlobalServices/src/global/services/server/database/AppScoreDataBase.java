@@ -94,11 +94,13 @@ public class AppScoreDataBase {
 		if (userId != null)
 			query.setFilter("userId_ == \"" + userId + "\"");
 		List<AppScore> retApps = new ArrayList<AppScore>();
-		List<AppScore> selectedApps = (List<AppScore>) query.execute();
+		//(List<Question>)pm.detachCopyAll((List<Question>)query.execute());
+		//List<AppScore> selectedApps = (List<AppScore>)pm_.detachCopyAll((List<AppScore>) query.execute());
+		List<AppScore> selectedApps =(List<AppScore>) query.execute();
 		for (AppScore app : selectedApps) {
 			retApps.add(app);
 		}
-		Window.alert("selectedApps size in database: " + selectedApps.size());
+		//Window.alert("selectedApps size in database: " + selectedApps.size());
 		return retApps;
 	}
 
