@@ -64,7 +64,7 @@ public class GlobalServices implements EntryPoint {
 	/**
 	 * This is the entry point method.
 	 */
-	private LoginInfo loginInfo = null;
+	static LoginInfo loginInfo = null;
 	private VerticalPanel loginPanel = new VerticalPanel();
 	private Label loginLabel = new Label(
 			"Please sign in to your Google Account to access the StockWatcher application.");
@@ -84,13 +84,13 @@ public class GlobalServices implements EntryPoint {
 	private VerticalPanel scoresPanel = new VerticalPanel();
 	private VerticalPanel gamesPanel = new VerticalPanel();
 
-	private AppScoreServiceAsync appScoreSvc;
-	private AdvertisementServiceAsync advSvc;
-	private NotificationServiceAsync noteSvc;
+	static AppScoreServiceAsync appScoreSvc = GWT.create(AppScoreService.class);
+	static AdvertisementServiceAsync advSvc = GWT.create(AdvertisementService.class);
+	static NotificationServiceAsync noteSvc = GWT.create(NotificationService.class);
 
-	private List<AppScore> listApp;
-	private List<Advertisement> listAdvs;
-	private List<Notification> listNotes;
+	static List<AppScore> listApp;
+	static List<Advertisement> listAdvs;
+	static List<Notification> listNotes;
 
 	private List<String> selectedApps = new ArrayList<String>();
 	private List<String> selectedAdvs = new ArrayList<String>();
@@ -210,25 +210,10 @@ public class GlobalServices implements EntryPoint {
 										// TODO Auto-generated method stub
 										Window.alert(result
 												+ " Applications have been deleted successful.");
-										appScoreSvc.SelectApps(
-												loginInfo.getEmailAddress(),
-												new AsyncCallback<List<AppScore>>() {
-													public void onFailure(
-															Throwable caught) {
-														// TODO: Do something
-														// with
-														// errors.
-													}
-
-													public void onSuccess(
-															List<AppScore> result) {
-
-														listApp.clear();
-														listApp.addAll(result);
-													}
-												});
-									}
+										RefreshAppScoreTbl();
+																			}
 								});
+						selectedApps.clear();
 					}
 				}
 
@@ -239,10 +224,10 @@ public class GlobalServices implements EntryPoint {
 
 		highScorePanel.add(tableGamesHeaderPanel);
 
-		final SelectionModel<AppScore> selectionModel = new MultiSelectionModel<AppScore>(
+		final SelectionModel<AppScore> selectionAppModel = new MultiSelectionModel<AppScore>(
 				AppScore.KEY_PROVIDER);
 		gamesCellTable
-				.setSelectionModel(selectionModel, DefaultSelectionEventManager
+				.setSelectionModel(selectionAppModel, DefaultSelectionEventManager
 						.<AppScore> createCheckboxManager());
 
 		Column<AppScore, Boolean> checkColumn = new Column<AppScore, Boolean>(
@@ -251,14 +236,14 @@ public class GlobalServices implements EntryPoint {
 			@Override
 			public Boolean getValue(AppScore app) {
 				// TODO Auto-generated method stub
-				if (selectionModel.isSelected(app)) {
+				if (selectionAppModel.isSelected(app)) {
 					if (!selectedApps.contains(app.getAppId()))
 						selectedApps.add(app.getAppId());
 				} else {
 					if (selectedApps.contains(app.getAppId()))
 						selectedApps.remove(app.getAppId());
 				}
-				return selectionModel.isSelected(app);
+				return selectionAppModel.isSelected(app);
 			}
 		};
 		gamesCellTable.addColumn(checkColumn,
@@ -305,21 +290,8 @@ public class GlobalServices implements EntryPoint {
 		// the
 		// widget.
 		listApp = dataProvider.getList();
-
-		// Set up the callback object.
-		AsyncCallback<List<AppScore>> callback = new AsyncCallback<List<AppScore>>() {
-			public void onFailure(Throwable caught) {
-				// TODO: Do something with errors.
-			}
-
-			public void onSuccess(List<AppScore> result) {
-
-				listApp.clear();
-				listApp.addAll(result);
-			}
-		};
-		appScoreSvc = GWT.create(AppScoreService.class);
-		appScoreSvc.SelectApps(loginInfo.getEmailAddress(), callback);
+		RefreshAppScoreTbl();
+		
 
 		highScorePanel.add(gamesCellTable);
 		highScorePanel.add(tableGamesFooterPanel);
@@ -373,26 +345,11 @@ public class GlobalServices implements EntryPoint {
 									public void onSuccess(Integer result) {
 										// TODO Auto-generated method stub
 										Window.alert(result + " Advertisements have been deleted successful.");
-										advSvc.SelectAdvs(
-												loginInfo.getEmailAddress(),
-												new AsyncCallback<List<Advertisement>>() {
-													public void onFailure(
-															Throwable caught) {
-														// TODO: Do something
-														// with
-														// errors.
-													}
-
-													public void onSuccess(
-															List<Advertisement> result) {
-
-														listAdvs.clear();
-														listAdvs.addAll(result);
-													}
-												});
-
+										RefreshAdvertisementTbl();
+										
 									}
 								});
+						selectedAdvs.clear();
 					}
 				}
 			}
@@ -402,9 +359,9 @@ public class GlobalServices implements EntryPoint {
 
 		advsPanel.add(tableAdvsHeaderPanel);
 
-		final SelectionModel<Advertisement> selectionModel = new MultiSelectionModel<Advertisement>(
+		final SelectionModel<Advertisement> selectionAdvModel = new MultiSelectionModel<Advertisement>(
 				Advertisement.KEY_PROVIDER);
-		advsCellTable.setSelectionModel(selectionModel,
+		advsCellTable.setSelectionModel(selectionAdvModel,
 				DefaultSelectionEventManager
 						.<Advertisement> createCheckboxManager());
 
@@ -414,14 +371,14 @@ public class GlobalServices implements EntryPoint {
 			@Override
 			public Boolean getValue(Advertisement adv) {
 				// TODO Auto-generated method stub
-				if (selectionModel.isSelected(adv)) {
+				if (selectionAdvModel.isSelected(adv)) {
 					if (!selectedAdvs.contains(adv.getAppId()))
 						selectedAdvs.add(adv.getAppId());
 				} else {
 					if (selectedAdvs.contains(adv.getAppId()))
 						selectedAdvs.remove(adv.getAppId());
 				}
-				return selectionModel.isSelected(adv);
+				return selectionAdvModel.isSelected(adv);
 			}
 		};
 		advsCellTable.addColumn(checkColumn,
@@ -490,19 +447,7 @@ public class GlobalServices implements EntryPoint {
 		listAdvs = dataProvider.getList();
 
 		// Set up the callback object.
-		AsyncCallback<List<Advertisement>> callback = new AsyncCallback<List<Advertisement>>() {
-			public void onFailure(Throwable caught) {
-				// TODO: Do something with errors.
-			}
-
-			public void onSuccess(List<Advertisement> result) {
-
-				listAdvs.clear();
-				listAdvs.addAll(result);
-			}
-		};
-		advSvc = GWT.create(AdvertisementService.class);
-		advSvc.SelectAdvs(loginInfo.getEmailAddress(), callback);
+		RefreshAdvertisementTbl();
 
 		advsPanel.add(advsCellTable);
 		advsPanel.add(tableAdvsFooterPanel);
@@ -556,25 +501,9 @@ public class GlobalServices implements EntryPoint {
 									public void onSuccess(Integer result) {
 										// TODO Auto-generated method stub
 										Window.alert(result + " Notifications have been deleted successful.");
-										noteSvc.SelectNotes(
-												loginInfo.getEmailAddress(),
-												new AsyncCallback<List<Notification>>() {
-													public void onFailure(
-															Throwable caught) {
-														// TODO: Do something
-														// with
-														// errors.
-													}
-
-													public void onSuccess(
-															List<Notification> result) {
-														listNotes.clear();
-														listNotes
-																.addAll(result);
-													}
-												});
-									}
+										RefreshNotificationTbl();									}
 								});
+						selectedNotes.clear();
 					}
 				}
 			}
@@ -584,9 +513,9 @@ public class GlobalServices implements EntryPoint {
 
 		notesPanel.add(tableNotesHeaderPanel);
 
-		final SelectionModel<Notification> selectionModel = new MultiSelectionModel<Notification>(
+		final SelectionModel<Notification> selectionNoteModel = new MultiSelectionModel<Notification>(
 				Notification.KEY_PROVIDER);
-		notesCellTable.setSelectionModel(selectionModel,
+		notesCellTable.setSelectionModel(selectionNoteModel,
 				DefaultSelectionEventManager
 						.<Notification> createCheckboxManager());
 
@@ -596,14 +525,14 @@ public class GlobalServices implements EntryPoint {
 			@Override
 			public Boolean getValue(Notification note) {
 				// TODO Auto-generated method stub
-				if (selectionModel.isSelected(note)) {
+				if (selectionNoteModel.isSelected(note)) {
 					if (!selectedNotes.contains(note.getAppId()))
 						selectedNotes.add(note.getAppId());
 				} else {
 					if (selectedNotes.contains(note.getAppId()))
 						selectedNotes.remove(note.getAppId());
 				}
-				return selectionModel.isSelected(note);
+				return selectionNoteModel.isSelected(note);
 			}
 		};
 		notesCellTable.addColumn(checkColumn,
@@ -670,24 +599,85 @@ public class GlobalServices implements EntryPoint {
 		// the
 		// widget.
 		listNotes = dataProvider.getList();
-
-		// Set up the callback object.
-		AsyncCallback<List<Notification>> callback = new AsyncCallback<List<Notification>>() {
-			public void onFailure(Throwable caught) {
-				// TODO: Do something with errors.
-			}
-
-			public void onSuccess(List<Notification> result) {
-				listNotes.clear();
-				listNotes.addAll(result);
-			}
-		};
-		noteSvc = GWT.create(NotificationService.class);
-		noteSvc.SelectNotes(loginInfo.getEmailAddress(), callback);
-
+		
+		RefreshNotificationTbl();
+		
 		notesPanel.add(notesCellTable);
 		notesPanel.add(tableNotesFooterPanel);
 		servicesTabPanel.add(notesPanel, "Notification");
 
+	}
+	static void RefreshAppScoreTbl(){
+		appScoreSvc.SelectApps(
+				loginInfo.getEmailAddress(),
+				new AsyncCallback<List<AppScore>>() {
+					public void onFailure(
+							Throwable caught) {
+						// TODO: Do something
+						// with
+						// errors.
+					}
+
+					public void onSuccess(
+							List<AppScore> result) {
+
+						listApp.clear();
+						listApp.addAll(result);
+					}
+				});
+
+	}
+	static void RefreshAdvertisementTbl() {
+		advSvc.SelectAdvs(
+				loginInfo.getEmailAddress(),
+				new AsyncCallback<List<Advertisement>>() {
+					public void onFailure(
+							Throwable caught) {
+						// TODO: Do something
+						// with
+						// errors.
+					}
+
+					public void onSuccess(
+							List<Advertisement> result) {
+
+						listAdvs.clear();
+						listAdvs.addAll(result);
+					}
+				});
+
+	}
+	static void RefreshNotificationTbl() {
+		noteSvc.SelectNotes(
+				loginInfo.getEmailAddress(),
+				new AsyncCallback<List<Notification>>() {
+					public void onFailure(
+							Throwable caught) {
+						// TODO: Do something
+						// with
+						// errors.
+					}
+
+					public void onSuccess(
+							List<Notification> result) {
+						listNotes.clear();
+						listNotes
+								.addAll(result);
+					}
+				});
+
+	}
+	static void ComebackHome(boolean reload){
+		GlobalServices.mainPanel.clear();
+		GlobalServices.mainPanel.addNorth(GlobalServices.headerPanel,
+				50);
+		GlobalServices.mainPanel.addSouth(GlobalServices.footerPanel,
+				50);
+		GlobalServices.mainPanel.add(GlobalServices.servicesTabPanel);
+		if (reload) {
+			RefreshAppScoreTbl();
+			RefreshAdvertisementTbl();
+			RefreshNotificationTbl();
+		}
 	}
 }

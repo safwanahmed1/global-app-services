@@ -96,13 +96,7 @@ public class CreateAdvertisment {
 						advSvc = GWT.create(AdvertisementService.class);
 						advSvc.InsertAdv(newApp, callback);
 
-						GlobalServices.mainPanel.clear();
-						GlobalServices.mainPanel.addNorth(
-								GlobalServices.headerPanel, 50);
-						GlobalServices.mainPanel.addSouth(
-								GlobalServices.footerPanel, 50);
-						GlobalServices.mainPanel
-								.add(GlobalServices.servicesTabPanel);
+						GlobalServices.ComebackHome(true);
 					}
 				}
 			}));
@@ -111,16 +105,12 @@ public class CreateAdvertisment {
 				@Override
 				public void onClick(ClickEvent event) {
 					// TODO Auto-generated method stub
-					GlobalServices.mainPanel.clear();
-					GlobalServices.mainPanel.addNorth(GlobalServices.headerPanel,
-							50);
-					GlobalServices.mainPanel.addSouth(GlobalServices.footerPanel,
-							50);
-					GlobalServices.mainPanel.add(GlobalServices.servicesTabPanel);
+					GlobalServices.ComebackHome(false);
 				}
 			}));
 			mainContent.add(controlButton);
 			return mainContent;
 
 		}
+		
 }

@@ -16,7 +16,11 @@ public class Notification implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public static final ProvidesKey<Notification> KEY_PROVIDER = null;
+	public static final ProvidesKey<Notification> KEY_PROVIDER =  new ProvidesKey<Notification>() {
+	 public Object getKey(Notification note) {
+	        return note == null ? null : note.getId();
+	      }
+	    };
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Long id;

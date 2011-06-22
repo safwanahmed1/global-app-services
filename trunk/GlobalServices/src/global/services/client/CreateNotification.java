@@ -93,13 +93,7 @@ public class CreateNotification {
 						NoteSvc = GWT.create(NotificationService.class);
 						NoteSvc.InsertNote(newNote, callback);
 
-						GlobalServices.mainPanel.clear();
-						GlobalServices.mainPanel.addNorth(
-								GlobalServices.headerPanel, 50);
-						GlobalServices.mainPanel.addSouth(
-								GlobalServices.footerPanel, 50);
-						GlobalServices.mainPanel
-								.add(GlobalServices.servicesTabPanel);
+						GlobalServices.ComebackHome(true);
 					}
 				}
 			}));
@@ -108,12 +102,7 @@ public class CreateNotification {
 				@Override
 				public void onClick(ClickEvent event) {
 					// TODO Auto-generated method stub
-					GlobalServices.mainPanel.clear();
-					GlobalServices.mainPanel.addNorth(GlobalServices.headerPanel,
-							50);
-					GlobalServices.mainPanel.addSouth(GlobalServices.footerPanel,
-							50);
-					GlobalServices.mainPanel.add(GlobalServices.servicesTabPanel);
+					GlobalServices.ComebackHome(false);
 				}
 			}));
 			mainContent.add(controlButton);
