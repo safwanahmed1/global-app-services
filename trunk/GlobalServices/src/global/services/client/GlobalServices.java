@@ -668,16 +668,18 @@ public class GlobalServices implements EntryPoint {
 
 	}
 	static void ComebackHome(boolean reload){
+		
+		if (reload) {
+			RefreshAppScoreTbl();
+			RefreshAdvertisementTbl();
+			RefreshNotificationTbl();
+		}
 		GlobalServices.mainPanel.clear();
 		GlobalServices.mainPanel.addNorth(GlobalServices.headerPanel,
 				50);
 		GlobalServices.mainPanel.addSouth(GlobalServices.footerPanel,
 				50);
 		GlobalServices.mainPanel.add(GlobalServices.servicesTabPanel);
-		if (reload) {
-			RefreshAppScoreTbl();
-			RefreshAdvertisementTbl();
-			RefreshNotificationTbl();
-		}
+		
 	}
 }
