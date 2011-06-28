@@ -4,12 +4,19 @@ import global.services.client.rpc.AdvertisementService;
 import global.services.client.rpc.AdvertisementServiceAsync;
 import global.services.shared.Advertisement;
 import global.services.shared.LoginInfo;
+import gwtupload.client.IUploadStatus.Status;
+import gwtupload.client.IUploader;
+import gwtupload.client.IUploader.UploadedInfo;
+import gwtupload.client.MultiUploader;
+import gwtupload.client.PreloadedImage;
+import gwtupload.client.PreloadedImage.OnLoadPreloadedImageHandler;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -25,6 +32,7 @@ public class CreateAdvertisment {
 		private TextBox txtType;
 		private TextBox txtStoreUrl;
 		private LoginInfo loginInfo = null;
+		private FlowPanel panelImages = new FlowPanel();
 		public LoginInfo getLoginInfo() {
 			return loginInfo;
 		}
@@ -40,9 +48,18 @@ public class CreateAdvertisment {
 			mainContent.add(new Label("Create new advertisment score"));
 			mainContent.add(new Label("You have 7 advertisment remaining."));
 			
+			// Create a new uploader panel and attach it to the document
+		    MultiUploader defaultUploader = new MultiUploader();
+		    
+
+		    // Add a finish handler which will load the image once the upload finishes
+		    defaultUploader.addOnFinishUploadHandler(onFinishUploaderHandler);
+		    
 			mainContent.add(new Label("Icon app:"));
 			imgIcon = new Image();
 			mainContent.add(imgIcon);
+			mainContent.add(defaultUploader);
+			mainContent.add(panelImages);
 
 			mainContent.add(new Label("App Identifier:"));
 			txtAppId = new TextBox();
@@ -112,5 +129,32 @@ public class CreateAdvertisment {
 			return mainContent;
 
 		}
+		
+		 // Load the image in the document and in the case of success attach it to the viewer
+		  private IUploader.OnFinishUploaderHandler onFinishUploaderHandler = new IUploader.OnFinishUploaderHandler() {
+		    public void onFinish(IUploader uploader) {
+		      if (uploader.getStatus() == Status.SUCCESS) {
+
+		        new PreloadedImage(uploader.fileUrl(), showImage);
+		        
+		        // The server sends useful information to the client by default
+		        UploadedInfo info = uploader.getServerInfo();
+		        System.out.println("File name " + info.name);
+		        System.out.println("File content-type " + info.ctype);
+		        System.out.println("File size " + info.size);
+
+		        // You can send any customized message and parse it 
+		        System.out.println("Server message " + info.message);
+		      }
+		    }
+		  };
+
+		  // Attach an image to the pictures viewer
+		  private OnLoadPreloadedImageHandler showImage = new OnLoadPreloadedImageHandler() {
+		    public void onLoad(PreloadedImage image) {
+		      image.setWidth("75px");
+		      panelImages.add(image);
+		    }
+		  };
 		
 }
