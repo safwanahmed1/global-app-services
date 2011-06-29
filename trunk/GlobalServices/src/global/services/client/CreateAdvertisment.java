@@ -25,136 +25,135 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class CreateAdvertisment {
-		private Image imgIcon;
-		private TextBox txtAppId;
-		private TextBox txtTitle;
-		private TextBox txtContent;
-		private TextBox txtType;
-		private TextBox txtStoreUrl;
-		private LoginInfo loginInfo = null;
-		private FlowPanel panelImages = new FlowPanel();
-		public LoginInfo getLoginInfo() {
-			return loginInfo;
-		}
+	private Image imgIcon;
+	private TextBox txtAppId;
+	private TextBox txtTitle;
+	private TextBox txtContent;
+	private TextBox txtType;
+	private TextBox txtStoreUrl;
+	private LoginInfo loginInfo = null;
+	private FlowPanel panelImages = new FlowPanel();
 
-		public void setLoginInfo(LoginInfo loginInfo) {
-			this.loginInfo = loginInfo;
-		}
+	public LoginInfo getLoginInfo() {
+		return loginInfo;
+	}
 
-		private AdvertisementServiceAsync advSvc;
+	public void setLoginInfo(LoginInfo loginInfo) {
+		this.loginInfo = loginInfo;
+	}
 
-		public Widget Initialize() {
-			VerticalPanel mainContent = new VerticalPanel();
-			mainContent.add(new Label("Create new advertisment score"));
-			mainContent.add(new Label("You have 7 advertisment remaining."));
-			
-			// Create a new uploader panel and attach it to the document
-		    MultiUploader defaultUploader = new MultiUploader();
-		    
+	private AdvertisementServiceAsync advSvc;
 
-		    // Add a finish handler which will load the image once the upload finishes
-		    defaultUploader.addOnFinishUploadHandler(onFinishUploaderHandler);
-		    
-			mainContent.add(new Label("Icon app:"));
-			imgIcon = new Image();
-			mainContent.add(imgIcon);
-			mainContent.add(defaultUploader);
-			mainContent.add(panelImages);
+	public Widget Initialize() {
+		VerticalPanel mainContent = new VerticalPanel();
+		mainContent.add(new Label("Create new advertisment score"));
+		mainContent.add(new Label("You have 7 advertisment remaining."));
 
-			mainContent.add(new Label("App Identifier:"));
-			txtAppId = new TextBox();
-			mainContent.add(txtAppId);
+		// Create a new uploader panel and attach it to the document
+		MultiUploader defaultUploader = new MultiUploader();
 
-			mainContent.add(new Label("Title:"));
-			txtTitle = new TextBox();
-			mainContent.add(txtTitle);
-			
-			mainContent.add(new Label("Content:"));
-			txtContent = new TextBox();
-			mainContent.add(txtContent);
-			
-			mainContent.add(new Label("Type:"));
-			txtType = new TextBox();
-			mainContent.add(txtType);
-			
-			mainContent.add(new Label("Store Url"));
-			txtStoreUrl = new TextBox();
-			mainContent.add(txtStoreUrl);
+		// Add a finish handler which will load the image once the upload
+		// finishes
+		defaultUploader.addOnFinishUploadHandler(onFinishUploaderHandler);
 
+		mainContent.add(new Label("Icon app:"));
+		imgIcon = new Image();
+		mainContent.add(imgIcon);
+		mainContent.add(defaultUploader);
+		mainContent.add(panelImages);
 
-			HorizontalPanel controlButton = new HorizontalPanel();
-			controlButton.add(new Button("Create adv", new ClickHandler() {
+		mainContent.add(new Label("App Identifier:"));
+		txtAppId = new TextBox();
+		mainContent.add(txtAppId);
 
-				@Override
-				public void onClick(ClickEvent event) {
-					// TODO Auto-generated method stub
-					String appID = txtAppId.getText();
-					String appTittle = txtTitle.getText();
-					if (appID != null) {
-						Advertisement newApp = new Advertisement(appID);
-						newApp.setUserId(loginInfo.getEmailAddress());
-						newApp.setTittle(appTittle);
-						newApp.setContent(txtContent.getText());
-						newApp.setType(txtType.getText());
-						newApp.setStoreUrl(txtStoreUrl.getText());
-						newApp.setIconUrl(imgIcon.getUrl());
-						
-						
+		mainContent.add(new Label("Title:"));
+		txtTitle = new TextBox();
+		mainContent.add(txtTitle);
 
-						// Set up the callback object.
-						AsyncCallback<Long> callback = new AsyncCallback<Long>() {
-							public void onFailure(Throwable caught) {
-								// TODO: Do something with errors.
-							}
+		mainContent.add(new Label("Content:"));
+		txtContent = new TextBox();
+		mainContent.add(txtContent);
 
-							public void onSuccess(Long result) {
-							}
-						};
-						advSvc = GWT.create(AdvertisementService.class);
-						advSvc.InsertAdv(newApp, callback);
+		mainContent.add(new Label("Type:"));
+		txtType = new TextBox();
+		mainContent.add(txtType);
 
-						GlobalServices.ComebackHome(true);
-					}
+		mainContent.add(new Label("Store Url"));
+		txtStoreUrl = new TextBox();
+		mainContent.add(txtStoreUrl);
+
+		HorizontalPanel controlButton = new HorizontalPanel();
+		controlButton.add(new Button("Create adv", new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				// TODO Auto-generated method stub
+				String appID = txtAppId.getText();
+				String appTittle = txtTitle.getText();
+				if (appID != null) {
+					Advertisement newApp = new Advertisement(appID);
+					newApp.setUserId(loginInfo.getEmailAddress());
+					newApp.setTittle(appTittle);
+					newApp.setContent(txtContent.getText());
+					newApp.setType(txtType.getText());
+					newApp.setStoreUrl(txtStoreUrl.getText());
+					newApp.setIconUrl(imgIcon.getUrl());
+
+					// Set up the callback object.
+					AsyncCallback<Long> callback = new AsyncCallback<Long>() {
+						public void onFailure(Throwable caught) {
+							// TODO: Do something with errors.
+						}
+
+						public void onSuccess(Long result) {
+						}
+					};
+					advSvc = GWT.create(AdvertisementService.class);
+					advSvc.InsertAdv(newApp, callback);
+
+					GlobalServices.ComebackHome(true);
 				}
-			}));
-			controlButton.add(new Button("Cancel", new ClickHandler() {
+			}
+		}));
+		controlButton.add(new Button("Cancel", new ClickHandler() {
 
-				@Override
-				public void onClick(ClickEvent event) {
-					// TODO Auto-generated method stub
-					GlobalServices.ComebackHome(false);
-				}
-			}));
-			mainContent.add(controlButton);
-			return mainContent;
+			@Override
+			public void onClick(ClickEvent event) {
+				// TODO Auto-generated method stub
+				GlobalServices.ComebackHome(false);
+			}
+		}));
+		mainContent.add(controlButton);
+		return mainContent;
 
+	}
+
+	// Load the image in the document and in the case of success attach it to
+	// the viewer
+	private IUploader.OnFinishUploaderHandler onFinishUploaderHandler = new IUploader.OnFinishUploaderHandler() {
+		public void onFinish(IUploader uploader) {
+			if (uploader.getStatus() == Status.SUCCESS) {
+
+				new PreloadedImage(uploader.fileUrl(), showImage);
+
+				// The server sends useful information to the client by default
+				UploadedInfo info = uploader.getServerInfo();
+				System.out.println("File name " + info.name);
+				System.out.println("File content-type " + info.ctype);
+				System.out.println("File size " + info.size);
+
+				// You can send any customized message and parse it
+				System.out.println("Server message " + info.message);
+			}
 		}
-		
-		 // Load the image in the document and in the case of success attach it to the viewer
-		  private IUploader.OnFinishUploaderHandler onFinishUploaderHandler = new IUploader.OnFinishUploaderHandler() {
-		    public void onFinish(IUploader uploader) {
-		      if (uploader.getStatus() == Status.SUCCESS) {
+	};
 
-		        new PreloadedImage(uploader.fileUrl(), showImage);
-		        
-		        // The server sends useful information to the client by default
-		        UploadedInfo info = uploader.getServerInfo();
-		        System.out.println("File name " + info.name);
-		        System.out.println("File content-type " + info.ctype);
-		        System.out.println("File size " + info.size);
+	// Attach an image to the pictures viewer
+	private OnLoadPreloadedImageHandler showImage = new OnLoadPreloadedImageHandler() {
+		public void onLoad(PreloadedImage image) {
+			image.setWidth("75px");
+			panelImages.add(image);
+		}
+	};
 
-		        // You can send any customized message and parse it 
-		        System.out.println("Server message " + info.message);
-		      }
-		    }
-		  };
-
-		  // Attach an image to the pictures viewer
-		  private OnLoadPreloadedImageHandler showImage = new OnLoadPreloadedImageHandler() {
-		    public void onLoad(PreloadedImage image) {
-		      image.setWidth("75px");
-		      panelImages.add(image);
-		    }
-		  };
-		
 }
