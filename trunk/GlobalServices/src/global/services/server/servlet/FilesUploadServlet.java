@@ -1,19 +1,20 @@
 package global.services.server.servlet;
 
+import gwtupload.server.UploadAction;
+import gwtupload.server.exceptions.UploadActionException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Hashtable;
 import java.util.List;
-
 import org.apache.commons.fileupload.FileItem;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import gwtupload.server.UploadAction;
-import gwtupload.server.exceptions.UploadActionException;
+//import gwtupload.server.UploadAction;
 
-public class FilesUploadServlet extends UploadAction {
+
+public class FilesUploadServlet extends AppEngineUploadAction {
 
 	private static final long serialVersionUID = 1L;
 

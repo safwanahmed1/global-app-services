@@ -5,14 +5,11 @@
 	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/home/work/eclipse/plugins/com.google.gwt.eclipse.sdkbundle_2.3.0.r36v201104261928/gwt-2.3.0/gwt-dev.jar"/>
-	<classpathentry kind="lib" path="/home/quanpn/ownwork/commons-fileupload.jar"/>
-	<classpathentry kind="lib" path="/home/quanpn/ownwork/gwtupload-0.6.3-compat.jar"/>
-	<classpathentry kind="lib" path="/home/quanpn/ownwork/gwtupload-gae-0.6.3.jar"/>
-	<classpathentry kind="lib" path="/home/quanpn/ownwork/jsupload-0.6.3.zip"/>
-	<classpathentry kind="lib" path="/home/quanpn/ownwork/GlobalServices/war/WEB-INF/lib/gwtupload-0.6.4-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="/home/quanpn/ownwork/commons-io-1.4.jar"/>
-	<classpathentry kind="lib" path="/home/quanpn/ownwork/activation-1.1.jar"/>
-	<classpathentry kind="lib" path="/home/quanpn/ownwork/log4j-1.2.13.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/activation-1.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-fileupload.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-io-1.4.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gwtupload-0.6.4-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gwtupload-gae-0.6.4-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jsupload-0.6.3.zip"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
