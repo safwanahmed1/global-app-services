@@ -18,15 +18,13 @@
 		<param-value>200</param-value>
 	</context-param>
 
-
-
 	<!-- Servlets -->
-	
+
 	<servlet>
 		<servlet-name>filesUploadServlet</servlet-name>
-		<!-- This is the default servlet, it puts files in session -->
 		<servlet-class>global.services.server.servlet.FilesUploadServlet</servlet-class>
 	</servlet>
+	
 	<servlet-mapping>
 		<servlet-name>filesUploadServlet</servlet-name>
 		<url-pattern>*.gupld</url-pattern>
