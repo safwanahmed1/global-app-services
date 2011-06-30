@@ -1,7 +1,8 @@
 package global.services.server.servlet;
 
-import gwtupload.server.UploadAction;
 import gwtupload.server.exceptions.UploadActionException;
+import gwtupload.server.gae.AppEngineUploadAction;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -51,7 +52,7 @@ public class FilesUploadServlet extends AppEngineUploadAction {
 
 					// / Create a temporary file placed in the default system
 					// temp folder
-					File file = File.createTempFile("upload-", ".bin");
+					File file = File.createTempFile("/tmp/upload", ".bin");
 					item.write(file);
 
 					// / Save a list with the received files
