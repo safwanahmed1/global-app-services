@@ -1,14 +1,23 @@
 package global.services.server.servlet;
 
+import global.services.server.PMF;
+import global.services.shared.IconAdvertisement;
 import gwtupload.server.exceptions.UploadActionException;
 import gwtupload.server.gae.AppEngineUploadAction;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Hashtable;
 import java.util.List;
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.io.IOUtils;
+
+import com.google.appengine.api.datastore.Blob;
+
+import javax.jdo.PersistenceManager;
+import javax.jdo.Transaction; 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -36,6 +45,7 @@ public class FilesUploadServlet extends AppEngineUploadAction {
 		int cont = 0;
 		for (FileItem item : sessionFiles) {
 			if (false == item.isFormField()) {
+				/*
 				cont++;
 				try {
 					// / Create a new file based on the remote file name in the
@@ -52,7 +62,7 @@ public class FilesUploadServlet extends AppEngineUploadAction {
 
 					// / Create a temporary file placed in the default system
 					// temp folder
-					File file = File.createTempFile("/tmp/upload", ".bin");
+					File file = File.createTempFile("tmp_global_upload", ".bin");
 					item.write(file);
 
 					// / Save a list with the received files
@@ -66,6 +76,28 @@ public class FilesUploadServlet extends AppEngineUploadAction {
 				} catch (Exception e) {
 					throw new UploadActionException(e);
 				}
+				*/
+				PersistenceManager pm = PMF.get().getPersistenceManager(); 
+                Transaction tx = pm.currentTransaction(); 
+                try { 
+                    // Start the transaction 
+                    tx.begin(); 
+                    InputStream imgStream = item.getInputStream(); 
+                        Blob blob = new Blob(IOUtils.toByteArray(imgStream)); 
+                        IconAdvertisement imageBlob = new IconAdvertisement(item.getName(), blob); 
+                        response = String.valueOf(pm.makePersistent(imageBlob).getId()); 
+                    // Commit the transaction, flushing the object to the datastore 
+                    tx.commit(); 
+                } 
+                catch(Exception e) { 
+                        e.printStackTrace(); 
+                } 
+                finally { 
+                    if(tx.isActive()) { 
+                        tx.rollback(); 
+                    } 
+                    pm.close(); 
+                } 
 			}
 		}
 

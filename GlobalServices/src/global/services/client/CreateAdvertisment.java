@@ -10,6 +10,7 @@ import gwtupload.client.IUploader.UploadedInfo;
 import gwtupload.client.MultiUploader;
 import gwtupload.client.PreloadedImage;
 import gwtupload.client.PreloadedImage.OnLoadPreloadedImageHandler;
+import gwtupload.client.SingleUploader;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -50,7 +51,7 @@ public class CreateAdvertisment {
 		mainContent.add(new Label("You have 7 advertisment remaining."));
 
 		// Create a new uploader panel and attach it to the document
-		MultiUploader defaultUploader = new MultiUploader();
+		SingleUploader defaultUploader = new SingleUploader();
 
 		// Add a finish handler which will load the image once the upload
 		// finishes
