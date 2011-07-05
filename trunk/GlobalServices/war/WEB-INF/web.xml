@@ -20,6 +20,16 @@
 
 	<!-- Servlets -->
 
+<servlet>
+    <servlet-name>fileUploaderServler</servlet-name>
+    <servlet-class>global.services.server.servlet.FileUpload</servlet-class>
+</servlet>
+<servlet-mapping>
+  <servlet-name>fileUploaderServler</servlet-name>
+  <url-pattern>/globalservices/fileupload</url-pattern>
+</servlet-mapping>
+
+
 	<servlet>
 		<servlet-name>filesUploadServlet</servlet-name>
 		<servlet-class>global.services.server.servlet.FilesUploadServlet</servlet-class>

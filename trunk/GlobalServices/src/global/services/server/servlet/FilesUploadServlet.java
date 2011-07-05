@@ -1,7 +1,7 @@
 package global.services.server.servlet;
 
 import global.services.server.PMF;
-import global.services.shared.IconAdvertisement;
+import global.services.server.database.IconAdvertisement;
 import gwtupload.server.exceptions.UploadActionException;
 import gwtupload.server.gae.AppEngineUploadAction;
 
@@ -78,24 +78,24 @@ public class FilesUploadServlet extends AppEngineUploadAction {
 				}
 				*/
 				PersistenceManager pm = PMF.get().getPersistenceManager(); 
-                Transaction tx = pm.currentTransaction(); 
+                //Transaction tx = pm.currentTransaction(); 
                 try { 
                     // Start the transaction 
-                    tx.begin(); 
+                    //tx.begin(); 
                     InputStream imgStream = item.getInputStream(); 
                         Blob blob = new Blob(IOUtils.toByteArray(imgStream)); 
                         IconAdvertisement imageBlob = new IconAdvertisement(item.getName(), blob); 
                         response = String.valueOf(pm.makePersistent(imageBlob).getId()); 
                     // Commit the transaction, flushing the object to the datastore 
-                    tx.commit(); 
+                    //tx.commit(); 
                 } 
                 catch(Exception e) { 
                         e.printStackTrace(); 
                 } 
                 finally { 
-                    if(tx.isActive()) { 
-                        tx.rollback(); 
-                    } 
+                    //if(tx.isActive()) { 
+                    //    tx.rollback(); 
+                    //} 
                     pm.close(); 
                 } 
 			}

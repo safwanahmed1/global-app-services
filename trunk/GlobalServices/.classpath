@@ -11,5 +11,6 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gwtupload-0.6.4-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gwtupload-gae-0.6.4-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jsupload-0.6.3.zip"/>
+	<classpathentry kind="lib" path="/home/quanpn/ownwork/GWTUpload/lib/log4j-1.2.13.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

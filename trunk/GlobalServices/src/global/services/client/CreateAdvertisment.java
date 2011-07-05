@@ -4,20 +4,22 @@ import global.services.client.rpc.AdvertisementService;
 import global.services.client.rpc.AdvertisementServiceAsync;
 import global.services.shared.Advertisement;
 import global.services.shared.LoginInfo;
+import gwtupload.client.IFileInput.FileInputType;
 import gwtupload.client.IUploadStatus.Status;
 import gwtupload.client.IUploader;
 import gwtupload.client.IUploader.UploadedInfo;
-import gwtupload.client.MultiUploader;
 import gwtupload.client.PreloadedImage;
 import gwtupload.client.PreloadedImage.OnLoadPreloadedImageHandler;
 import gwtupload.client.SingleUploader;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -44,54 +46,19 @@ public class CreateAdvertisment {
 	}
 
 	private AdvertisementServiceAsync advSvc;
-
+	private FormPanel formUpload;
 	public Widget Initialize() {
 		VerticalPanel mainContent = new VerticalPanel();
-		mainContent.add(new Label("Create new advertisment score"));
-		mainContent.add(new Label("You have 7 advertisment remaining."));
-
-		// Create a new uploader panel and attach it to the document
-		SingleUploader defaultUploader = new SingleUploader();
-
-		// Add a finish handler which will load the image once the upload
-		// finishes
-		defaultUploader.addOnFinishUploadHandler(onFinishUploaderHandler);
-
-		mainContent.add(new Label("Icon app:"));
-		imgIcon = new Image();
-		mainContent.add(imgIcon);
-		mainContent.add(defaultUploader);
-		mainContent.add(panelImages);
-
-		mainContent.add(new Label("App Identifier:"));
-		txtAppId = new TextBox();
-		mainContent.add(txtAppId);
-
-		mainContent.add(new Label("Title:"));
-		txtTitle = new TextBox();
-		mainContent.add(txtTitle);
-
-		mainContent.add(new Label("Content:"));
-		txtContent = new TextBox();
-		mainContent.add(txtContent);
-
-		mainContent.add(new Label("Type:"));
-		txtType = new TextBox();
-		mainContent.add(txtType);
-
-		mainContent.add(new Label("Store Url"));
-		txtStoreUrl = new TextBox();
-		mainContent.add(txtStoreUrl);
-
-		HorizontalPanel controlButton = new HorizontalPanel();
-		controlButton.add(new Button("Create adv", new ClickHandler() {
+		Button btnAddAdv = new Button("Create adv", new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
 				// TODO Auto-generated method stub
 				String appID = txtAppId.getText();
 				String appTittle = txtTitle.getText();
+				
 				if (appID != null) {
+					//formUpload.submit();
 					Advertisement newApp = new Advertisement(appID);
 					newApp.setUserId(loginInfo.getEmailAddress());
 					newApp.setTittle(appTittle);
@@ -115,7 +82,41 @@ public class CreateAdvertisment {
 					GlobalServices.ComebackHome(true);
 				}
 			}
-		}));
+		});
+		mainContent.add(new Label("Create new advertisment score"));
+		mainContent.add(new Label("You have 7 advertisment remaining."));
+
+		mainContent.add(new Label("Icon app:"));
+		//imgIcon = new Image();
+		//mainContent.add(imgIcon);
+		//mainContent.add(panelImages);
+		//mainContent.add(defaultUploader);
+		formUpload = (FormPanel) FileUploader.getFileUploaderWidget(); 
+		mainContent.add(formUpload);
+		
+
+		mainContent.add(new Label("App Identifier:"));
+		txtAppId = new TextBox();
+		mainContent.add(txtAppId);
+
+		mainContent.add(new Label("Title:"));
+		txtTitle = new TextBox();
+		mainContent.add(txtTitle);
+
+		mainContent.add(new Label("Content:"));
+		txtContent = new TextBox();
+		mainContent.add(txtContent);
+
+		mainContent.add(new Label("Type:"));
+		txtType = new TextBox();
+		mainContent.add(txtType);
+
+		mainContent.add(new Label("Store Url"));
+		txtStoreUrl = new TextBox();
+		mainContent.add(txtStoreUrl);
+
+		HorizontalPanel controlButton = new HorizontalPanel();
+		controlButton.add(btnAddAdv);
 		controlButton.add(new Button("Cancel", new ClickHandler() {
 
 			@Override
@@ -133,7 +134,9 @@ public class CreateAdvertisment {
 	// the viewer
 	private IUploader.OnFinishUploaderHandler onFinishUploaderHandler = new IUploader.OnFinishUploaderHandler() {
 		public void onFinish(IUploader uploader) {
+			//Window.alert("Upload da finish");
 			if (uploader.getStatus() == Status.SUCCESS) {
+				Window.alert("Upload da thanh cong: " + uploader.fileUrl());
 
 				new PreloadedImage(uploader.fileUrl(), showImage);
 
