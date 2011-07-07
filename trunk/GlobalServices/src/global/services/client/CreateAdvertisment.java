@@ -47,7 +47,7 @@ public class CreateAdvertisment {
 	}
 
 	private AdvertisementServiceAsync advSvc;
-	private FormPanel formUpload;
+	//private FormPanel formUpload;
 
 	public Widget Initialize() {
 		VerticalPanel mainContent = new VerticalPanel();
@@ -95,8 +95,8 @@ public class CreateAdvertisment {
 		iconUploader.addOnFinishUploadHandler(onFinishUploaderHandler);
 		mainContent.add(panelImages);
 		mainContent.add(iconUploader);
-		formUpload = (FormPanel) FileUploader.getFileUploaderWidget();
-		mainContent.add(formUpload);
+		//formUpload = (FormPanel) FileUploader.getFileUploaderWidget();
+		//mainContent.add(formUpload);
 
 		mainContent.add(new Label("App Identifier:"));
 		txtAppId = new TextBox();
