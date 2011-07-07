@@ -20,14 +20,6 @@
 
 	<!-- Servlets -->
 
-<servlet>
-    <servlet-name>fileUploaderServler</servlet-name>
-    <servlet-class>global.services.server.servlet.FileUpload</servlet-class>
-</servlet>
-<servlet-mapping>
-  <servlet-name>fileUploaderServler</servlet-name>
-  <url-pattern>/globalservices/fileupload</url-pattern>
-</servlet-mapping>
 
 
 	<servlet>
@@ -40,7 +32,16 @@
 		<url-pattern>*.gupld</url-pattern>
 	</servlet-mapping>
 	
-
+	<servlet>
+		<servlet-name>filesDownloadServlet</servlet-name>
+		<servlet-class>global.services.server.servlet.FilesDownloadServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>filesDownloadServlet</servlet-name>
+		<url-pattern>/globalservices/download</url-pattern>
+	</servlet-mapping>
+	
 	<servlet>
 		<servlet-name>loginService</servlet-name>
 		<servlet-class>global.services.server.rpc.LoginServiceImpl</servlet-class>

@@ -1,7 +1,7 @@
 package global.services.server.servlet;
 
 import global.services.server.PMF;
-import global.services.server.database.IconAdvertisement;
+import global.services.server.database.FilesDataBase;
 import gwtupload.server.exceptions.UploadActionException;
 import gwtupload.server.gae.AppEngineUploadAction;
 
@@ -12,17 +12,19 @@ import java.io.InputStream;
 import java.util.Hashtable;
 import java.util.List;
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.fileupload.FileItemIterator;
+import org.apache.commons.fileupload.FileItemStream;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.output.ByteArrayOutputStream;
 
 import com.google.appengine.api.datastore.Blob;
 
 import javax.jdo.PersistenceManager;
-import javax.jdo.Transaction; 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 //import gwtupload.server.UploadAction;
-
 
 public class FilesUploadServlet extends AppEngineUploadAction {
 
@@ -45,59 +47,30 @@ public class FilesUploadServlet extends AppEngineUploadAction {
 		int cont = 0;
 		for (FileItem item : sessionFiles) {
 			if (false == item.isFormField()) {
-				/*
-				cont++;
+
+				PersistenceManager pm = PMF.get().getPersistenceManager();
 				try {
-					// / Create a new file based on the remote file name in the
-					// client
-					// String saveName =
-					// item.getName().replaceAll("[\\\\/><\\|\\s\"'{}()\\[\\]]+",
-					// "_");
-					// File file =new File("/tmp/" + saveName);
+					InputStream inStream = item.getInputStream();
 
-					// / Create a temporary file placed in /tmp (only works in
-					// unix)
-					// File file = File.createTempFile("upload-", ".bin", new
-					// File("/tmp"));
+					ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+					int len;
+					byte[] buffer = new byte[8192];
+					while ((len = inStream.read(buffer, 0, buffer.length)) != -1) {
+						outStream.write(buffer, 0, len);
+					}
 
-					// / Create a temporary file placed in the default system
-					// temp folder
-					File file = File.createTempFile("tmp_global_upload", ".bin");
-					item.write(file);
-
-					// / Save a list with the received files
-					receivedFiles.put(item.getFieldName(), file);
-					receivedContentTypes.put(item.getFieldName(),
-							item.getContentType());
-
-					// / Send a customized message to the client.
-					response += "File saved as " + file.getAbsolutePath();
-
+					Blob blob = new Blob(outStream.toByteArray());
+					FilesDataBase imageBlob = new FilesDataBase(
+							item.getName(), blob);
+					response = String.valueOf(pm.makePersistent(imageBlob)
+							.getId());
+					
 				} catch (Exception e) {
-					throw new UploadActionException(e);
+					e.printStackTrace();
+				} finally {
+					
+					pm.close();
 				}
-				*/
-				PersistenceManager pm = PMF.get().getPersistenceManager(); 
-                //Transaction tx = pm.currentTransaction(); 
-                try { 
-                    // Start the transaction 
-                    //tx.begin(); 
-                    InputStream imgStream = item.getInputStream(); 
-                        Blob blob = new Blob(IOUtils.toByteArray(imgStream)); 
-                        IconAdvertisement imageBlob = new IconAdvertisement(item.getName(), blob); 
-                        response = String.valueOf(pm.makePersistent(imageBlob).getId()); 
-                    // Commit the transaction, flushing the object to the datastore 
-                    //tx.commit(); 
-                } 
-                catch(Exception e) { 
-                        e.printStackTrace(); 
-                } 
-                finally { 
-                    //if(tx.isActive()) { 
-                    //    tx.rollback(); 
-                    //} 
-                    pm.close(); 
-                } 
 			}
 		}
 
@@ -107,6 +80,53 @@ public class FilesUploadServlet extends AppEngineUploadAction {
 		// / Send your customized message to the client.
 		return response;
 	}
+	
+	
+
+	@Override
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws IOException, ServletException {
+		// TODO Auto-generated method stub
+		//super.doPost(request, response);
+		ServletFileUpload upload = new ServletFileUpload();
+        //PersistenceManager pm = PMF.get().getPersistenceManager(); 
+        try{
+            FileItemIterator iter = upload.getItemIterator(request);
+
+            while (iter.hasNext()) {
+                FileItemStream item = iter.next();
+                
+                String name = item.getFieldName();
+                InputStream stream = item.openStream();
+
+
+                // Process the input stream
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                int len;
+                byte[] buffer = new byte[8192];
+                while ((len = stream.read(buffer, 0, buffer.length)) != -1) {
+                    out.write(buffer, 0, len);
+                }
+                int maxFileSize = 2*1024*1024; //10 megs max 
+                if (out.size() > maxFileSize) { 
+                    System.out.println("File is > than " + maxFileSize);
+                    return;
+                }
+                
+                Blob blob = new Blob(out.toByteArray()); 
+                FilesDataBase fileBlob = new FilesDataBase(item.getName(), blob); 
+                fileBlob.setFileType(item.getContentType());
+                fileBlob.InsertFile();
+                //pm.makePersistent(fileBlob);
+                response.getWriter().print(fileBlob.getId());
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+	}
+
+
 
 	/**
 	 * Get the content of an uploaded file.

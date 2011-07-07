@@ -1,7 +1,7 @@
 package global.services.server.servlet;
 
 import global.services.server.PMF;
-import global.services.server.database.IconAdvertisement;
+import global.services.server.database.FilesDataBase;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,7 +48,7 @@ public class FileUpload extends HttpServlet {
 	                    out.write(buffer, 0, len);
 	                }
 	                Blob blob = new Blob(out.toByteArray()); 
-                    IconAdvertisement imageBlob = new IconAdvertisement(item.getName(), blob); 
+                    FilesDataBase imageBlob = new FilesDataBase(item.getName(), blob); 
                     pm.makePersistent(imageBlob);
                     response.getWriter().print(out.toByteArray());
                     

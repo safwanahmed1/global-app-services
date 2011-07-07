@@ -44,8 +44,8 @@ public class GetAdvertisementServlet extends HttpServlet {
 						stream.print(" content=\"" +  adv.getContent() + "\"");
 					if (adv.getType() != null)
 						stream.print(" type=\"" +  adv.getType() + "\"");
-					if (adv.getIconUrl() != null)
-						stream.print(" icon=\"" + adv.getIconUrl() + "\"");
+					if (adv.getIconFile() != null)
+						stream.print(" icon=\"" + adv.getIconFile() + "\"");
 					if (adv.getStoreUrl() != null)
 						stream.print(" store=\"" + adv.getStoreUrl() + "\"");
 					stream.println("/>");

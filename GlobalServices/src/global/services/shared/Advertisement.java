@@ -35,7 +35,7 @@ public class Advertisement implements Serializable {
 	@Persistent
 	private String type_;
 	@Persistent
-	private String iconUrl_;
+	private Long iconFileId_;
 	@Persistent
 	private String storeUrl_;
 	
@@ -81,11 +81,11 @@ public class Advertisement implements Serializable {
 	public void setType(String type) {
 		type_ = type;
 	}
-	public String getIconUrl() {
-		return iconUrl_;
+	public Long getIconFile() {
+		return iconFileId_;
 	}
-	public void setIconUrl(String iconUrl) {
-		iconUrl_ = iconUrl;
+	public void setIconFile(Long iconFileId) {
+		iconFileId_ = iconFileId;
 	}
 	public String getStoreUrl() {
 		return storeUrl_;
