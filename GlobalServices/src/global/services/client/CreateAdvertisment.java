@@ -47,6 +47,7 @@ public class CreateAdvertisment {
 
 	private AdvertisementServiceAsync advSvc;
 	private FormPanel formUpload;
+
 	public Widget Initialize() {
 		VerticalPanel mainContent = new VerticalPanel();
 		Button btnAddAdv = new Button("Create adv", new ClickHandler() {
@@ -56,9 +57,9 @@ public class CreateAdvertisment {
 				// TODO Auto-generated method stub
 				String appID = txtAppId.getText();
 				String appTittle = txtTitle.getText();
-				
+
 				if (appID != null) {
-					//formUpload.submit();
+					// formUpload.submit();
 					Advertisement newApp = new Advertisement(appID);
 					newApp.setUserId(loginInfo.getEmailAddress());
 					newApp.setTittle(appTittle);
@@ -85,15 +86,16 @@ public class CreateAdvertisment {
 		});
 		mainContent.add(new Label("Create new advertisment score"));
 		mainContent.add(new Label("You have 7 advertisment remaining."));
-
+		SingleUploader iconUploader = new SingleUploader(FileInputType.LABEL);
+		iconUploader.setAutoSubmit(true);
 		mainContent.add(new Label("Icon app:"));
-		//imgIcon = new Image();
-		//mainContent.add(imgIcon);
-		//mainContent.add(panelImages);
-		//mainContent.add(defaultUploader);
-		formUpload = (FormPanel) FileUploader.getFileUploaderWidget(); 
+		// imgIcon = new Image();
+		// mainContent.add(imgIcon);
+		iconUploader.addOnFinishUploadHandler(onFinishUploaderHandler);
+		mainContent.add(panelImages);
+		mainContent.add(iconUploader);
+		formUpload = (FormPanel) FileUploader.getFileUploaderWidget();
 		mainContent.add(formUpload);
-		
 
 		mainContent.add(new Label("App Identifier:"));
 		txtAppId = new TextBox();
@@ -134,11 +136,11 @@ public class CreateAdvertisment {
 	// the viewer
 	private IUploader.OnFinishUploaderHandler onFinishUploaderHandler = new IUploader.OnFinishUploaderHandler() {
 		public void onFinish(IUploader uploader) {
-			//Window.alert("Upload da finish");
+			// Window.alert("Upload da finish");
 			if (uploader.getStatus() == Status.SUCCESS) {
 				Window.alert("Upload da thanh cong: " + uploader.fileUrl());
 
-				new PreloadedImage(uploader.fileUrl(), showImage);
+				new PreloadedImage("http://global-app-services.appspot.com/images/GlobalAppServices.png", showImage);
 
 				// The server sends useful information to the client by default
 				UploadedInfo info = uploader.getServerInfo();
