@@ -18,14 +18,14 @@ import com.google.appengine.api.datastore.Blob;
 import com.google.gwt.view.client.ProvidesKey;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class FilesDataBase implements Serializable  {
+public class FilesDataBase implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	@PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    private Long id;
+	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+	private Long id;
 	@Persistent
 	private String userId_;
 	@Persistent
@@ -34,31 +34,28 @@ public class FilesDataBase implements Serializable  {
 	private String fileType_;
 	@Persistent
 	private Blob fileContent_;
-	
+
 	private PersistenceManager pm_;
-	
-	
-	
-	
+
 	/**
-     * The key provider that provides the unique ID of a contact.
-     */
-    public static final ProvidesKey<FilesDataBase> KEY_PROVIDER = new ProvidesKey<FilesDataBase>() {
-      public Object getKey(FilesDataBase app) {
-        return app == null ? null : app.getId();
-      }
-    };
-    
-    
+	 * The key provider that provides the unique ID of a contact.
+	 */
+	public static final ProvidesKey<FilesDataBase> KEY_PROVIDER = new ProvidesKey<FilesDataBase>() {
+		public Object getKey(FilesDataBase app) {
+			return app == null ? null : app.getId();
+		}
+	};
+
 	public FilesDataBase() {
 		pm_ = PMF.get().getPersistenceManager();
-		
+
 	}
+
 	public FilesDataBase(String fileName, Blob content) {
 		fileName_ = fileName;
 		fileContent_ = content;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -82,35 +79,45 @@ public class FilesDataBase implements Serializable  {
 	public void setContent(Blob iconContent) {
 		fileContent_ = iconContent;
 	}
-	
+
 	public void setUserId(String userId) {
 		this.userId_ = userId;
 	}
+
 	public String getUserId() {
 		return userId_;
 	}
+
 	public void setFileType(String fileType) {
 		this.fileType_ = fileType;
 	}
+
 	public String getFileType() {
 		return fileType_;
 	}
-	
+
 	public FilesDataBase InsertFile() {
 		return pm_.makePersistent(this);
 	}
-	
+
 	public FilesDataBase SelectFile(Long fileId) {
 		String strQuery = "select from " + FilesDataBase.class.getName();
 		Query query = pm_.newQuery(strQuery);
 		if ((userId_ != null) && !userId_.isEmpty())
 			query.setFilter("userId_ == \"" + userId_ + "\"");
-		if (fileId != null) 
-			query.setFilter("id == " + fileId );
+		if (fileId != null)
+			query.setFilter("id == " + fileId);
 		List<FilesDataBase> retFile = (List<FilesDataBase>) query.execute();
-		return retFile.get(0);
+		if (retFile.size() > 0) {
+
+			setContent(retFile.get(0).getContent());
+			setFileType(retFile.get(0).getFileType());
+			setName(retFile.get(0).getFileType());
+			setUserId(retFile.get(0).getUserId());
+
+			return this;
+		} else {
+			return null;
+		}
 	}
 }
-
-
-
