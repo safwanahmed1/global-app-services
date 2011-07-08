@@ -141,14 +141,18 @@ public class CreateAdvertisment {
 			if (uploader.getStatus() == Status.SUCCESS) {
 				
 				iconFileId = uploader.getServerResponse();
-							
-				UrlBuilder filesUrl = new UrlBuilder();
-				filesUrl.setHost(GWT.getHostPageBaseURL());
-				filesUrl.setPath("download");
-				filesUrl.setParameter("fileid", iconFileId);
+					
+				/*
+				UrlBuilder fileUrl = new UrlBuilder();
+				fileUrl.setHost(GWT.getHostPageBaseURL());
+				fileUrl.setPath("globalservices/download");
+				fileUrl.setParameter("fileid", iconFileId);
 				
-				Window.alert("Image url: " + filesUrl.buildString());
-				PreloadedImage image = new PreloadedImage(filesUrl.buildString(), showImage);
+				Window.alert("Image url: " + fileUrl.buildString());
+				*/
+				String fileUrl = "http://global-app-services.appspot.com/globalservices/download?fileid=";
+				fileUrl += iconFileId;
+				PreloadedImage image = new PreloadedImage(fileUrl, showImage);
 				// The server sends useful information to the client by default
 				UploadedInfo info = uploader.getServerInfo();
 				System.out.println("File name " + info.name);
@@ -165,6 +169,7 @@ public class CreateAdvertisment {
 	private OnLoadPreloadedImageHandler showImage = new OnLoadPreloadedImageHandler() {
 		public void onLoad(PreloadedImage image) {
 			image.setWidth("75px");
+			panelImages.clear();
 			panelImages.add(image);
 		}
 	};

@@ -52,6 +52,7 @@ public class FilesDataBase implements Serializable {
 	}
 
 	public FilesDataBase(String fileName, Blob content) {
+		pm_ = PMF.get().getPersistenceManager();
 		fileName_ = fileName;
 		fileContent_ = content;
 	}
