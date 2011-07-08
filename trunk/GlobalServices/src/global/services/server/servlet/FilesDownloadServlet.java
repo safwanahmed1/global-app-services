@@ -1,6 +1,6 @@
 package global.services.server.servlet;
 
-import global.services.server.database.FilesDataBase;
+import global.services.server.database.FileDataBase;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -24,7 +24,7 @@ public class FilesDownloadServlet extends HttpServlet {
 		String userId = req.getParameter("userid");
 		String fileId = req.getParameter("fileid");
 		
-        FilesDataBase fileDownload = new FilesDataBase();
+        FileDataBase fileDownload = new FileDataBase();
         fileDownload.SelectFile(Long.parseLong(fileId));
         resp.reset();
         resp.setContentType(fileDownload.getFileType()); 
@@ -37,7 +37,7 @@ public class FilesDownloadServlet extends HttpServlet {
 			String userId = request.getParameter("userid");
 			String fileId = request.getParameter("fileid");
 			
-	        FilesDataBase fileDownload = new FilesDataBase();
+	        FileDataBase fileDownload = new FileDataBase();
 	        fileDownload.SelectFile(Long.parseLong(fileId));
 	        response.reset();
 	        response.setContentType(fileDownload.getFileType()); 

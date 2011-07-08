@@ -1,7 +1,7 @@
 package global.services.server.servlet;
 
 import global.services.server.PMF;
-import global.services.server.database.FilesDataBase;
+import global.services.server.database.FileDataBase;
 import gwtupload.server.exceptions.UploadActionException;
 import gwtupload.server.gae.AppEngineUploadAction;
 
@@ -12,9 +12,6 @@ import java.io.InputStream;
 import java.util.Hashtable;
 import java.util.List;
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemIterator;
-import org.apache.commons.fileupload.FileItemStream;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 
 import com.google.appengine.api.datastore.Blob;
@@ -35,6 +32,7 @@ public class FilesUploadServlet extends AppEngineUploadAction {
 	 * Maintain a list with received files and their content types.
 	 */
 	Hashtable<String, File> receivedFiles = new Hashtable<String, File>();
+	private String userid = null; 
 
 	/**
 	 * Override executeAction to save the received files in a custom place and
@@ -60,15 +58,15 @@ public class FilesUploadServlet extends AppEngineUploadAction {
 					}
 
 					Blob blob = new Blob(outStream.toByteArray());
-					FilesDataBase imageBlob = new FilesDataBase(
-							item.getName(), blob);
-					response = String.valueOf(pm.makePersistent(imageBlob)
+					FileDataBase fileBlob = new FileDataBase(item.getName(),
+							blob);
+					response = String.valueOf(pm.makePersistent(fileBlob)
 							.getId());
-					
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				} finally {
-					
+
 					pm.close();
 				}
 			}
@@ -80,53 +78,58 @@ public class FilesUploadServlet extends AppEngineUploadAction {
 		// / Send your customized message to the client.
 		return response;
 	}
-	
-	
 
 	@Override
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, ServletException {
 		// TODO Auto-generated method stub
-		//super.doPost(request, response);
-		ServletFileUpload upload = new ServletFileUpload();
-        //PersistenceManager pm = PMF.get().getPersistenceManager(); 
-        try{
-            FileItemIterator iter = upload.getItemIterator(request);
+		// super.doPost(request, response);
+		List<FileItem> sessionFiles = getSessionFileItems(request);
+		// ServletFileUpload upload = new ServletFileUpload();
+		// PersistenceManager pm = PMF.get().getPersistenceManager();
 
-            while (iter.hasNext()) {
-                FileItemStream item = iter.next();
-                
-                String name = item.getFieldName();
-                InputStream stream = item.openStream();
+		for (FileItem item : sessionFiles) {
+			if (item.isFormField()) {
+				if (item.getFieldName().equals("userid")) {
+					userid = item.getString();
+				}
+					
+			} else {
 
+				try {
+					InputStream inStream = item.getInputStream();
 
-                // Process the input stream
-                ByteArrayOutputStream out = new ByteArrayOutputStream();
-                int len;
-                byte[] buffer = new byte[8192];
-                while ((len = stream.read(buffer, 0, buffer.length)) != -1) {
-                    out.write(buffer, 0, len);
-                }
-                int maxFileSize = 2*1024*1024; //10 megs max 
-                if (out.size() > maxFileSize) { 
-                    System.out.println("File is > than " + maxFileSize);
-                    return;
-                }
-                
-                Blob blob = new Blob(out.toByteArray()); 
-                FilesDataBase fileBlob = new FilesDataBase(item.getName(), blob); 
-                fileBlob.setFileType(item.getContentType());
-                fileBlob.InsertFile();
-                //pm.makePersistent(fileBlob);
-                response.getWriter().print(fileBlob.getId());
-            }
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
+					ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+					int len;
+					byte[] buffer = new byte[8192];
+					while ((len = inStream.read(buffer, 0, buffer.length)) != -1) {
+						outStream.write(buffer, 0, len);
+					}
+
+					int maxFileSize = 2 * 1024 * 1024; // 10 megs max
+					if (outStream.size() > maxFileSize) {
+						System.out.println("File is > than " + maxFileSize);
+						return;
+					}
+
+					Blob blob = new Blob(outStream.toByteArray());
+					FileDataBase fileBlob = new FileDataBase(item.getName(),
+							blob);
+					fileBlob.setFileType(item.getContentType());
+					fileBlob.setUserId(userid);
+					fileBlob.InsertFile();
+					// pm.makePersistent(fileBlob);
+					response.getWriter().print(fileBlob.getId());
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		// / Remove files from session because we have a copy of them
+		removeSessionFileItems(request);
+
 	}
-
-
 
 	/**
 	 * Get the content of an uploaded file.

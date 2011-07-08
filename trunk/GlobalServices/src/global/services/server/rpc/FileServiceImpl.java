@@ -1,10 +1,11 @@
 package global.services.server.rpc;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import global.services.client.rpc.FileService;
-import global.services.server.database.FileStoreDataBase;
-import global.services.shared.FileStore;
+import global.services.server.database.FileDataBase;
+import global.services.shared.FileInfo;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -21,7 +22,7 @@ FileService {
 		// TODO Auto-generated method stub
 		Long ret = null;
 		if (userId != null) {
-			FileStoreDataBase fileDB = new FileStoreDataBase();
+			FileDataBase fileDB = new FileDataBase();
 			ret = fileDB.DeleteFile(userId, fileId);
 		}
 			
@@ -33,44 +34,51 @@ FileService {
 		// TODO Auto-generated method stub
 		Long ret = null;
 		if (userId != null) {
-			FileStoreDataBase fileDB = new FileStoreDataBase();
+			FileDataBase fileDB = new FileDataBase();
 			ret = fileDB.DeleteFiles(userId);
 		}
 			
 		return ret;
 	}
 
-	@Override
-	public Long InsertFile(FileStore file) {
+	public Long InsertFile(FileDataBase file) {
 		Long ret = null;
 
-		FileStoreDataBase fileDB = new FileStoreDataBase();
-		ret = fileDB.InsertFile(file);
+		ret = file.InsertFile().getId();
 		return ret;
 	}
 
 	@Override
-	public FileStore SelectFile(String userId, String fileId) {
+	public FileInfo SelectFile(String userId, String fileId) {
 		// TODO Auto-generated method stub
-		FileStoreDataBase fileDB = new FileStoreDataBase();
-		return fileDB.SelectFile(userId, fileId);
-
+		FileDataBase fileDB = new FileDataBase();
+		FileInfo fileInfo = new FileInfo();
+		FileDataBase file = fileDB.SelectFile(userId, fileId);
+		fileInfo.setId(file.getId());
+		fileInfo.setFileName(file.getName());
+		fileInfo.setFileType(file.getFileType());
+		fileInfo.setFileSize(file.getContent().toString());
+		return fileInfo;
 	}
 
 	@Override
-	public List<FileStore> SelectFiles(String userId) {
+	public List<FileInfo> SelectFiles(String userId) {
 		// TODO Auto-generated method stub
-		FileStoreDataBase fileDB = new FileStoreDataBase();
-		return fileDB.SelectFiles(userId);
+		FileDataBase fileDB = new FileDataBase();
+		List<FileInfo> retFiles = new ArrayList<FileInfo>();
+		List<FileDataBase> filesList = fileDB.SelectFiles(userId);
+		for (FileDataBase file: filesList) {
+			FileInfo fileInfo = new FileInfo();
+			fileInfo.setId(file.getId());
+			fileInfo.setFileName(file.getName());
+			fileInfo.setFileType(file.getFileType());
+			fileInfo.setFileSize(file.getContent().toString());
+			retFiles.add(fileInfo);
+		}
+		return retFiles;
 	}
 
-	@Override
-	public Long UpdateFile(FileStore file) {
-		// TODO Auto-generated method stub
-		return null;
-
-	}
-
+	
 	@Override
 	public int DeleteFiles(String userId, List<String> listFileId) {
 		// TODO Auto-generated method stub
@@ -82,6 +90,12 @@ FileService {
 				ret++;
 		}
 		return ret;
+	}
+
+	@Override
+	public Long UpdateFile(FileInfo file) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 
