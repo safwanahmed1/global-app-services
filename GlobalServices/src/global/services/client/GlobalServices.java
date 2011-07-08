@@ -4,15 +4,21 @@ import global.services.client.rpc.AdvertisementService;
 import global.services.client.rpc.AdvertisementServiceAsync;
 import global.services.client.rpc.AppScoreService;
 import global.services.client.rpc.AppScoreServiceAsync;
+import global.services.client.rpc.FileService;
+import global.services.client.rpc.FileServiceAsync;
 import global.services.client.rpc.LoginService;
 import global.services.client.rpc.LoginServiceAsync;
 import global.services.client.rpc.NotificationService;
 import global.services.client.rpc.NotificationServiceAsync;
+import global.services.shared.FileInfo;
 import global.services.shared.Advertisement;
 import global.services.shared.AppScore;
 import global.services.shared.LoginInfo;
 import global.services.shared.Notification;
-
+import gwtupload.client.IUploader;
+import gwtupload.client.SingleUploader;
+import gwtupload.client.IFileInput.FileInputType;
+import gwtupload.client.IUploadStatus.Status;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +36,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
@@ -78,6 +85,8 @@ public class GlobalServices implements EntryPoint {
 	private CellTable<AppScore> gamesCellTable = new CellTable<AppScore>();
 	private CellTable<Advertisement> advsCellTable = new CellTable<Advertisement>();
 	private CellTable<Notification> notesCellTable = new CellTable<Notification>();
+	private CellTable<FileInfo> filesCellTable = new CellTable<FileInfo>();
+	
 	public static HorizontalPanel headerPanel = new HorizontalPanel();
 	private HorizontalPanel accountPanel = new HorizontalPanel();
 	public static HorizontalPanel footerPanel = new HorizontalPanel();
@@ -87,14 +96,17 @@ public class GlobalServices implements EntryPoint {
 	static AppScoreServiceAsync appScoreSvc = GWT.create(AppScoreService.class);
 	static AdvertisementServiceAsync advSvc = GWT.create(AdvertisementService.class);
 	static NotificationServiceAsync noteSvc = GWT.create(NotificationService.class);
+	static FileServiceAsync fileSvc = GWT.create(FileService.class);
 
 	static List<AppScore> listApp;
 	static List<Advertisement> listAdvs;
 	static List<Notification> listNotes;
+	static List<FileInfo> listFiles;
 
 	private List<String> selectedApps = new ArrayList<String>();
 	private List<String> selectedAdvs = new ArrayList<String>();
 	private List<String> selectedNotes = new ArrayList<String>();
+	private List<String> selectedFiles = new ArrayList<String>();
 
 	public void onModuleLoad() {
 
@@ -153,6 +165,8 @@ public class GlobalServices implements EntryPoint {
 
 		// Notification tab
 		CreateNotificationPanel();
+		// File server tab
+		CreateFileServerPanel();
 
 		// Add panels to RootLayout
 		mainPanel.addNorth(headerPanel, 50);
@@ -607,6 +621,154 @@ public class GlobalServices implements EntryPoint {
 		servicesTabPanel.add(notesPanel, "Notification");
 
 	}
+	
+	public void CreateFileServerPanel() {
+		VerticalPanel filesPanel = new VerticalPanel();
+		filesPanel.setStyleName("tabBackgroud");
+
+		HorizontalPanel tableFilesHeaderPanel = new HorizontalPanel();
+
+		tableFilesHeaderPanel.add(new Label("‹ Prev 20 1-3 of 3 Next 20 ›"));
+		VerticalPanel tableFilesFooterPanel = new VerticalPanel();
+		HorizontalPanel tableFilesInfoPanel = new HorizontalPanel();
+		tableFilesInfoPanel
+				.add(new Label("You have 7 file remaining."));
+		tableFilesInfoPanel.add(new Label("‹ Prev 20 1-3 of 3 Next 20 ›"));
+		VerticalPanel tableFilesCtrPanel = new VerticalPanel();
+		
+		SingleUploader fileUploader = new SingleUploader(FileInputType.LABEL);
+		fileUploader.add(new Hidden("userid", loginInfo.getEmailAddress()));
+		fileUploader.setAutoSubmit(true);
+		fileUploader.addOnFinishUploadHandler(onFinishUploaderHandler);
+		tableFilesCtrPanel.add(fileUploader);
+		
+
+		tableFilesCtrPanel.add(new Button("Delete files", new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				// TODO Auto-generated method stub
+				if (selectedFiles.size() == 0) {
+					Window.alert("You have to chose at least a file to delete.");
+				} else {
+					if (Window
+							.confirm("Would you want to delete files")) {
+						FileServiceAsync fileService = GWT
+								.create(FileService.class);
+						fileService.DeleteFiles(loginInfo.getEmailAddress(),
+								selectedFiles, new AsyncCallback<Integer>() {
+									public void onFailure(Throwable caught) {
+									}
+
+									public void onSuccess(Integer result) {
+										// TODO Auto-generated method stub
+										Window.alert(result + " files have been deleted successful.");
+										RefreshFileTbl();									}
+								});
+						selectedFiles.clear();
+					}
+				}
+			}
+		}));
+		tableFilesFooterPanel.add(tableFilesInfoPanel);
+		tableFilesFooterPanel.add(tableFilesCtrPanel);
+
+		filesPanel.add(tableFilesHeaderPanel);
+
+		final SelectionModel<FileInfo> selectionFileModel = new MultiSelectionModel<FileInfo>(
+				FileInfo.KEY_PROVIDER);
+		filesCellTable.setSelectionModel(selectionFileModel,
+				DefaultSelectionEventManager
+						.<FileInfo> createCheckboxManager());
+
+		Column<FileInfo, Boolean> checkColumn = new Column<FileInfo, Boolean>(
+				new CheckboxCell(true, false)) {
+
+			@Override
+			public Boolean getValue(FileInfo file) {
+				// TODO Auto-generated method stub
+				if (selectionFileModel.isSelected(file)) {
+					if (!selectedFiles.contains(String.valueOf(file.getId())))
+						selectedFiles.add(String.valueOf(file.getId()));
+				} else {
+					if (selectedFiles.contains(String.valueOf(file.getId())))
+						selectedFiles.remove(String.valueOf(file.getId()));
+				}
+				return selectionFileModel.isSelected(file);
+			}
+		};
+		filesCellTable.addColumn(checkColumn,
+				SafeHtmlUtils.fromSafeConstant("<br/>"));
+		filesCellTable.setColumnWidth(checkColumn, 40, Unit.PX);
+
+		// Create file id column.
+		TextColumn<FileInfo> fileIdColumn = new TextColumn<FileInfo>() {
+			@Override
+			public String getValue(FileInfo file) {
+				return String.valueOf(file.getId());
+			}
+		};
+		fileIdColumn.setSortable(true);
+		filesCellTable.addColumn(fileIdColumn, "File ID");
+		
+		// Create file name column.
+		TextColumn<FileInfo> fileNameColumn = new TextColumn<FileInfo>() {
+			@Override
+			public String getValue(FileInfo file) {
+				return file.getFileName();
+			}
+		};
+		fileNameColumn.setSortable(true);
+		filesCellTable.addColumn(fileNameColumn, "File Name");
+
+		// Create file type column.
+		TextColumn<FileInfo> fileTypeColumn = new TextColumn<FileInfo>() {
+			@Override
+			public String getValue(FileInfo file) {
+				return file.getFileType();
+			}
+		};
+		fileTypeColumn.setSortable(true);
+		filesCellTable.addColumn(fileTypeColumn, "File type");
+
+		// Create file size column.
+		
+		TextColumn<FileInfo> fileSizeColumn = new TextColumn<FileInfo>() {
+			@Override
+			public String getValue(FileInfo file) {
+				return file.getFileSize();
+			}
+		};
+		fileSizeColumn.setSortable(true);
+		filesCellTable.addColumn(fileSizeColumn, "File size");
+
+
+		// Create a data provider.
+		ListDataProvider<FileInfo> dataProvider = new ListDataProvider<FileInfo>();
+
+		// Connect the table to the data provider.
+		dataProvider.addDataDisplay(filesCellTable);
+
+		// Add the data to the data provider, which automatically pushes it to
+		// the
+		// widget.
+		listFiles = dataProvider.getList();
+		
+		RefreshFileTbl();
+		
+		filesPanel.add(filesCellTable);
+		filesPanel.add(tableFilesFooterPanel);
+		servicesTabPanel.add(filesPanel, "File Server");
+
+	}
+	private IUploader.OnFinishUploaderHandler onFinishUploaderHandler = new IUploader.OnFinishUploaderHandler() {
+		public void onFinish(IUploader uploader) {
+			if (uploader.getStatus() == Status.SUCCESS) {
+				RefreshFileTbl();
+			}
+		}
+	};
+	
 	static void RefreshAppScoreTbl(){
 		appScoreSvc.SelectApps(
 				loginInfo.getEmailAddress(),
@@ -666,6 +828,25 @@ public class GlobalServices implements EntryPoint {
 					}
 				});
 
+	}
+	static void RefreshFileTbl() {
+		fileSvc.SelectFiles(
+				loginInfo.getEmailAddress(),
+				new AsyncCallback<List<FileInfo>>() {
+					public void onFailure(
+							Throwable caught) {
+						// TODO: Do something
+						// with
+						// errors.
+					}
+
+					public void onSuccess(
+							List<FileInfo> result) {
+						listFiles.clear();
+						listFiles
+								.addAll(result);
+					}
+				});
 	}
 	static void ComebackHome(boolean reload){
 		

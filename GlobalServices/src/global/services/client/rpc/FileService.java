@@ -1,6 +1,6 @@
 package global.services.client.rpc;
 
-import global.services.shared.FileStore;
+import global.services.shared.FileInfo;
 
 import java.util.List;
 
@@ -10,11 +10,10 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("files")
 public interface FileService extends RemoteService {
 
-	public Long InsertFile(FileStore file);
-	public Long UpdateFile(FileStore file);
+	public Long UpdateFile(FileInfo file);
 	public Long DeleteFile(String userId, String fileId);
 	public int DeleteFiles(String userId, List<String> listFileId);
 	public Long DeleteFiles(String userId);
-	public FileStore SelectFile(String userId, String appId);
-	public List<FileStore> SelectFiles(String userId);
+	public FileInfo SelectFile(String userId, String appId);
+	public List<FileInfo> SelectFiles(String userId);
 }
