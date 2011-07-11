@@ -22,6 +22,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FormPanel;
+import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
@@ -88,6 +89,8 @@ public class CreateAdvertisment {
 		mainContent.add(new Label("Create new advertisment score"));
 		mainContent.add(new Label("You have 7 advertisment remaining."));
 		SingleUploader iconUploader = new SingleUploader(FileInputType.LABEL);
+		//iconUploader.add(new Hidden("userid", loginInfo.getEmailAddress()), 0);
+		iconUploader.setServletPath(iconUploader.getServletPath() + "?userid=" + loginInfo.getEmailAddress());
 		iconUploader.setAutoSubmit(true);
 		mainContent.add(new Label("Icon app:"));
 		// imgIcon = new Image();

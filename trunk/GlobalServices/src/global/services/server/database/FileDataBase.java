@@ -127,11 +127,11 @@ public class FileDataBase implements Serializable {
 	public Long DeleteFile(String userId, String id) {
 		// TODO Auto-generated method stub
 		Long ret = null;
-		Query query = pm_.newQuery(AppScore.class);
+		Query query = pm_.newQuery(FileDataBase.class);
 		if ((userId != null) && !userId.isEmpty())
 			query.setFilter("userId_ == \"" + userId + "\"");
 		if ((id != null) && !id.isEmpty())
-			query.setFilter("id == \"" + id + "\"");
+			query.setFilter("id == " + id);
 		ret = query.deletePersistentAll();
 		return ret;
 
