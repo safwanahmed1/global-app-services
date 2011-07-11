@@ -12,6 +12,9 @@ import java.io.InputStream;
 import java.util.Hashtable;
 import java.util.List;
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemIterator;
+import org.apache.commons.fileupload.FileItemStream;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 
 import com.google.appengine.api.datastore.Blob;
@@ -32,7 +35,7 @@ public class FilesUploadServlet extends AppEngineUploadAction {
 	 * Maintain a list with received files and their content types.
 	 */
 	Hashtable<String, File> receivedFiles = new Hashtable<String, File>();
-	private String userid = null; 
+	private String userid = null;
 
 	/**
 	 * Override executeAction to save the received files in a custom place and
@@ -83,48 +86,39 @@ public class FilesUploadServlet extends AppEngineUploadAction {
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, ServletException {
 		// TODO Auto-generated method stub
-		// super.doPost(request, response);
-		List<FileItem> sessionFiles = getSessionFileItems(request);
-		// ServletFileUpload upload = new ServletFileUpload();
-		// PersistenceManager pm = PMF.get().getPersistenceManager();
+		userid = request.getParameter("userid");
+		ServletFileUpload upload = new ServletFileUpload();
+		try {
+			FileItemIterator iter = upload.getItemIterator(request);
+			while (iter.hasNext()) {
+				FileItemStream item = iter.next();
+				InputStream inStream = item.openStream();
 
-		for (FileItem item : sessionFiles) {
-			if (item.isFormField()) {
-				if (item.getFieldName().equals("userid")) {
-					userid = item.getString();
+
+				ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+				int len;
+				byte[] buffer = new byte[8192];
+				while ((len = inStream.read(buffer, 0, buffer.length)) != -1) {
+					outStream.write(buffer, 0, len);
 				}
-					
-			} else {
 
-				try {
-					InputStream inStream = item.getInputStream();
-
-					ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-					int len;
-					byte[] buffer = new byte[8192];
-					while ((len = inStream.read(buffer, 0, buffer.length)) != -1) {
-						outStream.write(buffer, 0, len);
-					}
-
-					int maxFileSize = 2 * 1024 * 1024; // 10 megs max
-					if (outStream.size() > maxFileSize) {
-						System.out.println("File is > than " + maxFileSize);
-						return;
-					}
-
-					Blob blob = new Blob(outStream.toByteArray());
-					FileDataBase fileBlob = new FileDataBase(item.getName(),
-							blob);
-					fileBlob.setFileType(item.getContentType());
-					fileBlob.setUserId(userid);
-					fileBlob.InsertFile();
-					// pm.makePersistent(fileBlob);
-					response.getWriter().print(fileBlob.getId());
-
-				} catch (Exception e) {
-					e.printStackTrace();
+				int maxFileSize = 1024 * 1024; // 10 megs max
+				if (outStream.size() > maxFileSize) {
+					System.out.println("File is > than " + maxFileSize);
+					return;
 				}
+
+				Blob blob = new Blob(outStream.toByteArray());
+				FileDataBase fileBlob = new FileDataBase(item.getName(), blob);
+				fileBlob.setFileType(item.getContentType());
+				fileBlob.setUserId(userid);
+				fileBlob.InsertFile();
+				// pm.makePersistent(fileBlob);
+				response.getWriter().print(fileBlob.getId());
+
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		// / Remove files from session because we have a copy of them
 		removeSessionFileItems(request);

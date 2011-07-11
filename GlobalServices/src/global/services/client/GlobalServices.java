@@ -86,7 +86,7 @@ public class GlobalServices implements EntryPoint {
 	private CellTable<Advertisement> advsCellTable = new CellTable<Advertisement>();
 	private CellTable<Notification> notesCellTable = new CellTable<Notification>();
 	private CellTable<FileInfo> filesCellTable = new CellTable<FileInfo>();
-	
+
 	public static HorizontalPanel headerPanel = new HorizontalPanel();
 	private HorizontalPanel accountPanel = new HorizontalPanel();
 	public static HorizontalPanel footerPanel = new HorizontalPanel();
@@ -94,9 +94,24 @@ public class GlobalServices implements EntryPoint {
 	private VerticalPanel gamesPanel = new VerticalPanel();
 
 	static AppScoreServiceAsync appScoreSvc = GWT.create(AppScoreService.class);
-	static AdvertisementServiceAsync advSvc = GWT.create(AdvertisementService.class);
-	static NotificationServiceAsync noteSvc = GWT.create(NotificationService.class);
+	static AdvertisementServiceAsync advSvc = GWT
+			.create(AdvertisementService.class);
+	static NotificationServiceAsync noteSvc = GWT
+			.create(NotificationService.class);
 	static FileServiceAsync fileSvc = GWT.create(FileService.class);
+
+	static Label lblAppRemaining = new Label(
+			"Calculating number apps remaining...");
+	static Label lblAdvRemaining = new Label(
+			"Calculating number advertisments remaining...");
+	static Label lblNoteRemaining = new Label(
+			"Calculating number notes remaining...");
+	static Label lblFileRemaining = new Label(
+			"Calculating number files remaining...");
+	static int numAppRemaining = 0;
+	static int numAdvRemaining = 0;
+	static int numNoteRemaining = 0;
+	static int numFileRemaining = 0;
 
 	static List<AppScore> listApp;
 	static List<Advertisement> listAdvs;
@@ -107,6 +122,8 @@ public class GlobalServices implements EntryPoint {
 	private List<String> selectedAdvs = new ArrayList<String>();
 	private List<String> selectedNotes = new ArrayList<String>();
 	private List<String> selectedFiles = new ArrayList<String>();
+
+	static SingleUploader fileUploader;
 
 	public void onModuleLoad() {
 
@@ -184,22 +201,24 @@ public class GlobalServices implements EntryPoint {
 
 		HorizontalPanel tableGamesHeaderPanel = new HorizontalPanel();
 
-		tableGamesHeaderPanel.add(new Label("‹ Prev 20 1-3 of 3 Next 20 ›"));
 		VerticalPanel tableGamesFooterPanel = new VerticalPanel();
 		HorizontalPanel tableGamesInfoPanel = new HorizontalPanel();
-		tableGamesInfoPanel.add(new Label("You have 7 games remaining."));
-		tableGamesInfoPanel.add(new Label("‹ Prev 20 1-3 of 3 Next 20 ›"));
+		tableGamesInfoPanel.add(lblAppRemaining);
 		HorizontalPanel tableGamesCtrPanel = new HorizontalPanel();
 		tableGamesCtrPanel.add(new Button("Create app", new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				mainPanel.clear();
-				mainPanel.addNorth(headerPanel, 50);
-				mainPanel.addSouth(footerPanel, 50);
-				CreateAppScores createApp = new CreateAppScores();
-				createApp.setLoginInfo(loginInfo);
-				mainPanel.add(createApp.Initialize());
+				if (numAppRemaining <= 0) {
+					Window.alert("You can not create more appplication.");
+				} else {
+					mainPanel.clear();
+					mainPanel.addNorth(headerPanel, 50);
+					mainPanel.addSouth(footerPanel, 50);
+					CreateAppScores createApp = new CreateAppScores();
+					createApp.setLoginInfo(loginInfo);
+					mainPanel.add(createApp.Initialize());
+				}
 
 			}
 		}));
@@ -225,7 +244,7 @@ public class GlobalServices implements EntryPoint {
 										Window.alert(result
 												+ " Applications have been deleted successful.");
 										RefreshAppScoreTbl();
-																			}
+									}
 								});
 						selectedApps.clear();
 					}
@@ -241,8 +260,9 @@ public class GlobalServices implements EntryPoint {
 		final SelectionModel<AppScore> selectionAppModel = new MultiSelectionModel<AppScore>(
 				AppScore.KEY_PROVIDER);
 		gamesCellTable
-				.setSelectionModel(selectionAppModel, DefaultSelectionEventManager
-						.<AppScore> createCheckboxManager());
+				.setSelectionModel(selectionAppModel,
+						DefaultSelectionEventManager
+								.<AppScore> createCheckboxManager());
 
 		Column<AppScore, Boolean> checkColumn = new Column<AppScore, Boolean>(
 				new CheckboxCell(true, false)) {
@@ -305,7 +325,6 @@ public class GlobalServices implements EntryPoint {
 		// widget.
 		listApp = dataProvider.getList();
 		RefreshAppScoreTbl();
-		
 
 		highScorePanel.add(gamesCellTable);
 		highScorePanel.add(tableGamesFooterPanel);
@@ -318,23 +337,24 @@ public class GlobalServices implements EntryPoint {
 
 		HorizontalPanel tableAdvsHeaderPanel = new HorizontalPanel();
 
-		tableAdvsHeaderPanel.add(new Label("‹ Prev 20 1-3 of 3 Next 20 ›"));
 		VerticalPanel tableAdvsFooterPanel = new VerticalPanel();
 		HorizontalPanel tableAdvsInfoPanel = new HorizontalPanel();
-		tableAdvsInfoPanel
-				.add(new Label("You have 7 advertisement remaining."));
-		tableAdvsInfoPanel.add(new Label("‹ Prev 20 1-3 of 3 Next 20 ›"));
+		tableAdvsInfoPanel.add(lblAdvRemaining);
 		HorizontalPanel tableAdvsCtrPanel = new HorizontalPanel();
 		tableAdvsCtrPanel.add(new Button("Create adv", new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				mainPanel.clear();
-				mainPanel.addNorth(headerPanel, 50);
-				mainPanel.addSouth(footerPanel, 50);
-				CreateAdvertisment createAdv = new CreateAdvertisment();
-				createAdv.setLoginInfo(loginInfo);
-				mainPanel.add(createAdv.Initialize());
+				if ((numAdvRemaining <= 0) || (numFileRemaining <= 0)) {
+					Window.alert("You can not create more advertisment.");
+				} else {
+					mainPanel.clear();
+					mainPanel.addNorth(headerPanel, 50);
+					mainPanel.addSouth(footerPanel, 50);
+					CreateAdvertisment createAdv = new CreateAdvertisment();
+					createAdv.setLoginInfo(loginInfo);
+					mainPanel.add(createAdv.Initialize());
+				}
 
 			}
 		}));
@@ -351,16 +371,18 @@ public class GlobalServices implements EntryPoint {
 							.confirm("Would you want to delete advertisements")) {
 						AdvertisementServiceAsync advertisementService = GWT
 								.create(AdvertisementService.class);
-						advertisementService.DeleteAdvs(loginInfo.getEmailAddress(),
-								selectedAdvs, new AsyncCallback<Integer>() {
+						advertisementService.DeleteAdvs(
+								loginInfo.getEmailAddress(), selectedAdvs,
+								new AsyncCallback<Integer>() {
 									public void onFailure(Throwable caught) {
 									}
 
 									public void onSuccess(Integer result) {
 										// TODO Auto-generated method stub
-										Window.alert(result + " Advertisements have been deleted successful.");
+										Window.alert(result
+												+ " Advertisements have been deleted successful.");
 										RefreshAdvertisementTbl();
-										
+
 									}
 								});
 						selectedAdvs.clear();
@@ -474,24 +496,24 @@ public class GlobalServices implements EntryPoint {
 
 		HorizontalPanel tableNotesHeaderPanel = new HorizontalPanel();
 
-		tableNotesHeaderPanel.add(new Label("‹ Prev 20 1-3 of 3 Next 20 ›"));
 		VerticalPanel tableNotesFooterPanel = new VerticalPanel();
 		HorizontalPanel tableNotesInfoPanel = new HorizontalPanel();
-		tableNotesInfoPanel
-				.add(new Label("You have 7 notification remaining."));
-		tableNotesInfoPanel.add(new Label("‹ Prev 20 1-3 of 3 Next 20 ›"));
+		tableNotesInfoPanel.add(lblNoteRemaining);
 		HorizontalPanel tableNotesCtrPanel = new HorizontalPanel();
 		tableNotesCtrPanel.add(new Button("Create note", new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				mainPanel.clear();
-				mainPanel.addNorth(headerPanel, 50);
-				mainPanel.addSouth(footerPanel, 50);
-				CreateNotification createNote = new CreateNotification();
-				createNote.setLoginInfo(loginInfo);
-				mainPanel.add(createNote.Initialize());
-
+				if (numNoteRemaining <= 0) {
+					Window.alert("You can not create more notification.");
+				} else {
+					mainPanel.clear();
+					mainPanel.addNorth(headerPanel, 50);
+					mainPanel.addSouth(footerPanel, 50);
+					CreateNotification createNote = new CreateNotification();
+					createNote.setLoginInfo(loginInfo);
+					mainPanel.add(createNote.Initialize());
+				}
 			}
 		}));
 
@@ -514,8 +536,10 @@ public class GlobalServices implements EntryPoint {
 
 									public void onSuccess(Integer result) {
 										// TODO Auto-generated method stub
-										Window.alert(result + " Notifications have been deleted successful.");
-										RefreshNotificationTbl();									}
+										Window.alert(result
+												+ " Notifications have been deleted successful.");
+										RefreshNotificationTbl();
+									}
 								});
 						selectedNotes.clear();
 					}
@@ -613,35 +637,34 @@ public class GlobalServices implements EntryPoint {
 		// the
 		// widget.
 		listNotes = dataProvider.getList();
-		
+
 		RefreshNotificationTbl();
-		
+
 		notesPanel.add(notesCellTable);
 		notesPanel.add(tableNotesFooterPanel);
 		servicesTabPanel.add(notesPanel, "Notification");
 
 	}
-	
+
 	public void CreateFileServerPanel() {
 		VerticalPanel filesPanel = new VerticalPanel();
 		filesPanel.setStyleName("tabBackgroud");
 
 		HorizontalPanel tableFilesHeaderPanel = new HorizontalPanel();
 
-		tableFilesHeaderPanel.add(new Label("‹ Prev 20 1-3 of 3 Next 20 ›"));
 		VerticalPanel tableFilesFooterPanel = new VerticalPanel();
 		HorizontalPanel tableFilesInfoPanel = new HorizontalPanel();
-		tableFilesInfoPanel
-				.add(new Label("You have 7 file remaining."));
-		tableFilesInfoPanel.add(new Label("‹ Prev 20 1-3 of 3 Next 20 ›"));
+		tableFilesInfoPanel.add(lblFileRemaining);
 		VerticalPanel tableFilesCtrPanel = new VerticalPanel();
-		
-		SingleUploader fileUploader = new SingleUploader(FileInputType.LABEL);
-		fileUploader.add(new Hidden("userid", loginInfo.getEmailAddress()));
+
+		fileUploader = new SingleUploader(FileInputType.LABEL);
+		// fileUploader.add(new Hidden("userid", loginInfo.getEmailAddress()),
+		// 0);
+		fileUploader.setServletPath(fileUploader.getServletPath() + "?userid="
+				+ loginInfo.getEmailAddress());
 		fileUploader.setAutoSubmit(true);
 		fileUploader.addOnFinishUploadHandler(onFinishUploaderHandler);
 		tableFilesCtrPanel.add(fileUploader);
-		
 
 		tableFilesCtrPanel.add(new Button("Delete files", new ClickHandler() {
 
@@ -651,8 +674,7 @@ public class GlobalServices implements EntryPoint {
 				if (selectedFiles.size() == 0) {
 					Window.alert("You have to chose at least a file to delete.");
 				} else {
-					if (Window
-							.confirm("Would you want to delete files")) {
+					if (Window.confirm("Would you want to delete files")) {
 						FileServiceAsync fileService = GWT
 								.create(FileService.class);
 						fileService.DeleteFiles(loginInfo.getEmailAddress(),
@@ -662,8 +684,10 @@ public class GlobalServices implements EntryPoint {
 
 									public void onSuccess(Integer result) {
 										// TODO Auto-generated method stub
-										Window.alert(result + " files have been deleted successful.");
-										RefreshFileTbl();									}
+										Window.alert(result
+												+ " files have been deleted successful.");
+										RefreshFileTbl();
+									}
 								});
 						selectedFiles.clear();
 					}
@@ -677,9 +701,10 @@ public class GlobalServices implements EntryPoint {
 
 		final SelectionModel<FileInfo> selectionFileModel = new MultiSelectionModel<FileInfo>(
 				FileInfo.KEY_PROVIDER);
-		filesCellTable.setSelectionModel(selectionFileModel,
-				DefaultSelectionEventManager
-						.<FileInfo> createCheckboxManager());
+		filesCellTable
+				.setSelectionModel(selectionFileModel,
+						DefaultSelectionEventManager
+								.<FileInfo> createCheckboxManager());
 
 		Column<FileInfo, Boolean> checkColumn = new Column<FileInfo, Boolean>(
 				new CheckboxCell(true, false)) {
@@ -710,7 +735,7 @@ public class GlobalServices implements EntryPoint {
 		};
 		fileIdColumn.setSortable(true);
 		filesCellTable.addColumn(fileIdColumn, "File ID");
-		
+
 		// Create file name column.
 		TextColumn<FileInfo> fileNameColumn = new TextColumn<FileInfo>() {
 			@Override
@@ -732,7 +757,7 @@ public class GlobalServices implements EntryPoint {
 		filesCellTable.addColumn(fileTypeColumn, "File type");
 
 		// Create file size column.
-		
+
 		TextColumn<FileInfo> fileSizeColumn = new TextColumn<FileInfo>() {
 			@Override
 			public String getValue(FileInfo file) {
@@ -741,7 +766,6 @@ public class GlobalServices implements EntryPoint {
 		};
 		fileSizeColumn.setSortable(true);
 		filesCellTable.addColumn(fileSizeColumn, "File size");
-
 
 		// Create a data provider.
 		ListDataProvider<FileInfo> dataProvider = new ListDataProvider<FileInfo>();
@@ -753,14 +777,15 @@ public class GlobalServices implements EntryPoint {
 		// the
 		// widget.
 		listFiles = dataProvider.getList();
-		
+
 		RefreshFileTbl();
-		
+
 		filesPanel.add(filesCellTable);
 		filesPanel.add(tableFilesFooterPanel);
 		servicesTabPanel.add(filesPanel, "File Server");
 
 	}
+
 	private IUploader.OnFinishUploaderHandler onFinishUploaderHandler = new IUploader.OnFinishUploaderHandler() {
 		public void onFinish(IUploader uploader) {
 			if (uploader.getStatus() == Status.SUCCESS) {
@@ -768,99 +793,100 @@ public class GlobalServices implements EntryPoint {
 			}
 		}
 	};
-	
-	static void RefreshAppScoreTbl(){
-		appScoreSvc.SelectApps(
-				loginInfo.getEmailAddress(),
+
+	static void RefreshAppScoreTbl() {
+		appScoreSvc.SelectApps(loginInfo.getEmailAddress(),
 				new AsyncCallback<List<AppScore>>() {
-					public void onFailure(
-							Throwable caught) {
+					public void onFailure(Throwable caught) {
 						// TODO: Do something
 						// with
 						// errors.
 					}
 
-					public void onSuccess(
-							List<AppScore> result) {
+					public void onSuccess(List<AppScore> result) {
 
 						listApp.clear();
 						listApp.addAll(result);
+						numAppRemaining = 10 - result.size();
+						lblAppRemaining.setText("You have " + numAppRemaining
+								+ " remaining games.");
 					}
 				});
 
 	}
+
 	static void RefreshAdvertisementTbl() {
-		advSvc.SelectAdvs(
-				loginInfo.getEmailAddress(),
+		advSvc.SelectAdvs(loginInfo.getEmailAddress(),
 				new AsyncCallback<List<Advertisement>>() {
-					public void onFailure(
-							Throwable caught) {
+					public void onFailure(Throwable caught) {
 						// TODO: Do something
 						// with
 						// errors.
 					}
 
-					public void onSuccess(
-							List<Advertisement> result) {
+					public void onSuccess(List<Advertisement> result) {
 
 						listAdvs.clear();
 						listAdvs.addAll(result);
+						numAdvRemaining = 10 - result.size();
+						lblAdvRemaining.setText("You have " + numAdvRemaining
+								+ " remaining advertisments.");
 					}
 				});
 
 	}
+
 	static void RefreshNotificationTbl() {
-		noteSvc.SelectNotes(
-				loginInfo.getEmailAddress(),
+		noteSvc.SelectNotes(loginInfo.getEmailAddress(),
 				new AsyncCallback<List<Notification>>() {
-					public void onFailure(
-							Throwable caught) {
+					public void onFailure(Throwable caught) {
 						// TODO: Do something
 						// with
 						// errors.
 					}
 
-					public void onSuccess(
-							List<Notification> result) {
+					public void onSuccess(List<Notification> result) {
 						listNotes.clear();
-						listNotes
-								.addAll(result);
+						listNotes.addAll(result);
+						numNoteRemaining = 10 - result.size();
+						lblNoteRemaining.setText("You have " + numNoteRemaining
+								+ " remaining notes.");
 					}
 				});
 
 	}
+
 	static void RefreshFileTbl() {
-		fileSvc.SelectFiles(
-				loginInfo.getEmailAddress(),
+		fileSvc.SelectFiles(loginInfo.getEmailAddress(),
 				new AsyncCallback<List<FileInfo>>() {
-					public void onFailure(
-							Throwable caught) {
+					public void onFailure(Throwable caught) {
 						// TODO: Do something
 						// with
 						// errors.
 					}
 
-					public void onSuccess(
-							List<FileInfo> result) {
+					public void onSuccess(List<FileInfo> result) {
 						listFiles.clear();
-						listFiles
-								.addAll(result);
+						listFiles.addAll(result);
+						numFileRemaining = 10 - result.size();
+						lblFileRemaining.setText("You have " + numFileRemaining
+								+ " remaining files.");
+						fileUploader.setEnabled(numFileRemaining > 0);
 					}
 				});
 	}
-	static void ComebackHome(boolean reload){
-		
+
+	static void ComebackHome(boolean reload) {
+
 		if (reload) {
 			RefreshAppScoreTbl();
 			RefreshAdvertisementTbl();
 			RefreshNotificationTbl();
 		}
 		GlobalServices.mainPanel.clear();
-		GlobalServices.mainPanel.addNorth(GlobalServices.headerPanel,
-				50);
-		GlobalServices.mainPanel.addSouth(GlobalServices.footerPanel,
-				50);
+		GlobalServices.mainPanel.addNorth(GlobalServices.headerPanel, 50);
+		GlobalServices.mainPanel.addSouth(GlobalServices.footerPanel, 50);
 		GlobalServices.mainPanel.add(GlobalServices.servicesTabPanel);
-		
+
 	}
 }
