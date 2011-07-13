@@ -10,6 +10,12 @@ h1 {
   text-align: center;
 }
 
+.clickableanchor {
+	color: blue;
+	text-decoration:underline;
+	cursor:pointer;
+	
+}
 
 .tableListHeader {
   background-color: #92C1F0;

@@ -1,8 +1,6 @@
 package global.services.server.rpc;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import global.services.client.rpc.FileService;
 import global.services.server.database.FileDataBase;
 import global.services.shared.FileInfo;
@@ -36,6 +34,7 @@ FileService {
 		if (userId != null) {
 			FileDataBase fileDB = new FileDataBase();
 			ret = fileDB.DeleteFiles(userId);
+			fileDB.Finalize();
 		}
 			
 		return ret;
@@ -45,6 +44,7 @@ FileService {
 		Long ret = null;
 
 		ret = file.InsertFile().getId();
+		file.Finalize();
 		return ret;
 	}
 
@@ -58,6 +58,7 @@ FileService {
 		fileInfo.setFileName(file.getName());
 		fileInfo.setFileType(file.getFileType());
 		fileInfo.setFileSize(file.getContent().toString());
+		fileDB.Finalize();
 		return fileInfo;
 	}
 
@@ -75,6 +76,7 @@ FileService {
 			fileInfo.setFileSize(file.getContent().toString());
 			retFiles.add(fileInfo);
 		}
+		fileDB.Finalize();
 		return retFiles;
 	}
 

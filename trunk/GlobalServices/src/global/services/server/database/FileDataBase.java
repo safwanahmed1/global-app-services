@@ -53,6 +53,9 @@ public class FileDataBase implements Serializable {
 		pm_ = PMF.get().getPersistenceManager();
 
 	}
+	public void Finalize() {
+		pm_.close();
+	}
 
 	public FileDataBase(String fileName, Blob content) {
 		pm_ = PMF.get().getPersistenceManager();

@@ -6,6 +6,8 @@ import java.util.List;
 
 import global.services.server.PMF;
 import global.services.shared.Advertisement;
+import global.services.shared.AppScore;
+
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
@@ -30,8 +32,15 @@ public class AdvertisementDataBase {
 			return pm_.makePersistent(adv);
 	}
 
-	public void UpdateAdv(Advertisement adv) {
-
+	public Long UpdateAdv(Advertisement adv) {
+		Advertisement advTemp = pm_.getObjectById(Advertisement.class, adv.getId());
+		advTemp.setAppId(adv.getAppId());
+		advTemp.setContent(adv.getContent());
+		advTemp.setIconFile(adv.getIconFile());
+		advTemp.setStoreUrl(adv.getStoreUrl());
+		advTemp.setTittle(adv.getTittle());
+		advTemp.setType(adv.getType());
+		return advTemp.getId();
 	}
 
 	public Long DeleteAdv(String userId, String appId) {

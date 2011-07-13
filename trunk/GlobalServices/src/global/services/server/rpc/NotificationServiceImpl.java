@@ -3,6 +3,7 @@ package global.services.server.rpc;
 import java.util.List;
 
 import global.services.client.rpc.NotificationService;
+import global.services.server.database.AppScoreDataBase;
 import global.services.server.database.NotificationDataBase;
 import global.services.shared.Notification;
 
@@ -23,6 +24,7 @@ NotificationService {
 		if (userId != null) {
 			NotificationDataBase noteDB = new NotificationDataBase();
 			ret = noteDB.DeleteNote(userId, appId);
+			noteDB.Finalize();
 		}
 			
 		return ret;
@@ -35,6 +37,7 @@ NotificationService {
 		if (userId != null) {
 			NotificationDataBase noteDB = new NotificationDataBase();
 			ret = noteDB.DeleteNotes(userId);
+			noteDB.Finalize();
 		}
 			
 		return ret;
@@ -47,6 +50,7 @@ NotificationService {
 
 		NotificationDataBase noteDB = new NotificationDataBase();
 		ret = noteDB.InsertNote(note).getId();
+		noteDB.Finalize();
 		return ret;
 	}
 
@@ -54,7 +58,9 @@ NotificationService {
 	public Notification SelectNote(String userId, String appId) {
 		// TODO Auto-generated method stub
 		NotificationDataBase noteDB = new NotificationDataBase();
-		return noteDB.SelectNote(userId, appId);
+		Notification noteRet = noteDB.SelectNote(userId, appId);
+		noteDB.Finalize();
+		return noteRet;
 
 	}
 
@@ -62,13 +68,18 @@ NotificationService {
 	public List<Notification> SelectNotes(String userId) {
 		// TODO Auto-generated method stub
 		NotificationDataBase noteDB = new NotificationDataBase();
-		return noteDB.SelectNotes(userId);
+		List<Notification> noteListRet = noteDB.SelectNotes(userId);
+		noteDB.Finalize();
+		return noteListRet;
 	}
 
 	@Override
 	public Long UpdateNote(Notification note) {
 		// TODO Auto-generated method stub
-		return null;
+		NotificationDataBase noteDB = new NotificationDataBase();
+		Long ret = noteDB.UpdateNote(note);
+		noteDB.Finalize();
+		return ret;
 	}
 
 	@Override

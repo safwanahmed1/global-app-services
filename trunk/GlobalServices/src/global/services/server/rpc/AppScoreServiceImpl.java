@@ -25,6 +25,7 @@ public class AppScoreServiceImpl extends RemoteServiceServlet implements
 		if (userId != null) {
 			AppScoreDataBase appDB = new AppScoreDataBase();
 			ret = appDB.DeleteApp(userId, appId);
+			appDB.Finalize();
 		}
 			
 		return ret;
@@ -36,6 +37,7 @@ public class AppScoreServiceImpl extends RemoteServiceServlet implements
 		Long ret = null;
 		AppScoreDataBase appDB = new AppScoreDataBase();
 		ret = appDB.DeleteApps(userId);
+		appDB.Finalize();
 		return ret;
 
 	}
@@ -48,13 +50,16 @@ public class AppScoreServiceImpl extends RemoteServiceServlet implements
 
 		AppScoreDataBase appDB = new AppScoreDataBase();
 		ret = appDB.InsertApp(app);
+		appDB.Finalize();
 		return ret;
 	}
 
 	@Override
 	public Long UpdateApp(AppScore app) {
 		// TODO Auto-generated method stub
-		Long ret = null;
+		AppScoreDataBase appDB = new AppScoreDataBase();
+		Long ret = appDB.UpdateApp(app);
+		appDB.Finalize();
 		return ret;
 	}
 
@@ -62,9 +67,9 @@ public class AppScoreServiceImpl extends RemoteServiceServlet implements
 	public AppScore SelectApp(String userId, String appId) {
 		// TODO Auto-generated method stub
 		AppScoreDataBase appDB = new AppScoreDataBase();
-		return appDB.SelectApp(userId, appId);
-
-		
+		AppScore appRet = appDB.SelectApp(userId, appId);
+		appDB.Finalize();
+		return appRet;
 	}
 
 	@Override
@@ -76,7 +81,7 @@ public class AppScoreServiceImpl extends RemoteServiceServlet implements
 		for (AppScore app : selectedApps) {
 			retApps.add(app);
 		}
-		//Window.alert("selectedApps size in Service implement: " + selectedApps.size());
+		appDB.Finalize();
 		return retApps;
 	}
 
@@ -91,6 +96,7 @@ public class AppScoreServiceImpl extends RemoteServiceServlet implements
 			if (tmpRet != null) 
 				ret++;
 		}
+		appDB.Finalize();
 		return ret;
 	}
 

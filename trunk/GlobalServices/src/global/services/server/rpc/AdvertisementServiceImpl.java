@@ -22,6 +22,7 @@ AdvertisementService {
 		if (userId != null) {
 			AdvertisementDataBase advDB = new AdvertisementDataBase();
 			ret = advDB.DeleteAdv(userId, appId);
+			advDB.Finalize();
 		}
 			
 		return ret;
@@ -34,6 +35,7 @@ AdvertisementService {
 		if (userId != null) {
 			AdvertisementDataBase advDB = new AdvertisementDataBase();
 			ret = advDB.DeleteAdvs(userId);
+			advDB.Finalize();
 		}
 			
 		return ret;
@@ -45,6 +47,7 @@ AdvertisementService {
 
 		AdvertisementDataBase advDB = new AdvertisementDataBase();
 		ret = advDB.InsertAdv(adv).getId();
+		advDB.Finalize();
 		return ret;
 	}
 
@@ -52,7 +55,9 @@ AdvertisementService {
 	public Advertisement SelectAdv(String userId, String appId) {
 		// TODO Auto-generated method stub
 		AdvertisementDataBase advDB = new AdvertisementDataBase();
-		return advDB.SelectAdv(userId, appId);
+		Advertisement advRet = advDB.SelectAdv(userId, appId);
+		advDB.Finalize();
+		return advRet;
 
 	}
 
@@ -60,13 +65,18 @@ AdvertisementService {
 	public List<Advertisement> SelectAdvs(String userId) {
 		// TODO Auto-generated method stub
 		AdvertisementDataBase advDB = new AdvertisementDataBase();
-		return advDB.SelectAdvs(userId);
+		List<Advertisement> advListRet = advDB.SelectAdvs(userId);
+		advDB.Finalize();
+		return advListRet;
 	}
 
 	@Override
 	public Long UpdateAdv(Advertisement adv) {
 		// TODO Auto-generated method stub
-		return null;
+		AdvertisementDataBase advDB = new AdvertisementDataBase();
+		Long advIdRet = advDB.UpdateAdv(adv);
+		advDB.Finalize();
+		return advIdRet;
 
 	}
 
