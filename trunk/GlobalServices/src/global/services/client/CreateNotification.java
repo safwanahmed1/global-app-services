@@ -2,14 +2,9 @@ package global.services.client;
 
 import java.util.Date;
 
-import global.services.client.rpc.AdvertisementService;
 import global.services.client.rpc.NotificationService;
 import global.services.client.rpc.NotificationServiceAsync;
-import global.services.shared.Advertisement;
-import global.services.shared.LoginInfo;
 import global.services.shared.Notification;
-import gwtupload.client.PreloadedImage;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -31,6 +26,55 @@ public class CreateNotification {
 
 	private String userId_ = null;
 	private Notification noteObj = null;
+	private Button btnAddNote = new Button("Create note",  new ClickHandler() {
+
+		@SuppressWarnings("deprecation")
+		@Override
+		public void onClick(ClickEvent event) {
+			// TODO Auto-generated method stub
+			String appID = txtAppId.getText();
+			String appTittle = txtTitle.getText();
+
+			if ((appID != null) && (!appID.equals(""))) {
+
+				// Set up the callback object.
+				AsyncCallback<Long> callback = new AsyncCallback<Long>() {
+					public void onFailure(Throwable caught) {
+						// TODO: Do something with errors.
+					}
+
+					public void onSuccess(Long result) {
+					}
+				};
+
+				if (noteObj == null) {
+					noteObj = new Notification(appID);
+
+					noteObj.setUserId(userId_);
+					noteObj.setTittle(txtTitle.getText());
+					noteObj.setContent(txtContent.getText());
+					noteObj.setFromDate(Date.parse(dateFrom.getValue()
+							.toString()));
+					noteObj.setToDate(Date.parse(dateTo.getValue()
+							.toString()));
+
+					noteSvc.InsertNote(noteObj, callback);
+				} else {
+					noteObj.setAppId(appID);
+					noteObj.setTittle(txtTitle.getText());
+					noteObj.setContent(txtContent.getText());
+					noteObj.setFromDate(Date.parse(dateFrom.getValue()
+							.toString()));
+					noteObj.setToDate(Date.parse(dateTo.getValue()
+							.toString()));
+
+					noteSvc.UpdateNote(noteObj, callback);
+				}
+
+				GlobalServices.ComebackHome(true);
+			}
+		}
+	});
 
 	private NotificationServiceAsync noteSvc = GWT
 			.create(NotificationService.class);
@@ -48,7 +92,7 @@ public class CreateNotification {
 
 			public void onSuccess(Notification result) {
 				noteObj = result;
-
+				btnAddNote.setText("Update note");
 				txtAppId.setText(noteObj.getAppId());
 				txtContent.setText(noteObj.getContent());
 				txtTitle.setText(noteObj.getTittle());
@@ -60,6 +104,7 @@ public class CreateNotification {
 
 	public Widget Initialize() {
 		VerticalPanel mainContent = new VerticalPanel();
+		mainContent.setStyleName("contentBackgroud");
 		mainContent.add(new Label("Create new notification"));
 
 		mainContent.add(new Label("App Identifier:"));
@@ -78,64 +123,7 @@ public class CreateNotification {
 		mainContent.add(dateTo);
 
 		HorizontalPanel controlButton = new HorizontalPanel();
-		controlButton.add(new Button("Create note", new ClickHandler() {
-
-			@SuppressWarnings("deprecation")
-			@Override
-			public void onClick(ClickEvent event) {
-				// TODO Auto-generated method stub
-				String appID = txtAppId.getText();
-				String appTittle = txtTitle.getText();
-
-				if ((appID != null) && (!appID.equals(""))) {
-
-					Notification newNote = new Notification(appID);
-					newNote.setUserId(userId_);
-					newNote.setTittle(appTittle);
-					newNote.setContent(txtContent.getText());
-					newNote.setFromDate(Date.parse(dateFrom.getValue()
-							.toString()));
-					newNote.setToDate(Date.parse(dateTo.getValue().toString()));
-
-					// Set up the callback object.
-					AsyncCallback<Long> callback = new AsyncCallback<Long>() {
-						public void onFailure(Throwable caught) {
-							// TODO: Do something with errors.
-						}
-
-						public void onSuccess(Long result) {
-						}
-					};
-					noteSvc.InsertNote(newNote, callback);
-
-					if (noteObj == null) {
-						noteObj = new Notification(appID);
-
-						noteObj.setUserId(userId_);
-						noteObj.setTittle(txtTitle.getText());
-						noteObj.setContent(txtContent.getText());
-						noteObj.setFromDate(Date.parse(dateFrom.getValue()
-								.toString()));
-						noteObj.setToDate(Date.parse(dateTo.getValue()
-								.toString()));
-
-						noteSvc.InsertNote(noteObj, callback);
-					} else {
-						noteObj.setAppId(appID);
-						noteObj.setTittle(txtTitle.getText());
-						noteObj.setContent(txtContent.getText());
-						noteObj.setFromDate(Date.parse(dateFrom.getValue()
-								.toString()));
-						noteObj.setToDate(Date.parse(dateTo.getValue()
-								.toString()));
-
-						noteSvc.UpdateNote(noteObj, callback);
-					}
-
-					GlobalServices.ComebackHome(true);
-				}
-			}
-		}));
+		controlButton.add( btnAddNote);
 		controlButton.add(new Button("Cancel", new ClickHandler() {
 
 			@Override

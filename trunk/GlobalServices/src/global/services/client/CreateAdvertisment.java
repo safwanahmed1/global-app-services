@@ -43,8 +43,50 @@ public class CreateAdvertisment {
 	private Advertisement advObj = null;
 	
 	private AdvertisementServiceAsync advSvc = GWT.create(AdvertisementService.class);
-	//private FormPanel formUpload;
-	
+
+	private Button btnAddAdv = new Button("Create advertisment", new ClickHandler() {
+
+		@Override
+		public void onClick(ClickEvent event) {
+			// TODO Auto-generated method stub
+			String appID = txtAppId.getText();
+
+			if ((appID != null)&&(!appID.equals(""))) {
+				// formUpload.submit();
+				AsyncCallback<Long> callback = new AsyncCallback<Long>() {
+					public void onFailure(Throwable caught) {
+						// TODO: Do something with errors.
+					}
+
+					public void onSuccess(Long result) {
+					}
+				};
+				if (advObj == null) {
+					advObj = new Advertisement (appID);
+					
+					advObj.setUserId(userId_);
+					advObj.setTittle(txtTitle.getText());
+					advObj.setContent(txtContent.getText());
+					advObj.setType(txtType.getText());
+					advObj.setStoreUrl(txtStoreUrl.getText());
+					advObj.setIconFile(Long.valueOf(iconFileId));
+				
+					advSvc.InsertAdv(advObj, callback);
+				} else {
+					advObj.setAppId(appID);
+					advObj.setTittle(txtTitle.getText());
+					advObj.setContent(txtContent.getText());
+					advObj.setType(txtType.getText());
+					advObj.setStoreUrl(txtStoreUrl.getText());
+					advObj.setIconFile(Long.valueOf(iconFileId));
+					
+					advSvc.UpdateAdv(advObj, callback);
+				}
+				GlobalServices.ComebackHome(true);
+			}
+		}
+	});
+		
 	public CreateAdvertisment(String userId) {
 		userId_ = userId;
 	}
@@ -58,6 +100,7 @@ public class CreateAdvertisment {
 
 			public void onSuccess(Advertisement result) {
 				advObj = result;
+				btnAddAdv.setText("Update advertisment");
 				iconFileId = String.valueOf(advObj.getIconFile());
 				String fileUrl = "http://global-app-services.appspot.com/globalservices/download?fileid=";
 				fileUrl += iconFileId;
@@ -73,48 +116,8 @@ public class CreateAdvertisment {
 
 	public Widget Initialize() {
 		VerticalPanel mainContent = new VerticalPanel();
-		Button btnAddAdv = new Button("Create adv", new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				// TODO Auto-generated method stub
-				String appID = txtAppId.getText();
-
-				if ((appID != null)&&(!appID.equals(""))) {
-					// formUpload.submit();
-					AsyncCallback<Long> callback = new AsyncCallback<Long>() {
-						public void onFailure(Throwable caught) {
-							// TODO: Do something with errors.
-						}
-
-						public void onSuccess(Long result) {
-						}
-					};
-					if (advObj == null) {
-						advObj = new Advertisement (appID);
-						
-						advObj.setUserId(userId_);
-						advObj.setTittle(txtTitle.getText());
-						advObj.setContent(txtContent.getText());
-						advObj.setType(txtType.getText());
-						advObj.setStoreUrl(txtStoreUrl.getText());
-						advObj.setIconFile(Long.valueOf(iconFileId));
-					
-						advSvc.InsertAdv(advObj, callback);
-					} else {
-						advObj.setAppId(appID);
-						advObj.setTittle(txtTitle.getText());
-						advObj.setContent(txtContent.getText());
-						advObj.setType(txtType.getText());
-						advObj.setStoreUrl(txtStoreUrl.getText());
-						advObj.setIconFile(Long.valueOf(iconFileId));
-						
-						advSvc.UpdateAdv(advObj, callback);
-					}
-					GlobalServices.ComebackHome(true);
-				}
-			}
-		});
+		mainContent.setStyleName("contentBackgroud");
+		
 		mainContent.add(new Label("Create new advertisment score"));
 		SingleUploader iconUploader = new SingleUploader(FileInputType.LABEL);
 		//iconUploader.add(new Hidden("userid", loginInfo.getEmailAddress()), 0);

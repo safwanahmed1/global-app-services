@@ -34,7 +34,17 @@ h1 {
   display: block;
   font-size: 16pt;
 }
-
+.contentBackgroud {
+	
+	display: block;
+  	background-color: #D0E4F6;
+  	border-bottom-style: solid;
+  	border-top-style: solid;
+  	border-color:#92c1f0;
+  	border-bottom-width: 3px;
+  	border-top-width: 3px;
+  	padding: 20px;
+}
 .tabBackgroud {
 	
 	 display: block;

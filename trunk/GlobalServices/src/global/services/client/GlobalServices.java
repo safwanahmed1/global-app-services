@@ -292,12 +292,7 @@ public class GlobalServices implements EntryPoint {
 		// Create appId column.
 		Column<AppScore, String> appIdColumn = new Column<AppScore, String>(
 				new ClickableTextCell()) {
-			/*
-			@Override
-			public String getValue(AppScore app) {
-				return app.getAppId();
-			}
-			*/
+			
 
 			@Override
 			public void render(Context context, AppScore object,
@@ -349,16 +344,50 @@ public class GlobalServices implements EntryPoint {
 		};
 		appTittleColumn.setSortable(true);
 		gamesCellTable.addColumn(appTittleColumn, "Tittle");
+		
+		Column<AppScore, String> entriesColumn = new Column<AppScore, String>(
+				new ClickableTextCell()) {
+			
 
-		// Create entries column.
-		TextColumn<AppScore> entriesColumn = new TextColumn<AppScore>() {
 			@Override
-			public String getValue(AppScore app) {
-				return String.valueOf(app.getScoreEntries());
+			public void render(Context context, AppScore object,
+					SafeHtmlBuilder sb) {
+				// TODO Auto-generated method stub
+				super.render(context, object, sb);
+				if (object != null) {
+					sb.appendHtmlConstant("<div class=\"clickableanchor\">");
+					sb.appendEscaped(String.valueOf(object.getScoreEntries()));
+					sb.appendHtmlConstant("</div>");
+				}
 			}
+
+			@Override
+			public void onBrowserEvent(Context context, Element elem,
+					AppScore object, NativeEvent event) {
+				// TODO Auto-generated method stub
+				super.onBrowserEvent(context, elem, object, event);
+				if (event.getType().equals("click")) {
+
+					mainPanel.clear();
+					mainPanel.addNorth(headerPanel, 50);
+					mainPanel.addSouth(footerPanel, 50);
+					HighScoreTable highScore = new HighScoreTable(loginInfo.getEmailAddress(), object.getAppId());
+					
+					mainPanel.add(highScore.Initialize());
+				}
+			}
+
+			@Override
+			public String getValue(AppScore object) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
 		};
 		entriesColumn.setSortable(true);
 		gamesCellTable.addColumn(entriesColumn, "Entries");
+		
+		
 
 		// Create a data provider.
 		ListDataProvider<AppScore> dataProvider = new ListDataProvider<AppScore>();

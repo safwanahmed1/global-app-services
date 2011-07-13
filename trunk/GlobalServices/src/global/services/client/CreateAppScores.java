@@ -22,6 +22,43 @@ public class CreateAppScores {
 	private AppScore appObj = null;
 
 	private AppScoreServiceAsync appScoreSvc = GWT.create(AppScoreService.class);
+	
+	private Button btnAddApp= new Button("Create App", new ClickHandler() {
+
+		@Override
+		public void onClick(ClickEvent event) {
+			// TODO Auto-generated method stub
+			String appID = txtAppId.getText();
+			String appTittle = txtAppTitle.getText();
+			if ((appID != null) && (appTittle != null)
+					&& (!appID.equals("")) && (!appTittle.equals(""))) {
+
+				// Set up the callback object.
+				AsyncCallback<Long> callback = new AsyncCallback<Long>() {
+					public void onFailure(Throwable caught) {
+						// TODO: Do something with errors.
+					}
+
+					public void onSuccess(Long result) {
+					}
+				};
+				if (appObj == null) {
+					appObj = new AppScore(appID);
+					appObj.setAppTittle(appTittle);
+					appObj.setUserId(userId_);
+					appScoreSvc.InsertApp(appObj, callback);
+				} else {
+					appObj.setAppId(appID);
+					appObj.setAppTittle(appTittle);
+					appScoreSvc.UpdateApp(appObj, callback);
+				}
+
+				GlobalServices.ComebackHome(true);
+			} else {
+				Window.alert("Please input fully application information.");
+			}
+		}
+	});
 
 	public CreateAppScores(String userId) {
 		userId_ = userId;
@@ -36,6 +73,7 @@ public class CreateAppScores {
 
 			public void onSuccess(AppScore result) {
 				appObj = result;
+				btnAddApp.setText("Update app");
 				txtAppId.setText(appObj.getAppId());
 				txtAppTitle.setText(appObj.getAppTittle());
 			}
@@ -44,6 +82,7 @@ public class CreateAppScores {
 
 	public Widget Initialize() {
 		VerticalPanel mainContent = new VerticalPanel();
+		mainContent.setStyleName("contentBackgroud");
 		mainContent.add(new Label("Create new app score"));
 		mainContent.add(new Label("App Identifier:"));
 
@@ -54,42 +93,7 @@ public class CreateAppScores {
 		mainContent.add(txtAppTitle);
 
 		HorizontalPanel controlButton = new HorizontalPanel();
-		controlButton.add(new Button("Create App", new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				// TODO Auto-generated method stub
-				String appID = txtAppId.getText();
-				String appTittle = txtAppTitle.getText();
-				if ((appID != null) && (appTittle != null)
-						&& (!appID.equals("")) && (!appTittle.equals(""))) {
-
-					// Set up the callback object.
-					AsyncCallback<Long> callback = new AsyncCallback<Long>() {
-						public void onFailure(Throwable caught) {
-							// TODO: Do something with errors.
-						}
-
-						public void onSuccess(Long result) {
-						}
-					};
-					if (appObj == null) {
-						appObj = new AppScore(appID);
-						appObj.setAppTittle(appTittle);
-						appObj.setUserId(userId_);
-						appScoreSvc.InsertApp(appObj, callback);
-					} else {
-						appObj.setAppId(appID);
-						appObj.setAppTittle(appTittle);
-						appScoreSvc.UpdateApp(appObj, callback);
-					}
-
-					GlobalServices.ComebackHome(true);
-				} else {
-					Window.alert("Please input fully application information.");
-				}
-			}
-		}));
+		controlButton.add(btnAddApp);
 		controlButton.add(new Button("Cancel", new ClickHandler() {
 
 			@Override
