@@ -1,9 +1,11 @@
 package global.services.client;
 
 import global.services.client.rpc.AdvertisementService;
+import global.services.client.rpc.AppScoreService;
 
 import global.services.client.rpc.AdvertisementServiceAsync;
 import global.services.shared.Advertisement;
+import global.services.shared.AppScore;
 import global.services.shared.LoginInfo;
 import gwtupload.client.IFileInput.FileInputType;
 import gwtupload.client.IUploadStatus.Status;
@@ -30,25 +32,44 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class CreateAdvertisment {
-	private TextBox txtAppId;
-	private TextBox txtTitle;
-	private TextBox txtContent;
-	private TextBox txtType;
-	private TextBox txtStoreUrl;
-	private LoginInfo loginInfo = null;
+	private TextBox txtAppId= new TextBox();
+	private TextBox txtTitle= new TextBox();
+	private TextBox txtContent= new TextBox();
+	private TextBox txtType= new TextBox();
+	private TextBox txtStoreUrl= new TextBox();
+	private String userId_ = null;
 	private String iconFileId = null;
 	private FlowPanel panelImages = new FlowPanel();
-
-	public LoginInfo getLoginInfo() {
-		return loginInfo;
-	}
-
-	public void setLoginInfo(LoginInfo loginInfo) {
-		this.loginInfo = loginInfo;
-	}
-
-	private AdvertisementServiceAsync advSvc;
+	private Advertisement advObj = null;
+	
+	private AdvertisementServiceAsync advSvc = GWT.create(AdvertisementService.class);
 	//private FormPanel formUpload;
+	
+	public CreateAdvertisment(String userId) {
+		userId_ = userId;
+	}
+
+	public CreateAdvertisment(String userId, String appId) {
+		userId_ = userId;
+		advSvc.SelectAdv(userId, appId, new AsyncCallback<Advertisement>() {
+			public void onFailure(Throwable caught) {
+				// TODO: Do something with errors.
+			}
+
+			public void onSuccess(Advertisement result) {
+				advObj = result;
+				iconFileId = String.valueOf(advObj.getIconFile());
+				String fileUrl = "http://global-app-services.appspot.com/globalservices/download?fileid=";
+				fileUrl += iconFileId;
+				new PreloadedImage(fileUrl, showImage);
+				txtAppId.setText(advObj.getAppId());
+				txtContent.setText(advObj.getContent());
+				txtStoreUrl.setText(advObj.getStoreUrl());
+				txtTitle.setText(advObj.getTittle());
+				txtType.setText(advObj.getType());
+			}
+		});
+	}
 
 	public Widget Initialize() {
 		VerticalPanel mainContent = new VerticalPanel();
@@ -58,19 +79,9 @@ public class CreateAdvertisment {
 			public void onClick(ClickEvent event) {
 				// TODO Auto-generated method stub
 				String appID = txtAppId.getText();
-				String appTittle = txtTitle.getText();
 
-				if (appID != null) {
+				if ((appID != null)&&(!appID.equals(""))) {
 					// formUpload.submit();
-					Advertisement newApp = new Advertisement(appID);
-					newApp.setUserId(loginInfo.getEmailAddress());
-					newApp.setTittle(appTittle);
-					newApp.setContent(txtContent.getText());
-					newApp.setType(txtType.getText());
-					newApp.setStoreUrl(txtStoreUrl.getText());
-					newApp.setIconFile(Long.valueOf(iconFileId));
-
-					// Set up the callback object.
 					AsyncCallback<Long> callback = new AsyncCallback<Long>() {
 						public void onFailure(Throwable caught) {
 							// TODO: Do something with errors.
@@ -79,18 +90,35 @@ public class CreateAdvertisment {
 						public void onSuccess(Long result) {
 						}
 					};
-					advSvc = GWT.create(AdvertisementService.class);
-					advSvc.InsertAdv(newApp, callback);
-
+					if (advObj == null) {
+						advObj = new Advertisement (appID);
+						
+						advObj.setUserId(userId_);
+						advObj.setTittle(txtTitle.getText());
+						advObj.setContent(txtContent.getText());
+						advObj.setType(txtType.getText());
+						advObj.setStoreUrl(txtStoreUrl.getText());
+						advObj.setIconFile(Long.valueOf(iconFileId));
+					
+						advSvc.InsertAdv(advObj, callback);
+					} else {
+						advObj.setAppId(appID);
+						advObj.setTittle(txtTitle.getText());
+						advObj.setContent(txtContent.getText());
+						advObj.setType(txtType.getText());
+						advObj.setStoreUrl(txtStoreUrl.getText());
+						advObj.setIconFile(Long.valueOf(iconFileId));
+						
+						advSvc.UpdateAdv(advObj, callback);
+					}
 					GlobalServices.ComebackHome(true);
 				}
 			}
 		});
 		mainContent.add(new Label("Create new advertisment score"));
-		mainContent.add(new Label("You have 7 advertisment remaining."));
 		SingleUploader iconUploader = new SingleUploader(FileInputType.LABEL);
 		//iconUploader.add(new Hidden("userid", loginInfo.getEmailAddress()), 0);
-		iconUploader.setServletPath(iconUploader.getServletPath() + "?userid=" + loginInfo.getEmailAddress());
+		iconUploader.setServletPath(iconUploader.getServletPath() + "?userid=" + userId_);
 		iconUploader.setAutoSubmit(true);
 		mainContent.add(new Label("Icon app:"));
 		// imgIcon = new Image();

@@ -34,8 +34,14 @@ public class NotificationDataBase {
 		return pm_.makePersistent(note);
 	}
 
-	public void UpdateNote(Notification note) {
-
+	public Long UpdateNote(Notification note) {
+		Notification noteTemp = pm_.getObjectById(Notification.class, note.getId());
+		noteTemp.setAppId(note.getAppId());
+		noteTemp.setContent(note.getContent());
+		noteTemp.setFromDate(note.getFromDate());
+		noteTemp.setTittle(note.getTittle());
+		noteTemp.setToDate(note.getToDate());
+		return note.getId();
 	}
 
 	public Long DeleteNote(String userId, String appId) {

@@ -1,14 +1,12 @@
 package global.services.client;
 
-
 import global.services.client.rpc.AppScoreService;
 import global.services.client.rpc.AppScoreServiceAsync;
 import global.services.shared.AppScore;
-import global.services.shared.LoginInfo;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -18,29 +16,41 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class CreateAppScores {
-	private TextBox txtAppId;
-	private TextBox txtAppTitle;
-	private LoginInfo loginInfo = null;
-	public LoginInfo getLoginInfo() {
-		return loginInfo;
+	private TextBox txtAppId = new TextBox();
+	private TextBox txtAppTitle = new TextBox();
+	private String userId_ = null;
+	private AppScore appObj = null;
+
+	private AppScoreServiceAsync appScoreSvc = GWT.create(AppScoreService.class);
+
+	public CreateAppScores(String userId) {
+		userId_ = userId;
 	}
 
-	public void setLoginInfo(LoginInfo loginInfo) {
-		this.loginInfo = loginInfo;
-	}
+	public CreateAppScores(String userId, String appId) {
+		userId_ = userId;
+		appScoreSvc.SelectApp(userId, appId, new AsyncCallback<AppScore>() {
+			public void onFailure(Throwable caught) {
+				// TODO: Do something with errors.
+			}
 
-	private AppScoreServiceAsync appScoreSvc;
+			public void onSuccess(AppScore result) {
+				appObj = result;
+				txtAppId.setText(appObj.getAppId());
+				txtAppTitle.setText(appObj.getAppTittle());
+			}
+		});
+	}
 
 	public Widget Initialize() {
 		VerticalPanel mainContent = new VerticalPanel();
 		mainContent.add(new Label("Create new app score"));
-		mainContent.add(new Label("You have 7 games remaining."));
 		mainContent.add(new Label("App Identifier:"));
-		txtAppId = new TextBox();
+
 		mainContent.add(txtAppId);
 
 		mainContent.add(new Label("App Title:"));
-		txtAppTitle = new TextBox();
+
 		mainContent.add(txtAppTitle);
 
 		HorizontalPanel controlButton = new HorizontalPanel();
@@ -51,10 +61,8 @@ public class CreateAppScores {
 				// TODO Auto-generated method stub
 				String appID = txtAppId.getText();
 				String appTittle = txtAppTitle.getText();
-				if (appID != null) {
-					AppScore newApp = new AppScore(appID);
-					newApp.setAppTittle(appTittle);
-					newApp.setUserId(loginInfo.getEmailAddress());
+				if ((appID != null) && (appTittle != null)
+						&& (!appID.equals("")) && (!appTittle.equals(""))) {
 
 					// Set up the callback object.
 					AsyncCallback<Long> callback = new AsyncCallback<Long>() {
@@ -65,10 +73,20 @@ public class CreateAppScores {
 						public void onSuccess(Long result) {
 						}
 					};
-					appScoreSvc = GWT.create(AppScoreService.class);
-					appScoreSvc.InsertApp(newApp, callback);
+					if (appObj == null) {
+						appObj = new AppScore(appID);
+						appObj.setAppTittle(appTittle);
+						appObj.setUserId(userId_);
+						appScoreSvc.InsertApp(appObj, callback);
+					} else {
+						appObj.setAppId(appID);
+						appObj.setAppTittle(appTittle);
+						appScoreSvc.UpdateApp(appObj, callback);
+					}
 
 					GlobalServices.ComebackHome(true);
+				} else {
+					Window.alert("Please input fully application information.");
 				}
 			}
 		}));

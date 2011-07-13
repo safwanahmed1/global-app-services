@@ -20,28 +20,34 @@ public class HighScoreServiceImpl extends RemoteServiceServlet implements
 	@Override
 	public Long DeleteScore(String userId, Long id) {
 		// TODO Auto-generated method stub
+		Long scoreId = null;
 		if (userId != null) {
 			ScoreDataBase scoreDB = new ScoreDataBase();
-			return scoreDB.DeleteScore(userId, id);
+			scoreId = scoreDB.DeleteScore(userId, id);
+			scoreDB.Finalize();
 		}
-		return null;
+		return scoreId;
 			
 	}
 
 	@Override
 	public Long DeleteScores(String userId, String appId) {
+		Long scoreId = null;
 		if (userId != null) {
 			ScoreDataBase scoreDB = new ScoreDataBase();
-			return scoreDB.DeleteScores(userId, appId);
+			scoreId = scoreDB.DeleteScores(userId, appId);
+			scoreDB.Finalize();
 		}
-		return null;
+		return scoreId;
 	}
 
 	@Override
 	public List<HighScore> SelectScores(String userId, String appId) {
 		// TODO Auto-generated method stub
 		ScoreDataBase scoreDB = new ScoreDataBase();
-		return scoreDB.SelectScores(userId, appId);
+		List<HighScore> scoreListRet = scoreDB.SelectScores(userId, appId);
+		scoreDB.Finalize();
+		return scoreListRet;
 	}
 
 	@Override

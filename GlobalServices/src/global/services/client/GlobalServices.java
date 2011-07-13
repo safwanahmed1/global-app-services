@@ -22,11 +22,14 @@ import gwtupload.client.IUploadStatus.Status;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.cell.client.Cell.Context;
 import com.google.gwt.cell.client.CheckboxCell;
+import com.google.gwt.cell.client.ClickableTextCell;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -44,12 +47,15 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionModel;
+import com.sun.java.swing.plaf.windows.resources.windows;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -215,8 +221,7 @@ public class GlobalServices implements EntryPoint {
 					mainPanel.clear();
 					mainPanel.addNorth(headerPanel, 50);
 					mainPanel.addSouth(footerPanel, 50);
-					CreateAppScores createApp = new CreateAppScores();
-					createApp.setLoginInfo(loginInfo);
+					CreateAppScores createApp = new CreateAppScores(loginInfo.getEmailAddress());
 					mainPanel.add(createApp.Initialize());
 				}
 
@@ -285,14 +290,55 @@ public class GlobalServices implements EntryPoint {
 		gamesCellTable.setColumnWidth(checkColumn, 40, Unit.PX);
 
 		// Create appId column.
-		TextColumn<AppScore> appIdColumn = new TextColumn<AppScore>() {
+		Column<AppScore, String> appIdColumn = new Column<AppScore, String>(
+				new ClickableTextCell()) {
+			/*
 			@Override
 			public String getValue(AppScore app) {
 				return app.getAppId();
 			}
+			*/
+
+			@Override
+			public void render(Context context, AppScore object,
+					SafeHtmlBuilder sb) {
+				// TODO Auto-generated method stub
+				super.render(context, object, sb);
+				if (object != null) {
+					sb.appendHtmlConstant("<div class=\"clickableanchor\">");
+					sb.appendEscaped(object.getAppId());
+					sb.appendHtmlConstant("</div>");
+				}
+			}
+
+			@Override
+			public void onBrowserEvent(Context context, Element elem,
+					AppScore object, NativeEvent event) {
+				// TODO Auto-generated method stub
+				super.onBrowserEvent(context, elem, object, event);
+				if (event.getType().equals("click")) {
+
+					mainPanel.clear();
+					mainPanel.addNorth(headerPanel, 50);
+					mainPanel.addSouth(footerPanel, 50);
+					CreateAppScores createApp = new CreateAppScores(loginInfo.getEmailAddress(), object.getAppId());
+					
+					mainPanel.add(createApp.Initialize());
+				}
+			}
+
+			@Override
+			public String getValue(AppScore object) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
 		};
 		appIdColumn.setSortable(true);
 		gamesCellTable.addColumn(appIdColumn, "AppId");
+
+	
+		
 
 		// Create appTittle column.
 		TextColumn<AppScore> appTittleColumn = new TextColumn<AppScore>() {
@@ -351,8 +397,7 @@ public class GlobalServices implements EntryPoint {
 					mainPanel.clear();
 					mainPanel.addNorth(headerPanel, 50);
 					mainPanel.addSouth(footerPanel, 50);
-					CreateAdvertisment createAdv = new CreateAdvertisment();
-					createAdv.setLoginInfo(loginInfo);
+					CreateAdvertisment createAdv = new CreateAdvertisment(loginInfo.getEmailAddress());
 					mainPanel.add(createAdv.Initialize());
 				}
 
@@ -432,15 +477,53 @@ public class GlobalServices implements EntryPoint {
 		 * }; advsCellTable.addColumn(iconColumn);
 		 */
 		// Create appId column.
-		TextColumn<Advertisement> appIdColumn = new TextColumn<Advertisement>() {
+		Column<Advertisement, String> appIdColumn = new Column<Advertisement, String>(
+				new ClickableTextCell()) {
+			/*
 			@Override
-			public String getValue(Advertisement adv) {
-				return adv.getAppId();
+			public String getValue(AppScore app) {
+				return app.getAppId();
 			}
+			*/
+
+			@Override
+			public void render(Context context, Advertisement object,
+					SafeHtmlBuilder sb) {
+				// TODO Auto-generated method stub
+				super.render(context, object, sb);
+				if (object != null) {
+					sb.appendHtmlConstant("<div class=\"clickableanchor\">");
+					sb.appendEscaped(object.getAppId());
+					sb.appendHtmlConstant("</div>");
+				}
+			}
+
+			@Override
+			public void onBrowserEvent(Context context, Element elem,
+					Advertisement object, NativeEvent event) {
+				// TODO Auto-generated method stub
+				super.onBrowserEvent(context, elem, object, event);
+				if (event.getType().equals("click")) {
+
+					mainPanel.clear();
+					mainPanel.addNorth(headerPanel, 50);
+					mainPanel.addSouth(footerPanel, 50);
+					CreateAdvertisment createAdv = new CreateAdvertisment(loginInfo.getEmailAddress(), object.getAppId());
+					
+					mainPanel.add(createAdv.Initialize());
+				}
+			}
+
+			@Override
+			public String getValue(Advertisement object) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
 		};
 		appIdColumn.setSortable(true);
 		advsCellTable.addColumn(appIdColumn, "AppId");
-
+		
 		// Create appTittle column.
 		TextColumn<Advertisement> appTittleColumn = new TextColumn<Advertisement>() {
 			@Override
@@ -510,8 +593,7 @@ public class GlobalServices implements EntryPoint {
 					mainPanel.clear();
 					mainPanel.addNorth(headerPanel, 50);
 					mainPanel.addSouth(footerPanel, 50);
-					CreateNotification createNote = new CreateNotification();
-					createNote.setLoginInfo(loginInfo);
+					CreateNotification createNote = new CreateNotification(loginInfo.getEmailAddress());
 					mainPanel.add(createNote.Initialize());
 				}
 			}
@@ -578,14 +660,55 @@ public class GlobalServices implements EntryPoint {
 		notesCellTable.setColumnWidth(checkColumn, 40, Unit.PX);
 
 		// Create appId column.
-		TextColumn<Notification> appIdColumn = new TextColumn<Notification>() {
+		// Create appId column.
+		Column<Notification, String> appIdColumn = new Column<Notification, String>(
+				new ClickableTextCell()) {
+			/*
 			@Override
-			public String getValue(Notification adv) {
-				return adv.getAppId();
+			public String getValue(AppScore app) {
+				return app.getAppId();
 			}
+			*/
+
+			@Override
+			public void render(Context context, Notification object,
+					SafeHtmlBuilder sb) {
+				// TODO Auto-generated method stub
+				super.render(context, object, sb);
+				if (object != null) {
+					sb.appendHtmlConstant("<div class=\"clickableanchor\">");
+					sb.appendEscaped(object.getAppId());
+					sb.appendHtmlConstant("</div>");
+				}
+			}
+
+			@Override
+			public void onBrowserEvent(Context context, Element elem,
+					Notification object, NativeEvent event) {
+				// TODO Auto-generated method stub
+				super.onBrowserEvent(context, elem, object, event);
+				if (event.getType().equals("click")) {
+
+					mainPanel.clear();
+					mainPanel.addNorth(headerPanel, 50);
+					mainPanel.addSouth(footerPanel, 50);
+					CreateNotification createNote = new CreateNotification(loginInfo.getEmailAddress(), object.getAppId());
+					
+					mainPanel.add(createNote.Initialize());
+				}
+			}
+
+			@Override
+			public String getValue(Notification object) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
 		};
 		appIdColumn.setSortable(true);
 		notesCellTable.addColumn(appIdColumn, "AppId");
+		
+		
 
 		// Create appTittle column.
 		TextColumn<Notification> appTittleColumn = new TextColumn<Notification>() {
