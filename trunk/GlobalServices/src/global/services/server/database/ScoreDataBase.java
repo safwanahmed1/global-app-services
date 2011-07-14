@@ -3,6 +3,7 @@ package global.services.server.database;
 import java.util.List;
 
 import global.services.server.PMF;
+import global.services.shared.AppScore;
 import global.services.shared.HighScore;
 
 import javax.jdo.PersistenceManager;
@@ -25,9 +26,16 @@ public class ScoreDataBase {
 	}
 
 
-	public HighScore SelectScore(Long id) {
+	public HighScore SelectScore(String userId, Long scoreId) {
 		// TODO Auto-generated method stub
-		return null;
+		String strQuery = "select from " + HighScore.class.getName();
+		Query query = pm_.newQuery(strQuery);
+		if (userId != null)
+			query.setFilter("userId_ == \"" + userId + "\"");
+		if (scoreId != null)
+			query.setFilter("id == " + scoreId);
+		List<HighScore> scores = (List<HighScore>) query.execute();
+		return scores.get(0);
 
 	}
 	
@@ -40,7 +48,7 @@ public class ScoreDataBase {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<HighScore> SelectScores(String userId, String appId) {
+	public List<HighScore> SelectScores(String userId, Long appId) {
 		// TODO Auto-generated method stub
 
 		String strQuery = "select from " + HighScore.class.getName();
@@ -48,21 +56,30 @@ public class ScoreDataBase {
 		if (userId != null)
 			query.setFilter("userId_ == \"" + userId + "\"");
 		if (appId != null)
-			query.setFilter("appId_ == \"" + appId + "\"");
+			query.setFilter("appId_ == " + appId);
 		List<HighScore> scores = (List<HighScore>) query.execute();
 		return scores;
 
 	}
 
-	public void InsertScore(HighScore score) {
+	public Long InsertScore(HighScore score) {
 		// TODO Auto-generated method stub
-			pm_.makePersistent(score);
+		
+			return pm_.makePersistent(score).getId();
 
 	}
 
 	public Long UpdateScore(HighScore score) {
 		// TODO Auto-generated method stub
-		return null;
+		HighScore scoreTemp = pm_.getObjectById(HighScore.class, score.getId());
+		scoreTemp.setGameID(score.getGameID());
+		scoreTemp.setSubBoard(score.getSubBoard());
+		scoreTemp.setLocation(score.getLocation());
+		scoreTemp.setHighScore(score.getHighScore());
+		scoreTemp.setDuring(score.getDuring());
+		scoreTemp.setComment(score.getComment());
+		scoreTemp.setDate(System.nanoTime());
+		return scoreTemp.getId();
 
 	}
 

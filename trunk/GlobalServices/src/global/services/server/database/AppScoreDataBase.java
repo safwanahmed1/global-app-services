@@ -66,7 +66,7 @@ public class AppScoreDataBase {
 	public Long UpdateApp(AppScore app) {
 		// TODO Auto-generated method stub
 		AppScore appScore = pm_.getObjectById(AppScore.class, app.getId());
-		appScore.setAppId(app.getAppId());
+		appScore.setAppName(app.getAppName());
 		appScore.setAppTittle(app.getAppTittle());
 		return app.getId();
 	}

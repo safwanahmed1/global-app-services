@@ -41,14 +41,7 @@ public class HighScoreServiceImpl extends RemoteServiceServlet implements
 		return scoreId;
 	}
 
-	@Override
-	public List<HighScore> SelectScores(String userId, String appId) {
-		// TODO Auto-generated method stub
-		ScoreDataBase scoreDB = new ScoreDataBase();
-		List<HighScore> scoreListRet = scoreDB.SelectScores(userId, appId);
-		scoreDB.Finalize();
-		return scoreListRet;
-	}
+	
 
 	@Override
 	public int DeleteScores(String userId, List<Long> listScoreId) {
@@ -61,5 +54,41 @@ public class HighScoreServiceImpl extends RemoteServiceServlet implements
 				ret++;
 		}
 		return ret;
+	}
+
+	@Override
+	public Long InsertScore(HighScore score) {
+		// TODO Auto-generated method stub
+		ScoreDataBase scoreDB = new ScoreDataBase();
+		Long scoreIdRet = scoreDB.InsertScore(score);
+		scoreDB.Finalize();
+		return scoreIdRet;
+	}
+
+	@Override
+	public Long UpdateScore(HighScore score) {
+		// TODO Auto-generated method stub
+		ScoreDataBase scoreDB = new ScoreDataBase();
+		Long ret = scoreDB.UpdateScore(score);
+		scoreDB.Finalize();
+		return ret;
+	}
+
+	@Override
+	public HighScore SelectScore(String userId, long scoreId) {
+		// TODO Auto-generated method stub
+		ScoreDataBase scoreDB = new ScoreDataBase();
+		HighScore scoreRet = scoreDB.SelectScore(userId, scoreId);
+		scoreDB.Finalize();
+		return scoreRet;
+	}
+
+	@Override
+	public List<HighScore> SelectScores(String userId, long appId) {
+		// TODO Auto-generated method stub
+		ScoreDataBase scoreDB = new ScoreDataBase();
+		List<HighScore> scoreListRet = scoreDB.SelectScores(userId, appId);
+		scoreDB.Finalize();
+		return scoreListRet;
 	}
 }

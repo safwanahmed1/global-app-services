@@ -22,7 +22,7 @@ public class AppScore implements Serializable  {
 	@Persistent
 	private String userId_;
 	@Persistent
-	private String appId_;
+	private String appName_;
 	@Persistent
 	private String appTittle_;
 	@Persistent
@@ -39,8 +39,8 @@ public class AppScore implements Serializable  {
     
     
 	public AppScore() {}
-	public AppScore(String appID) {
-		appId_ = appID;
+	public AppScore(String appName) {
+		appName_ = appName;
 	}
 	
 	public Long getId() {
@@ -55,12 +55,12 @@ public class AppScore implements Serializable  {
 
 
 
-	public String getAppId() {
-		return appId_;
+	public String getAppName() {
+		return appName_;
 	}
 
-	public void setAppId(String appId) {
-		appId_ = appId;
+	public void setAppName(String appId) {
+		appName_ = appId;
 	}
 
 	public String getAppTittle() {

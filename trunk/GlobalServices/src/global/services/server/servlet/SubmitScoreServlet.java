@@ -14,7 +14,7 @@ public class SubmitScoreServlet extends HttpServlet {
 		resp.setContentType("text/plain");
 		//UserService userService = UserServiceFactory.getUserService();
 		//User user = userService.getCurrentUser();
-		String gameID = req.getParameter("GameID");
+		Long gameID = Long.parseLong(req.getParameter("GameID"));
 		String subBoard = req.getParameter("SubBoard");
 		String player = req.getParameter("Player");
 		String highScore = req.getParameter("HighScore");

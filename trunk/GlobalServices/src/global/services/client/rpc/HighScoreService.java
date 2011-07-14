@@ -11,8 +11,11 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("appScores")
 public interface HighScoreService extends RemoteService {
 
+	public Long InsertScore(HighScore score);
+	public Long UpdateScore(HighScore score);
 	public Long DeleteScore(String userId, Long id);
 	public int DeleteScores(String userId, List<Long> listScoreId);
 	public Long DeleteScores(String userId, String appId);
-	public List<HighScore> SelectScores(String userId, String appId);
+	public HighScore SelectScore(String userId, long scoreId);
+	public List<HighScore> SelectScores(String userId, long appId);
 }
