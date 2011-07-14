@@ -4,15 +4,18 @@ import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
+
+import com.google.gwt.view.client.ProvidesKey;
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class HighScore {
+	public static ProvidesKey<HighScore> KEY_PROVIDER;
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     private Long id;
     @Persistent
     private String userId_;
     @Persistent
-    private String appId_;
+    private Long appId_;
     @Persistent
     private String subBoard_;
     @Persistent
@@ -24,13 +27,13 @@ public class HighScore {
     @Persistent
     private String location_;
     @Persistent
-    private int during_;
+    private long during_;
     @Persistent
     private long date_;
     @Persistent
     private String avatar_;
     
-    public HighScore(String gameID, String player) {
+    public HighScore(long gameID, String player) {
         //this.userID = userID;
         this.appId_ = gameID;
         this.player_ = player;
@@ -53,10 +56,10 @@ public class HighScore {
 	public void setUserID(String userId) {
 		this.userId_ = userId;
 	}
-	public String getGameID() {
+	public long getGameID() {
 		return appId_;
 	}
-	public void setGameID(String gameID) {
+	public void setGameID(long gameID) {
 		this.appId_ = gameID;
 	}
 	public String getSubBoard() {
@@ -83,10 +86,10 @@ public class HighScore {
 	public void setLocation(String location) {
 		this.location_ = location;
 	}
-	public int getDuring() {
+	public long getDuring() {
 		return during_;
 	}
-	public void setDuring(int during) {
+	public void setDuring(long during) {
 		this.during_ = during;
 	}
 	public long getDate() {

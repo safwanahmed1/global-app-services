@@ -48,7 +48,7 @@ public class CreateAppScores {
 					appObj.setUserId(userId_);
 					appScoreSvc.InsertApp(appObj, callback);
 				} else {
-					appObj.setAppId(appID);
+					appObj.setAppName(appID);
 					appObj.setAppTittle(appTittle);
 					appScoreSvc.UpdateApp(appObj, callback);
 				}
@@ -74,7 +74,7 @@ public class CreateAppScores {
 			public void onSuccess(AppScore result) {
 				appObj = result;
 				btnAddApp.setText("Update app");
-				txtAppId.setText(appObj.getAppId());
+				txtAppId.setText(appObj.getAppName());
 				txtAppTitle.setText(appObj.getAppTittle());
 			}
 		});

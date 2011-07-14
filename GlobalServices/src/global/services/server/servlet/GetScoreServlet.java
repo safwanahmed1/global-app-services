@@ -21,13 +21,13 @@ public class GetScoreServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		String userId = null;
-		String appId = null;
+		Long appId = null;
 		String subBoard = null;
 		//resp.setContentType("text/xml");
 		if (req.getParameterMap().containsKey("userid"))
 			userId = req.getParameter("userid");
 		if (req.getParameterMap().containsKey("appid"))
-			appId = req.getParameter("appid");
+			appId = Long.parseLong(req.getParameter("appid"));
 		if (req.getParameterMap().containsKey("subboard"))
 			subBoard = req.getParameter("subboard");
 

@@ -1,11 +1,19 @@
 package global.services.client;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import global.services.client.rpc.AdvertisementService;
 import global.services.client.rpc.AppScoreService;
+import global.services.client.rpc.AppScoreServiceAsync;
+import global.services.client.rpc.HighScoreService;
+import global.services.client.rpc.HighScoreServiceAsync;
 
 import global.services.client.rpc.AdvertisementServiceAsync;
 import global.services.shared.Advertisement;
 import global.services.shared.AppScore;
+import global.services.shared.HighScore;
+import global.services.shared.HighScore;
 import global.services.shared.LoginInfo;
 import gwtupload.client.IFileInput.FileInputType;
 import gwtupload.client.IUploadStatus.Status;
@@ -15,8 +23,19 @@ import gwtupload.client.PreloadedImage;
 import gwtupload.client.PreloadedImage.OnLoadPreloadedImageHandler;
 import gwtupload.client.SingleUploader;
 
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.cell.client.CheckboxCell;
+import com.google.gwt.cell.client.ClickableTextCell;
+import com.google.gwt.cell.client.Cell.Context;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.UrlBuilder;
@@ -30,182 +49,260 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.view.client.DefaultSelectionEventManager;
+import com.google.gwt.view.client.ListDataProvider;
+import com.google.gwt.view.client.MultiSelectionModel;
+import com.google.gwt.view.client.SelectionModel;
 
 public class HighScoreTable {
-	private TextBox txtAppId= new TextBox();
-	private TextBox txtTitle= new TextBox();
-	private TextBox txtContent= new TextBox();
-	private TextBox txtType= new TextBox();
-	private TextBox txtStoreUrl= new TextBox();
+
 	private String userId_ = null;
-	private String iconFileId = null;
-	private FlowPanel panelImages = new FlowPanel();
-	private Advertisement advObj = null;
-	
-	private AdvertisementServiceAsync advSvc = GWT.create(AdvertisementService.class);
+	private Long appId_ = null;
 
-	private Button btnAddAdv = new Button("Create advertisment", new ClickHandler() {
+	private CellTable<HighScore> scoreCellTable = new CellTable<HighScore>();
+	private List<Long> selectedScores = new ArrayList<Long>();
+	private VerticalPanel mainContent = new VerticalPanel();
+	private List<HighScore> listScore = null;
+	static HighScoreServiceAsync scoreSvc = GWT.create(HighScoreService.class);
 
-		@Override
-		public void onClick(ClickEvent event) {
-			// TODO Auto-generated method stub
-			String appID = txtAppId.getText();
-
-			if ((appID != null)&&(!appID.equals(""))) {
-				// formUpload.submit();
-				AsyncCallback<Long> callback = new AsyncCallback<Long>() {
-					public void onFailure(Throwable caught) {
-						// TODO: Do something with errors.
-					}
-
-					public void onSuccess(Long result) {
-					}
-				};
-				if (advObj == null) {
-					advObj = new Advertisement (appID);
-					
-					advObj.setUserId(userId_);
-					advObj.setTittle(txtTitle.getText());
-					advObj.setContent(txtContent.getText());
-					advObj.setType(txtType.getText());
-					advObj.setStoreUrl(txtStoreUrl.getText());
-					advObj.setIconFile(Long.valueOf(iconFileId));
-				
-					advSvc.InsertAdv(advObj, callback);
-				} else {
-					advObj.setAppId(appID);
-					advObj.setTittle(txtTitle.getText());
-					advObj.setContent(txtContent.getText());
-					advObj.setType(txtType.getText());
-					advObj.setStoreUrl(txtStoreUrl.getText());
-					advObj.setIconFile(Long.valueOf(iconFileId));
-					
-					advSvc.UpdateAdv(advObj, callback);
-				}
-				GlobalServices.ComebackHome(true);
-			}
-		}
-	});
-		
-	public HighScoreTable(String userId) {
+	public HighScoreTable(String userId, Long appId) {
 		userId_ = userId;
-	}
-
-	public HighScoreTable(String userId, String appId) {
-		userId_ = userId;
-		advSvc.SelectAdv(userId, appId, new AsyncCallback<Advertisement>() {
-			public void onFailure(Throwable caught) {
-				// TODO: Do something with errors.
-			}
-
-			public void onSuccess(Advertisement result) {
-				advObj = result;
-				btnAddAdv.setText("Update advertisment");
-				iconFileId = String.valueOf(advObj.getIconFile());
-				String fileUrl = "http://global-app-services.appspot.com/globalservices/download?fileid=";
-				fileUrl += iconFileId;
-				new PreloadedImage(fileUrl, showImage);
-				txtAppId.setText(advObj.getAppId());
-				txtContent.setText(advObj.getContent());
-				txtStoreUrl.setText(advObj.getStoreUrl());
-				txtTitle.setText(advObj.getTittle());
-				txtType.setText(advObj.getType());
-			}
-		});
+		appId_ = appId;
+		RefreshHighScoreTbl();
 	}
 
 	public Widget Initialize() {
-		VerticalPanel mainContent = new VerticalPanel();
+
 		mainContent.setStyleName("contentBackgroud");
-		
-		mainContent.add(new Label("Create new advertisment score"));
-		SingleUploader iconUploader = new SingleUploader(FileInputType.LABEL);
-		//iconUploader.add(new Hidden("userid", loginInfo.getEmailAddress()), 0);
-		iconUploader.setServletPath(iconUploader.getServletPath() + "?userid=" + userId_);
-		iconUploader.setAutoSubmit(true);
-		mainContent.add(new Label("Icon app:"));
-		// imgIcon = new Image();
-		// mainContent.add(imgIcon);
-		iconUploader.addOnFinishUploadHandler(onFinishUploaderHandler);
-		mainContent.add(panelImages);
-		mainContent.add(iconUploader);
-		//formUpload = (FormPanel) FileUploader.getFileUploaderWidget();
-		//mainContent.add(formUpload);
+		mainContent.add(new Label("Highscore table of " + appId_
+				+ " application."));
 
-		mainContent.add(new Label("App Identifier:"));
-		txtAppId = new TextBox();
-		mainContent.add(txtAppId);
+		final SelectionModel<HighScore> selectionAppModel = new MultiSelectionModel<HighScore>(
+				HighScore.KEY_PROVIDER);
+		scoreCellTable.setSelectionModel(selectionAppModel,
+				DefaultSelectionEventManager
+						.<HighScore> createCheckboxManager());
 
-		mainContent.add(new Label("Title:"));
-		txtTitle = new TextBox();
-		mainContent.add(txtTitle);
+		Column<HighScore, Boolean> checkColumn = new Column<HighScore, Boolean>(
+				new CheckboxCell(true, false)) {
 
-		mainContent.add(new Label("Content:"));
-		txtContent = new TextBox();
-		mainContent.add(txtContent);
+			@Override
+			public Boolean getValue(HighScore score) {
+				// TODO Auto-generated method stub
+				if (selectionAppModel.isSelected(score)) {
+					if (!selectedScores.contains(score.getId()))
+						selectedScores.add(score.getId());
+				} else {
+					if (selectedScores.contains(score.getId()))
+						selectedScores.remove(score.getId());
+				}
+				return selectionAppModel.isSelected(score);
+			}
+		};
+		scoreCellTable.addColumn(checkColumn,
+				SafeHtmlUtils.fromSafeConstant("<br/>"));
+		scoreCellTable.setColumnWidth(checkColumn, 40, Unit.PX);
 
-		mainContent.add(new Label("Type:"));
-		txtType = new TextBox();
-		mainContent.add(txtType);
+		// Create scoreId column.
+		Column<HighScore, String> scoreIdColumn = new Column<HighScore, String>(
+				new ClickableTextCell()) {
 
-		mainContent.add(new Label("Store Url"));
-		txtStoreUrl = new TextBox();
-		mainContent.add(txtStoreUrl);
+			@Override
+			public void render(Context context, HighScore object,
+					SafeHtmlBuilder sb) {
+				// TODO Auto-generated method stub
+				super.render(context, object, sb);
+				if (object != null) {
+					sb.appendHtmlConstant("<div class=\"clickableanchor\">");
+					sb.appendEscaped(String.valueOf(object.getId()));
+					sb.appendHtmlConstant("</div>");
+				}
+			}
 
-		HorizontalPanel controlButton = new HorizontalPanel();
-		controlButton.add(btnAddAdv);
-		controlButton.add(new Button("Cancel", new ClickHandler() {
+			@Override
+			public void onBrowserEvent(Context context, Element elem,
+					HighScore object, NativeEvent event) {
+				// TODO Auto-generated method stub
+				super.onBrowserEvent(context, elem, object, event);
+				if (event.getType().equals("click")) {
+
+					CreateHighScore createScore = new CreateHighScore(userId_,
+							object.getId());
+					mainContent.clear();
+					mainContent.add(createScore.Initialize());
+				}
+			}
+
+			@Override
+			public String getValue(HighScore object) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+		};
+		scoreIdColumn.setSortable(true);
+		scoreCellTable.addColumn(scoreIdColumn, "Score Id");
+
+		// Create subBoard column.
+		TextColumn<HighScore> levelColumn = new TextColumn<HighScore>() {
+			@Override
+			public String getValue(HighScore score) {
+				return score.getSubBoard();
+			}
+		};
+		levelColumn.setSortable(true);
+		scoreCellTable.addColumn(levelColumn, "Level");
+
+		// Create player column.
+		TextColumn<HighScore> playerColumn = new TextColumn<HighScore>() {
+			@Override
+			public String getValue(HighScore score) {
+				// TODO Auto-generated method stub
+				return score.getPlayer();
+			}
+
+		};
+		playerColumn.setSortable(true);
+		scoreCellTable.addColumn(playerColumn, "Player");
+
+		// Create score column.
+		TextColumn<HighScore> scoreColumn = new TextColumn<HighScore>() {
+			@Override
+			public String getValue(HighScore score) {
+				// TODO Auto-generated method stub
+				return String.valueOf(score.getHighScore());
+			}
+
+		};
+		scoreColumn.setSortable(true);
+		scoreCellTable.addColumn(scoreColumn, "Score");
+
+		// Create during column.
+		TextColumn<HighScore> duringColumn = new TextColumn<HighScore>() {
+			@Override
+			public String getValue(HighScore score) {
+				// TODO Auto-generated method stub
+				return String.valueOf(score.getDuring());
+			}
+
+		};
+		duringColumn.setSortable(true);
+		scoreCellTable.addColumn(duringColumn, "During");
+
+		// Create location column.
+		TextColumn<HighScore> locationColumn = new TextColumn<HighScore>() {
+			@Override
+			public String getValue(HighScore score) {
+				// TODO Auto-generated method stub
+				return String.valueOf(score.getDuring());
+			}
+
+		};
+		locationColumn.setSortable(true);
+		scoreCellTable.addColumn(locationColumn, "Location");
+
+		// Create comment column.
+		TextColumn<HighScore> commentColumn = new TextColumn<HighScore>() {
+			@Override
+			public String getValue(HighScore score) {
+				// TODO Auto-generated method stub
+				return score.getComment();
+			}
+
+		};
+		commentColumn.setSortable(true);
+		scoreCellTable.addColumn(commentColumn, "Comment");
+		// Create date column.
+		TextColumn<HighScore> dateColumn = new TextColumn<HighScore>() {
+			@Override
+			public String getValue(HighScore score) {
+				// TODO Auto-generated method stub
+				return String.valueOf(score.getDate());
+			}
+
+		};
+		dateColumn.setSortable(true);
+		scoreCellTable.addColumn(dateColumn, "Date");
+
+		// Create a data provider.
+		ListDataProvider<HighScore> dataProvider = new ListDataProvider<HighScore>();
+
+		// Connect the table to the data provider.
+		dataProvider.addDataDisplay(scoreCellTable);
+
+		// Add the data to the data provider, which automatically pushes it to
+		// the
+		// widget.
+		listScore = dataProvider.getList();
+		RefreshHighScoreTbl();
+
+		mainContent.add(scoreCellTable);
+
+		HorizontalPanel tableGamesCtrPanel = new HorizontalPanel();
+		tableGamesCtrPanel.add(new Button("Create app", new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+
+				CreateHighScore createScore = new CreateHighScore(userId_);
+				mainContent.clear();
+				mainContent.add(createScore.Initialize());
+
+			}
+		}));
+
+		tableGamesCtrPanel.add(new Button("Delete app", new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
 				// TODO Auto-generated method stub
-				GlobalServices.ComebackHome(false);
+				if (selectedScores.size() == 0) {
+					Window.alert("You have to chose at least an entry to delete.");
+				} else {
+					if (Window.confirm("Would you want to delete entries")) {
+						HighScoreServiceAsync scoreService = GWT
+								.create(HighScoreService.class);
+						scoreService.DeleteScores(userId_, selectedScores,
+								new AsyncCallback<Integer>() {
+									public void onFailure(Throwable caught) {
+									}
+
+									public void onSuccess(Integer result) {
+										// TODO Auto-generated method stub
+										Window.alert(result
+												+ " Scores have been deleted successful.");
+										RefreshHighScoreTbl();
+									}
+								});
+						selectedScores.clear();
+					}
+				}
+
 			}
 		}));
-		mainContent.add(controlButton);
+		mainContent.add(tableGamesCtrPanel);
+
 		return mainContent;
 
 	}
 
-	// Load the image in the document and in the case of success attach it to
-	// the viewer
-	private IUploader.OnFinishUploaderHandler onFinishUploaderHandler = new IUploader.OnFinishUploaderHandler() {
-		public void onFinish(IUploader uploader) {
-			// Window.alert("Upload da finish");
-			if (uploader.getStatus() == Status.SUCCESS) {
-				
-				iconFileId = uploader.getServerResponse();
-					
-				/*
-				UrlBuilder fileUrl = new UrlBuilder();
-				fileUrl.setHost(GWT.getHostPageBaseURL());
-				fileUrl.setPath("globalservices/download");
-				fileUrl.setParameter("fileid", iconFileId);
-				
-				Window.alert("Image url: " + fileUrl.buildString());
-				*/
-				String fileUrl = "http://global-app-services.appspot.com/globalservices/download?fileid=";
-				fileUrl += iconFileId;
-				PreloadedImage image = new PreloadedImage(fileUrl, showImage);
-				// The server sends useful information to the client by default
-				UploadedInfo info = uploader.getServerInfo();
-				System.out.println("File name " + info.name);
-				System.out.println("File content-type " + info.ctype);
-				System.out.println("File size " + info.size);
+	private void RefreshHighScoreTbl() {
+		// TODO Auto-generated method stub
+		scoreSvc.SelectScores(userId_, appId_,
+				new AsyncCallback<List<HighScore>>() {
+					public void onFailure(Throwable caught) {
+						// TODO: Do something
+						// with
+						// errors.
+					}
 
-				// You can send any customized message and parse it
-				System.out.println("Server message " + info.message);
-			}
-		}
-	};
+					public void onSuccess(List<HighScore> result) {
 
-	// Attach an image to the pictures viewer
-	private OnLoadPreloadedImageHandler showImage = new OnLoadPreloadedImageHandler() {
-		public void onLoad(PreloadedImage image) {
-			image.setWidth("75px");
-			panelImages.clear();
-			panelImages.add(image);
-		}
-	};
+						listScore.clear();
+						listScore.addAll(result);
+
+					}
+				});
+	}
 
 }

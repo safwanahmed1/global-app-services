@@ -276,11 +276,11 @@ public class GlobalServices implements EntryPoint {
 			public Boolean getValue(AppScore app) {
 				// TODO Auto-generated method stub
 				if (selectionAppModel.isSelected(app)) {
-					if (!selectedApps.contains(app.getAppId()))
-						selectedApps.add(app.getAppId());
+					if (!selectedApps.contains(app.getAppName()))
+						selectedApps.add(app.getAppName());
 				} else {
-					if (selectedApps.contains(app.getAppId()))
-						selectedApps.remove(app.getAppId());
+					if (selectedApps.contains(app.getAppName()))
+						selectedApps.remove(app.getAppName());
 				}
 				return selectionAppModel.isSelected(app);
 			}
@@ -301,7 +301,7 @@ public class GlobalServices implements EntryPoint {
 				super.render(context, object, sb);
 				if (object != null) {
 					sb.appendHtmlConstant("<div class=\"clickableanchor\">");
-					sb.appendEscaped(object.getAppId());
+					sb.appendEscaped(object.getAppName());
 					sb.appendHtmlConstant("</div>");
 				}
 			}
@@ -316,7 +316,7 @@ public class GlobalServices implements EntryPoint {
 					mainPanel.clear();
 					mainPanel.addNorth(headerPanel, 50);
 					mainPanel.addSouth(footerPanel, 50);
-					CreateAppScores createApp = new CreateAppScores(loginInfo.getEmailAddress(), object.getAppId());
+					CreateAppScores createApp = new CreateAppScores(loginInfo.getEmailAddress(), object.getAppName());
 					
 					mainPanel.add(createApp.Initialize());
 				}
@@ -371,7 +371,7 @@ public class GlobalServices implements EntryPoint {
 					mainPanel.clear();
 					mainPanel.addNorth(headerPanel, 50);
 					mainPanel.addSouth(footerPanel, 50);
-					HighScoreTable highScore = new HighScoreTable(loginInfo.getEmailAddress(), object.getAppId());
+					HighScoreTable highScore = new HighScoreTable(loginInfo.getEmailAddress(), object.getId());
 					
 					mainPanel.add(highScore.Initialize());
 				}
