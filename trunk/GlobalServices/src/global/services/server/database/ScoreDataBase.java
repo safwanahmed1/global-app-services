@@ -1,9 +1,9 @@
 package global.services.server.database;
 
+import java.util.Date;
 import java.util.List;
 
 import global.services.server.PMF;
-import global.services.shared.AppScore;
 import global.services.shared.HighScore;
 
 import javax.jdo.PersistenceManager;
@@ -78,7 +78,7 @@ public class ScoreDataBase {
 		scoreTemp.setHighScore(score.getHighScore());
 		scoreTemp.setDuring(score.getDuring());
 		scoreTemp.setComment(score.getComment());
-		scoreTemp.setDate(System.nanoTime());
+		scoreTemp.setDate(new Date().getTime());
 		return scoreTemp.getId();
 
 	}

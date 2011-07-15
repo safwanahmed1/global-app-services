@@ -16,6 +16,6 @@ public interface NotificationService extends RemoteService {
 	public Long DeleteNote(String userId, String appId);
 	public int DeleteNotes(String userId, List<String> listAppId);
 	public Long DeleteNotes(String userId);
-	public Notification SelectNote(String userId, String appId);
+	public Notification SelectNote(String userId, Long appId);
 	public List<Notification> SelectNotes(String userId);
 }

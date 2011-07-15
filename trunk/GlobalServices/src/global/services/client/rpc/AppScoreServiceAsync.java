@@ -13,7 +13,7 @@ public interface AppScoreServiceAsync {
 	 public void DeleteApp(String userId, String appId, AsyncCallback<Long> callback);
 	 public void DeleteApps(String userId, List<String> listAppId, AsyncCallback<Integer> callback);
 	 public void DeleteApps(String userId, AsyncCallback<Long> callback);
-	 public void SelectApp(String userId, String appId, AsyncCallback<AppScore> callback);
+	 public void SelectApp(String userId, Long appId, AsyncCallback<AppScore> callback);
 	 public void SelectApps(String userId, AsyncCallback<List<AppScore>> callback);
 	 // Thu edit cho nay xem sao
 }

@@ -71,7 +71,7 @@ public class AppScoreDataBase {
 		return app.getId();
 	}
 
-	public AppScore SelectApp(String userId, String appId) {
+	public AppScore SelectApp(String userId, Long appId) {
 		// TODO Auto-generated method stub
 		String strQuery = "select from " + AppScore.class.getName();
 		// + HighScore.class.getName() ;
@@ -79,8 +79,8 @@ public class AppScoreDataBase {
 		// query.setOrdering("highScore desc, during asc");
 		if ((userId != null) && !userId.isEmpty())
 			query.setFilter("userId_ == \"" + userId + "\"");
-		if ((appId != null) && !appId.isEmpty())
-			query.setFilter("appId_ == \"" + appId + "\"");
+		if (appId != null)
+			query.setFilter("id == " + appId);
 
 		List<AppScore> appscores = (List<AppScore>) query.execute();
 

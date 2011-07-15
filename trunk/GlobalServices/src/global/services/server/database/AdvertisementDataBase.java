@@ -34,7 +34,7 @@ public class AdvertisementDataBase {
 
 	public Long UpdateAdv(Advertisement adv) {
 		Advertisement advTemp = pm_.getObjectById(Advertisement.class, adv.getId());
-		advTemp.setAppId(adv.getAppId());
+		advTemp.setAppName(adv.getAppName());
 		advTemp.setContent(adv.getContent());
 		advTemp.setIconFile(adv.getIconFile());
 		advTemp.setStoreUrl(adv.getStoreUrl());
@@ -62,13 +62,13 @@ public class AdvertisementDataBase {
 	}
 	
 
-	public Advertisement SelectAdv(String userId, String appId) {
+	public Advertisement SelectAdv(String userId, Long appId) {
 		String strQuery = "select from " + Advertisement.class.getName();
 		Query query = pm_.newQuery(strQuery);
 		if ((userId != null) && !userId.isEmpty())
 			query.setFilter("userId_ == \"" + userId + "\"");
-		if ((appId != null) && !appId.isEmpty())
-			query.setFilter("appId_ == \"" + appId + "\"");
+		if (appId != null)
+			query.setFilter("id == \"" + appId);
 		List<Advertisement> retAdv = (List<Advertisement>) query.execute();
 		return retAdv.get(0);
 

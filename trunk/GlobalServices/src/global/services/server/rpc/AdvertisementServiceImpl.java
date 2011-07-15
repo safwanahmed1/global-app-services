@@ -52,7 +52,7 @@ AdvertisementService {
 	}
 
 	@Override
-	public Advertisement SelectAdv(String userId, String appId) {
+	public Advertisement SelectAdv(String userId, Long appId) {
 		// TODO Auto-generated method stub
 		AdvertisementDataBase advDB = new AdvertisementDataBase();
 		Advertisement advRet = advDB.SelectAdv(userId, appId);

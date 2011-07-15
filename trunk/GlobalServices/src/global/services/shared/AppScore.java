@@ -39,8 +39,8 @@ public class AppScore implements Serializable  {
     
     
 	public AppScore() {}
-	public AppScore(String appName) {
-		appName_ = appName;
+	public AppScore(String userID) {
+		userId_ = userID;
 	}
 	
 	public Long getId() {

@@ -73,7 +73,7 @@ public class CreateAdvertisment {
 				
 					advSvc.InsertAdv(advObj, callback);
 				} else {
-					advObj.setAppId(appID);
+					advObj.setAppName(appID);
 					advObj.setTittle(txtTitle.getText());
 					advObj.setContent(txtContent.getText());
 					advObj.setType(txtType.getText());
@@ -91,7 +91,7 @@ public class CreateAdvertisment {
 		userId_ = userId;
 	}
 
-	public CreateAdvertisment(String userId, String appId) {
+	public CreateAdvertisment(String userId, Long appId) {
 		userId_ = userId;
 		advSvc.SelectAdv(userId, appId, new AsyncCallback<Advertisement>() {
 			public void onFailure(Throwable caught) {
@@ -105,7 +105,7 @@ public class CreateAdvertisment {
 				String fileUrl = "http://global-app-services.appspot.com/globalservices/download?fileid=";
 				fileUrl += iconFileId;
 				new PreloadedImage(fileUrl, showImage);
-				txtAppId.setText(advObj.getAppId());
+				txtAppId.setText(advObj.getAppName());
 				txtContent.setText(advObj.getContent());
 				txtStoreUrl.setText(advObj.getStoreUrl());
 				txtTitle.setText(advObj.getTittle());

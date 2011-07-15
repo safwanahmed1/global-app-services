@@ -4,12 +4,8 @@ import global.services.server.database.ScoreDataBase;
 import global.services.shared.HighScore;
 
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.util.List;
 
-import javax.jdo.PersistenceManager;
-import javax.jdo.Query;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.*;
 

@@ -36,8 +36,8 @@ public class GetAdvertisementServlet extends HttpServlet {
 				    
 				for (Advertisement adv : advList) {
 					stream.print("<adv ");
-					if (adv.getAppId() != null)
-						stream.print(" appid=\"" + adv.getAppId() + "\"");
+					if (adv.getAppName() != null)
+						stream.print(" appid=\"" + adv.getAppName() + "\"");
 					if (adv.getTittle() != null)
 						stream.print(" titlte=\"" + adv.getTittle() + "\"");
 					if (adv.getContent() != null)

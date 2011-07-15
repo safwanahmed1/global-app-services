@@ -36,7 +36,7 @@ public class NotificationDataBase {
 
 	public Long UpdateNote(Notification note) {
 		Notification noteTemp = pm_.getObjectById(Notification.class, note.getId());
-		noteTemp.setAppId(note.getAppId());
+		noteTemp.setAppName(note.getAppName());
 		noteTemp.setContent(note.getContent());
 		noteTemp.setFromDate(note.getFromDate());
 		noteTemp.setTittle(note.getTittle());
@@ -62,13 +62,13 @@ public class NotificationDataBase {
 
 	}
 	@SuppressWarnings("unchecked")
-	public Notification SelectNote(String userId, String appId) {
+	public Notification SelectNote(String userId, Long appId) {
 		String strQuery = "select from " + Notification.class.getName();
 		Query query = pm_.newQuery(strQuery);
 		if ((userId != null) && !userId.isEmpty())
 			query.setFilter("userId_ == \"" + userId + "\"");
-		if ((appId != null) && !appId.isEmpty())
-			query.setFilter("appId_ == \"" + appId + "\"");
+		if (appId != null)
+			query.setFilter("id == " + appId);
 		List<Notification> retAdvs = (List<Notification>) query.execute();
 		return retAdvs.get(0);
 

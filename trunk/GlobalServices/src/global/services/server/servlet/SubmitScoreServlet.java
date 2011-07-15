@@ -14,6 +14,7 @@ public class SubmitScoreServlet extends HttpServlet {
 		resp.setContentType("text/plain");
 		//UserService userService = UserServiceFactory.getUserService();
 		//User user = userService.getCurrentUser();
+		String userID = req.getParameter("UserID");
 		Long gameID = Long.parseLong(req.getParameter("GameID"));
 		String subBoard = req.getParameter("SubBoard");
 		String player = req.getParameter("Player");
@@ -24,7 +25,7 @@ public class SubmitScoreServlet extends HttpServlet {
 		String date = req.getParameter("Date");
 		String avatar = req.getParameter("Avatar");
 		if ((gameID != null) && (player != null)) {
-			HighScore highscore = new HighScore(gameID, player);
+			HighScore highscore = new HighScore(userID, gameID);
 			if (subBoard!=null)
 				highscore.setSubBoard(subBoard);
 			if (highScore!=null)
