@@ -301,7 +301,7 @@ public class GlobalServices implements EntryPoint {
 				super.render(context, object, sb);
 				if (object != null) {
 					sb.appendHtmlConstant("<div class=\"clickableanchor\">");
-					sb.appendEscaped(object.getAppName());
+					sb.appendEscaped(String.valueOf(object.getId()));
 					sb.appendHtmlConstant("</div>");
 				}
 			}
@@ -316,7 +316,7 @@ public class GlobalServices implements EntryPoint {
 					mainPanel.clear();
 					mainPanel.addNorth(headerPanel, 50);
 					mainPanel.addSouth(footerPanel, 50);
-					CreateAppScores createApp = new CreateAppScores(loginInfo.getEmailAddress(), object.getAppName());
+					CreateAppScores createApp = new CreateAppScores(loginInfo.getEmailAddress(), object.getId());
 					
 					mainPanel.add(createApp.Initialize());
 				}
@@ -332,7 +332,15 @@ public class GlobalServices implements EntryPoint {
 		appIdColumn.setSortable(true);
 		gamesCellTable.addColumn(appIdColumn, "AppId");
 
-	
+		// Create appName column.
+		TextColumn<AppScore> appNameColumn = new TextColumn<AppScore>() {
+			@Override
+			public String getValue(AppScore app) {
+				return app.getAppName();
+			}
+		};
+		appNameColumn.setSortable(true);
+		gamesCellTable.addColumn(appNameColumn, "App Name");	
 		
 
 		// Create appTittle column.
@@ -482,11 +490,11 @@ public class GlobalServices implements EntryPoint {
 			public Boolean getValue(Advertisement adv) {
 				// TODO Auto-generated method stub
 				if (selectionAdvModel.isSelected(adv)) {
-					if (!selectedAdvs.contains(adv.getAppId()))
-						selectedAdvs.add(adv.getAppId());
+					if (!selectedAdvs.contains(adv.getAppName()))
+						selectedAdvs.add(adv.getAppName());
 				} else {
-					if (selectedAdvs.contains(adv.getAppId()))
-						selectedAdvs.remove(adv.getAppId());
+					if (selectedAdvs.contains(adv.getAppName()))
+						selectedAdvs.remove(adv.getAppName());
 				}
 				return selectionAdvModel.isSelected(adv);
 			}
@@ -522,7 +530,7 @@ public class GlobalServices implements EntryPoint {
 				super.render(context, object, sb);
 				if (object != null) {
 					sb.appendHtmlConstant("<div class=\"clickableanchor\">");
-					sb.appendEscaped(object.getAppId());
+					sb.appendEscaped(String.valueOf(object.getId()));
 					sb.appendHtmlConstant("</div>");
 				}
 			}
@@ -537,7 +545,7 @@ public class GlobalServices implements EntryPoint {
 					mainPanel.clear();
 					mainPanel.addNorth(headerPanel, 50);
 					mainPanel.addSouth(footerPanel, 50);
-					CreateAdvertisment createAdv = new CreateAdvertisment(loginInfo.getEmailAddress(), object.getAppId());
+					CreateAdvertisment createAdv = new CreateAdvertisment(loginInfo.getEmailAddress(), object.getId());
 					
 					mainPanel.add(createAdv.Initialize());
 				}
@@ -552,6 +560,16 @@ public class GlobalServices implements EntryPoint {
 		};
 		appIdColumn.setSortable(true);
 		advsCellTable.addColumn(appIdColumn, "AppId");
+		
+		// Create appTittle column.
+		TextColumn<Advertisement> appNameColumn = new TextColumn<Advertisement>() {
+			@Override
+			public String getValue(Advertisement adv) {
+				return adv.getAppName();
+			}
+		};
+		appNameColumn.setSortable(true);
+		advsCellTable.addColumn(appNameColumn, "App Name");
 		
 		// Create appTittle column.
 		TextColumn<Advertisement> appTittleColumn = new TextColumn<Advertisement>() {
@@ -675,11 +693,11 @@ public class GlobalServices implements EntryPoint {
 			public Boolean getValue(Notification note) {
 				// TODO Auto-generated method stub
 				if (selectionNoteModel.isSelected(note)) {
-					if (!selectedNotes.contains(note.getAppId()))
-						selectedNotes.add(note.getAppId());
+					if (!selectedNotes.contains(note.getAppName()))
+						selectedNotes.add(note.getAppName());
 				} else {
-					if (selectedNotes.contains(note.getAppId()))
-						selectedNotes.remove(note.getAppId());
+					if (selectedNotes.contains(note.getAppName()))
+						selectedNotes.remove(note.getAppName());
 				}
 				return selectionNoteModel.isSelected(note);
 			}
@@ -706,7 +724,7 @@ public class GlobalServices implements EntryPoint {
 				super.render(context, object, sb);
 				if (object != null) {
 					sb.appendHtmlConstant("<div class=\"clickableanchor\">");
-					sb.appendEscaped(object.getAppId());
+					sb.appendEscaped(String.valueOf(object.getId()));
 					sb.appendHtmlConstant("</div>");
 				}
 			}
@@ -721,7 +739,7 @@ public class GlobalServices implements EntryPoint {
 					mainPanel.clear();
 					mainPanel.addNorth(headerPanel, 50);
 					mainPanel.addSouth(footerPanel, 50);
-					CreateNotification createNote = new CreateNotification(loginInfo.getEmailAddress(), object.getAppId());
+					CreateNotification createNote = new CreateNotification(loginInfo.getEmailAddress(), object.getId());
 					
 					mainPanel.add(createNote.Initialize());
 				}
@@ -737,6 +755,15 @@ public class GlobalServices implements EntryPoint {
 		appIdColumn.setSortable(true);
 		notesCellTable.addColumn(appIdColumn, "AppId");
 		
+		// Create appName column.
+		TextColumn<Notification> appNameColumn = new TextColumn<Notification>() {
+			@Override
+			public String getValue(Notification note) {
+				return note.getAppName();
+			}
+		};
+		appNameColumn.setSortable(true);
+		notesCellTable.addColumn(appNameColumn, "App Name");
 		
 
 		// Create appTittle column.

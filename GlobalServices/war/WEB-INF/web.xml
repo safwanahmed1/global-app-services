@@ -94,6 +94,17 @@
 	</servlet-mapping>
 
 
+<servlet>
+		<servlet-name>HighScoreServiceImpl</servlet-name>
+		<servlet-class>global.services.server.rpc.HighScoreServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>HighScoreServiceImpl</servlet-name>
+		<url-pattern>/globalservices/highscores</url-pattern>
+	</servlet-mapping>
+	
+	
 	<servlet>
 		<servlet-name>SubmitScore</servlet-name>
 		<servlet-class>global.services.server.servlet.SubmitScoreServlet</servlet-class>

@@ -244,7 +244,7 @@ public class HighScoreTable {
 			@Override
 			public void onClick(ClickEvent event) {
 
-				CreateHighScore createScore = new CreateHighScore(userId_);
+				CreateHighScore createScore = new CreateHighScore(userId_, appId_);
 				mainContent.clear();
 				mainContent.add(createScore.Initialize());
 

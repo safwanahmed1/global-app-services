@@ -13,12 +13,12 @@ public class GetNotificationServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		String userId = null;
-		String appId = null;
+		Long appId = null;
 		// resp.setContentType("text/xml");
 		if (req.getParameterMap().containsKey("userid"))
 			userId = req.getParameter("userid");
 		if (req.getParameterMap().containsKey("appid"))
-			appId = req.getParameter("appid");
+			appId = Long.parseLong(req.getParameter("appid"));
 
 		NotificationDataBase noteDB = new NotificationDataBase();
 		ServletOutputStream stream = null;

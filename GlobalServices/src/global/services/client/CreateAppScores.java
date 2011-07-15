@@ -16,7 +16,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class CreateAppScores {
-	private TextBox txtAppId = new TextBox();
+	private TextBox txtAppName = new TextBox();
 	private TextBox txtAppTitle = new TextBox();
 	private String userId_ = null;
 	private AppScore appObj = null;
@@ -28,10 +28,10 @@ public class CreateAppScores {
 		@Override
 		public void onClick(ClickEvent event) {
 			// TODO Auto-generated method stub
-			String appID = txtAppId.getText();
+			String appName = txtAppName.getText();
 			String appTittle = txtAppTitle.getText();
-			if ((appID != null) && (appTittle != null)
-					&& (!appID.equals("")) && (!appTittle.equals(""))) {
+			if ((appName != null) && (appTittle != null)
+					&& (!appName.equals("")) && (!appTittle.equals(""))) {
 
 				// Set up the callback object.
 				AsyncCallback<Long> callback = new AsyncCallback<Long>() {
@@ -42,13 +42,13 @@ public class CreateAppScores {
 					public void onSuccess(Long result) {
 					}
 				};
-				if (appObj == null) {
-					appObj = new AppScore(appID);
+				if (appObj == null){
+					appObj = new AppScore(userId_);
+					appObj.setAppName(appName);
 					appObj.setAppTittle(appTittle);
-					appObj.setUserId(userId_);
 					appScoreSvc.InsertApp(appObj, callback);
 				} else {
-					appObj.setAppName(appID);
+					appObj.setAppName(appName);
 					appObj.setAppTittle(appTittle);
 					appScoreSvc.UpdateApp(appObj, callback);
 				}
@@ -64,7 +64,7 @@ public class CreateAppScores {
 		userId_ = userId;
 	}
 
-	public CreateAppScores(String userId, String appId) {
+	public CreateAppScores(String userId, Long appId) {
 		userId_ = userId;
 		appScoreSvc.SelectApp(userId, appId, new AsyncCallback<AppScore>() {
 			public void onFailure(Throwable caught) {
@@ -74,7 +74,7 @@ public class CreateAppScores {
 			public void onSuccess(AppScore result) {
 				appObj = result;
 				btnAddApp.setText("Update app");
-				txtAppId.setText(appObj.getAppName());
+				txtAppName.setText(appObj.getAppName());
 				txtAppTitle.setText(appObj.getAppTittle());
 			}
 		});
@@ -84,9 +84,9 @@ public class CreateAppScores {
 		VerticalPanel mainContent = new VerticalPanel();
 		mainContent.setStyleName("contentBackgroud");
 		mainContent.add(new Label("Create new app score"));
-		mainContent.add(new Label("App Identifier:"));
+		mainContent.add(new Label("App Name:"));
 
-		mainContent.add(txtAppId);
+		mainContent.add(txtAppName);
 
 		mainContent.add(new Label("App Title:"));
 

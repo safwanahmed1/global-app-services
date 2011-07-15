@@ -27,7 +27,7 @@ public class Advertisement implements Serializable {
 	@Persistent
 	private String userId_;
 	@Persistent
-	private String appId_;
+	private String appName_;
 	@Persistent
 	private String tittle_;
 	@Persistent
@@ -41,7 +41,7 @@ public class Advertisement implements Serializable {
 	
 	public Advertisement(){}
 	public Advertisement(String appId){
-		setAppId(appId);
+		setAppName(appId);
 	}
 	
 	
@@ -57,11 +57,11 @@ public class Advertisement implements Serializable {
 	public void setUserId(String userId) {
 		userId_ = userId;
 	}
-	public String getAppId() {
-		return appId_;
+	public String getAppName() {
+		return appName_;
 	}
-	public void setAppId(String appId) {
-		appId_ = appId;
+	public void setAppName(String appId) {
+		appName_ = appId;
 	}
 	public String getTittle() {
 		return tittle_;

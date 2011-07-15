@@ -1,4 +1,6 @@
 package global.services.shared;
+import java.io.Serializable;
+
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
@@ -7,8 +9,18 @@ import javax.jdo.annotations.PrimaryKey;
 
 import com.google.gwt.view.client.ProvidesKey;
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class HighScore {
-	public static ProvidesKey<HighScore> KEY_PROVIDER;
+public class HighScore implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public static final ProvidesKey<HighScore> KEY_PROVIDER = new ProvidesKey<HighScore>() {
+	      public Object getKey(HighScore score) {
+	        return score == null ? null : score.getId();
+	      }
+	    };
+	
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     private Long id;
@@ -33,10 +45,12 @@ public class HighScore {
     @Persistent
     private String avatar_;
     
-    public HighScore(long gameID, String player) {
+    public HighScore(){}
+    
+    public HighScore(String userID, long appID) {
         //this.userID = userID;
-        this.appId_ = gameID;
-        this.player_ = player;
+    	this.userId_ = userID;
+    	this.appId_ = appID;
     }
 	public String getComment() {
 		return comment_;

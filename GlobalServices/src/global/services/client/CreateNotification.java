@@ -60,7 +60,7 @@ public class CreateNotification {
 
 					noteSvc.InsertNote(noteObj, callback);
 				} else {
-					noteObj.setAppId(appID);
+					noteObj.setAppName(appID);
 					noteObj.setTittle(txtTitle.getText());
 					noteObj.setContent(txtContent.getText());
 					noteObj.setFromDate(Date.parse(dateFrom.getValue()
@@ -83,7 +83,7 @@ public class CreateNotification {
 		userId_ = userId;
 	}
 
-	public CreateNotification(String userId, String appId) {
+	public CreateNotification(String userId, Long appId) {
 		userId_ = userId;
 		noteSvc.SelectNote(userId, appId, new AsyncCallback<Notification>() {
 			public void onFailure(Throwable caught) {
@@ -93,7 +93,7 @@ public class CreateNotification {
 			public void onSuccess(Notification result) {
 				noteObj = result;
 				btnAddNote.setText("Update note");
-				txtAppId.setText(noteObj.getAppId());
+				txtAppId.setText(noteObj.getAppName());
 				txtContent.setText(noteObj.getContent());
 				txtTitle.setText(noteObj.getTittle());
 				dateFrom.setValue(new Date(noteObj.getFromDate()));

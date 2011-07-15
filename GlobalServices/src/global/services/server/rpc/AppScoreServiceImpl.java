@@ -64,7 +64,7 @@ public class AppScoreServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public AppScore SelectApp(String userId, String appId) {
+	public AppScore SelectApp(String userId, Long appId) {
 		// TODO Auto-generated method stub
 		AppScoreDataBase appDB = new AppScoreDataBase();
 		AppScore appRet = appDB.SelectApp(userId, appId);

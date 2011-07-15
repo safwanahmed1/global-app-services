@@ -1,9 +1,12 @@
 package global.services.client;
 
+import org.apache.commons.lang.time.DateUtils;
+
 import global.services.client.rpc.HighScoreService;
 import global.services.client.rpc.HighScoreServiceAsync;
 
 import global.services.shared.HighScore;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -15,20 +18,22 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import java.util.Date;
 
 public class CreateHighScore {
-	private TextBox txtAppId= new TextBox();
-	private TextBox txtSubBoard= new TextBox();
-	private TextBox txtPlayer= new TextBox();
-	private TextBox txtLocation= new TextBox();
-	private TextBox txtScore= new TextBox();
-	private TextBox txtDuring= new TextBox();
-	private TextBox txtComment= new TextBox();
-	
+	private TextBox txtAppId = new TextBox();
+	private TextBox txtSubBoard = new TextBox();
+	private TextBox txtPlayer = new TextBox();
+	private TextBox txtLocation = new TextBox();
+	private TextBox txtScore = new TextBox();
+	private TextBox txtDuring = new TextBox();
+	private TextBox txtComment = new TextBox();
+
 	private String userId_ = null;
+	private Long appId_ = null;
 	private FlowPanel panelImages = new FlowPanel();
 	private HighScore scoreObj = null;
-	
+
 	private HighScoreServiceAsync scoreSvc = GWT.create(HighScoreService.class);
 
 	private Button btnAddScore = new Button("Create entry", new ClickHandler() {
@@ -36,53 +41,52 @@ public class CreateHighScore {
 		@Override
 		public void onClick(ClickEvent event) {
 			// TODO Auto-generated method stub
-			String appID = txtAppId.getText();
 
-			if ((appID != null)&&(!appID.equals(""))) {
-				// formUpload.submit();
-				AsyncCallback<Long> callback = new AsyncCallback<Long>() {
-					public void onFailure(Throwable caught) {
-						// TODO: Do something with errors.
-					}
-
-					public void onSuccess(Long result) {
-					}
-				};
-				if (scoreObj == null) {
-					scoreObj = new HighScore(Long.valueOf(appID), txtPlayer.getText());
-					
-					scoreObj.setSubBoard(txtSubBoard.getName());
-					scoreObj.setLocation(txtLocation.getText());
-					scoreObj.setHighScore(Integer.valueOf(txtScore.getText()));
-					scoreObj.setDuring(Long.valueOf(txtDuring.getText()));
-					scoreObj.setComment(txtComment.getText());
-					scoreObj.setDate(System.nanoTime());
-					scoreObj.setUserID(userId_);
-
-					scoreSvc.InsertScore(scoreObj, callback);
-				} else {
-					
-					scoreObj.setGameID(Long.valueOf(appID));
-					scoreObj.setSubBoard(txtSubBoard.getName());
-					scoreObj.setLocation(txtLocation.getText());
-					scoreObj.setHighScore(Integer.valueOf(txtScore.getText()));
-					scoreObj.setDuring(Long.valueOf(txtDuring.getText()));
-					scoreObj.setComment(txtComment.getText());
-					scoreObj.setDate(System.nanoTime());
-					
-					scoreSvc.UpdateScore(scoreObj, callback);
+			// formUpload.submit();
+			AsyncCallback<Long> callback = new AsyncCallback<Long>() {
+				public void onFailure(Throwable caught) {
+					// TODO: Do something with errors.
 				}
-				GlobalServices.ComebackHome(true);
+
+				public void onSuccess(Long result) {
+				}
+			};
+			if (scoreObj == null) {
+				scoreObj = new HighScore(userId_,appId_);
+				scoreObj.setPlayer(txtPlayer.getText());
+				scoreObj.setSubBoard(txtSubBoard.getName());
+				scoreObj.setLocation(txtLocation.getText());
+				scoreObj.setHighScore(Integer.valueOf(txtScore.getText()));
+				scoreObj.setDuring(Long.valueOf(txtDuring.getText()));
+				scoreObj.setComment(txtComment.getText());
+				scoreObj.setDate(new Date().getTime());
+				scoreObj.setUserID(userId_);
+
+				scoreSvc.InsertScore(scoreObj, callback);
+			} else {
+				scoreObj.setPlayer(txtPlayer.getText());
+				scoreObj.setGameID(appId_);
+				scoreObj.setSubBoard(txtSubBoard.getName());
+				scoreObj.setLocation(txtLocation.getText());
+				scoreObj.setHighScore(Integer.valueOf(txtScore.getText()));
+				scoreObj.setDuring(Long.valueOf(txtDuring.getText()));
+				scoreObj.setComment(txtComment.getText());
+				scoreObj.setDate(new Date().getTime());
+
+				scoreSvc.UpdateScore(scoreObj, callback);
 			}
+			GlobalServices.ComebackHome(true);
 		}
 	});
-		
-	public CreateHighScore(String userId) {
+
+	public CreateHighScore(String userId, Long appId) {
 		userId_ = userId;
+		appId_ = appId;
 	}
 
-	public CreateHighScore(String userId, Long scoreId) {
+	public CreateHighScore(String userId, Long appId, Long scoreId) {
 		userId_ = userId;
+		appId_ = appId;
 		scoreSvc.SelectScore(userId, scoreId, new AsyncCallback<HighScore>() {
 			public void onFailure(Throwable caught) {
 				// TODO: Do something with errors.
@@ -91,7 +95,7 @@ public class CreateHighScore {
 			public void onSuccess(HighScore result) {
 				scoreObj = result;
 				btnAddScore.setText("Update advertisment");
-				
+
 				txtAppId.setText(String.valueOf(scoreObj.getGameID()));
 				txtPlayer.setText(scoreObj.getPlayer());
 				txtDuring.setText(String.valueOf(scoreObj.getDuring()));
@@ -116,7 +120,7 @@ public class CreateHighScore {
 
 		mainContent.add(new Label("Player:"));
 		mainContent.add(txtPlayer);
-		
+
 		mainContent.add(new Label("Location:"));
 		mainContent.add(txtLocation);
 
@@ -125,7 +129,7 @@ public class CreateHighScore {
 
 		mainContent.add(new Label("During:"));
 		mainContent.add(txtDuring);
-		
+
 		mainContent.add(new Label("Comment:"));
 		mainContent.add(txtComment);
 
@@ -143,6 +147,5 @@ public class CreateHighScore {
 		return mainContent;
 
 	}
-
 
 }

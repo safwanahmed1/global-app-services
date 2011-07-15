@@ -55,7 +55,7 @@ NotificationService {
 	}
 
 	@Override
-	public Notification SelectNote(String userId, String appId) {
+	public Notification SelectNote(String userId, Long appId) {
 		// TODO Auto-generated method stub
 		NotificationDataBase noteDB = new NotificationDataBase();
 		Notification noteRet = noteDB.SelectNote(userId, appId);
