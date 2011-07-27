@@ -13,6 +13,7 @@ import global.services.client.rpc.NotificationServiceAsync;
 import global.services.shared.FileInfo;
 import global.services.shared.Advertisement;
 import global.services.shared.AppScore;
+import global.services.shared.HighScore;
 import global.services.shared.LoginInfo;
 import global.services.shared.Notification;
 import gwtupload.client.IUploader;
@@ -363,6 +364,22 @@ public class GlobalServices implements EntryPoint {
 				// TODO Auto-generated method stub
 				super.render(context, object, sb);
 				if (object != null) {
+					scoreSvc.SelectScores(object.getUserId(), object.getga,
+							new AsyncCallback<List<HighScore>>() {
+								public void onFailure(Throwable caught) {
+									// TODO: Do something
+									// with
+									// errors.
+								}
+
+								public void onSuccess(List<HighScore> result) {
+
+									listScore.clear();
+									listScore.addAll(result);
+
+								}
+							});
+					
 					sb.appendHtmlConstant("<div class=\"clickableanchor\">");
 					sb.appendEscaped(String.valueOf(object.getScoreEntries()));
 					sb.appendHtmlConstant("</div>");
@@ -375,13 +392,7 @@ public class GlobalServices implements EntryPoint {
 				// TODO Auto-generated method stub
 				super.onBrowserEvent(context, elem, object, event);
 				if (event.getType().equals("click")) {
-
-					mainPanel.clear();
-					mainPanel.addNorth(headerPanel, 50);
-					mainPanel.addSouth(footerPanel, 50);
-					HighScoreTable highScore = new HighScoreTable(loginInfo.getEmailAddress(), object.getId());
-					
-					mainPanel.add(highScore.Initialize());
+					HighScorePage(object.getId());
 				}
 			}
 
@@ -1067,5 +1078,14 @@ public class GlobalServices implements EntryPoint {
 		GlobalServices.mainPanel.addSouth(GlobalServices.footerPanel, 50);
 		GlobalServices.mainPanel.add(GlobalServices.servicesTabPanel);
 
+	}
+	static void HighScorePage(Long appId)
+	{
+		mainPanel.clear();
+		mainPanel.addNorth(headerPanel, 50);
+		mainPanel.addSouth(footerPanel, 50);
+		HighScoreTable highScore = new HighScoreTable(loginInfo.getEmailAddress(), appId);
+		
+		mainPanel.add(highScore.Initialize());
 	}
 }

@@ -1,34 +1,15 @@
 package global.services.client;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import global.services.client.rpc.AdvertisementService;
 import global.services.client.rpc.AppScoreService;
 import global.services.client.rpc.AppScoreServiceAsync;
 import global.services.client.rpc.HighScoreService;
 import global.services.client.rpc.HighScoreServiceAsync;
-
-import global.services.client.rpc.AdvertisementServiceAsync;
-import global.services.shared.Advertisement;
 import global.services.shared.AppScore;
 import global.services.shared.HighScore;
-import global.services.shared.HighScore;
-import global.services.shared.LoginInfo;
-import gwtupload.client.IFileInput.FileInputType;
-import gwtupload.client.IUploadStatus.Status;
-import gwtupload.client.IUploader;
-import gwtupload.client.IUploader.UploadedInfo;
-import gwtupload.client.PreloadedImage;
-import gwtupload.client.PreloadedImage.OnLoadPreloadedImageHandler;
-import gwtupload.client.SingleUploader;
 
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
-import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.Column;
-import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.user.client.Window;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.ClickableTextCell;
 import com.google.gwt.cell.client.Cell.Context;
@@ -38,15 +19,16 @@ import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.http.client.UrlBuilder;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.FormPanel;
-import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
@@ -58,24 +40,39 @@ public class HighScoreTable {
 
 	private String userId_ = null;
 	private Long appId_ = null;
+	private String appName_ = null;
 
 	private CellTable<HighScore> scoreCellTable = new CellTable<HighScore>();
 	private List<Long> selectedScores = new ArrayList<Long>();
 	private VerticalPanel mainContent = new VerticalPanel();
 	private List<HighScore> listScore = null;
+	private Label lblAppInfo =new Label("Highscore table of ... application.");
 	static HighScoreServiceAsync scoreSvc = GWT.create(HighScoreService.class);
+	static AppScoreServiceAsync appSvc = GWT.create(AppScoreService.class);
 
 	public HighScoreTable(String userId, Long appId) {
 		userId_ = userId;
 		appId_ = appId;
+		appSvc.SelectApp(userId, appId, new AsyncCallback<AppScore>() {
+					public void onFailure(Throwable caught) {
+						// TODO: Do something
+						// with
+						// errors.
+					}
+
+					public void onSuccess(AppScore result) {
+
+						appName_ = result.getAppName();
+						lblAppInfo.setText("Highscore table of " + appName_ + " application.");
+					}
+				});
 		RefreshHighScoreTbl();
 	}
 
 	public Widget Initialize() {
 
 		mainContent.setStyleName("contentBackgroud");
-		mainContent.add(new Label("Highscore table of " + appId_
-				+ " application."));
+		mainContent.add(lblAppInfo );
 
 		final SelectionModel<HighScore> selectionAppModel = new MultiSelectionModel<HighScore>(
 				HighScore.KEY_PROVIDER);
@@ -126,8 +123,7 @@ public class HighScoreTable {
 				super.onBrowserEvent(context, elem, object, event);
 				if (event.getType().equals("click")) {
 
-					CreateHighScore createScore = new CreateHighScore(userId_,
-							object.getId());
+					CreateHighScore createScore = new CreateHighScore(object);
 					mainContent.clear();
 					mainContent.add(createScore.Initialize());
 				}
@@ -239,7 +235,7 @@ public class HighScoreTable {
 		mainContent.add(scoreCellTable);
 
 		HorizontalPanel tableGamesCtrPanel = new HorizontalPanel();
-		tableGamesCtrPanel.add(new Button("Create app", new ClickHandler() {
+		tableGamesCtrPanel.add(new Button("Create score", new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
@@ -251,7 +247,7 @@ public class HighScoreTable {
 			}
 		}));
 
-		tableGamesCtrPanel.add(new Button("Delete app", new ClickHandler() {
+		tableGamesCtrPanel.add(new Button("Delete score", new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
@@ -303,6 +299,14 @@ public class HighScoreTable {
 
 					}
 				});
+	}
+
+	public void setAppName(String appName) {
+		this.appName_ = appName;
+	}
+
+	public String getAppName() {
+		return appName_;
 	}
 
 }
