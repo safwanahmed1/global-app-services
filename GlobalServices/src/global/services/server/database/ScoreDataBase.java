@@ -1,13 +1,17 @@
 package global.services.server.database;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import global.services.server.PMF;
 import global.services.shared.HighScore;
+import global.services.shared.Notification;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
+
+import org.eclipse.jdt.internal.compiler.ast.ArrayAllocationExpression;
 
 public class ScoreDataBase {
 	private HighScore score_;
@@ -50,7 +54,7 @@ public class ScoreDataBase {
 	@SuppressWarnings("unchecked")
 	public List<HighScore> SelectScores(String userId, Long appId) {
 		// TODO Auto-generated method stub
-
+		List<HighScore> retScores = new ArrayList<HighScore>();
 		String strQuery = "select from " + HighScore.class.getName();
 		Query query = pm_.newQuery(strQuery);
 		if (userId != null)
@@ -58,7 +62,10 @@ public class ScoreDataBase {
 		if (appId != null)
 			query.setFilter("appId_ == " + appId);
 		List<HighScore> scores = (List<HighScore>) query.execute();
-		return scores;
+		for (HighScore note : scores) {
+			retScores.add(note);
+		}
+		return retScores;
 
 	}
 

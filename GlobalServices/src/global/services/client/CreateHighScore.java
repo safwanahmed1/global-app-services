@@ -1,7 +1,5 @@
 package global.services.client;
 
-import org.apache.commons.lang.time.DateUtils;
-
 import global.services.client.rpc.HighScoreService;
 import global.services.client.rpc.HighScoreServiceAsync;
 
@@ -10,6 +8,7 @@ import global.services.shared.HighScore;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -21,7 +20,6 @@ import com.google.gwt.user.client.ui.Widget;
 import java.util.Date;
 
 public class CreateHighScore {
-	private TextBox txtAppId = new TextBox();
 	private TextBox txtSubBoard = new TextBox();
 	private TextBox txtPlayer = new TextBox();
 	private TextBox txtLocation = new TextBox();
@@ -46,15 +44,19 @@ public class CreateHighScore {
 			AsyncCallback<Long> callback = new AsyncCallback<Long>() {
 				public void onFailure(Throwable caught) {
 					// TODO: Do something with errors.
+					Window.alert("Creating score has NOT successful.");
+					GlobalServices.HighScorePage(appId_);
 				}
 
 				public void onSuccess(Long result) {
+					Window.alert("Creating score has successful.");
+					GlobalServices.HighScorePage(appId_);
 				}
 			};
 			if (scoreObj == null) {
 				scoreObj = new HighScore(userId_,appId_);
 				scoreObj.setPlayer(txtPlayer.getText());
-				scoreObj.setSubBoard(txtSubBoard.getName());
+				scoreObj.setSubBoard(txtSubBoard.getText());
 				scoreObj.setLocation(txtLocation.getText());
 				scoreObj.setHighScore(Integer.valueOf(txtScore.getText()));
 				scoreObj.setDuring(Long.valueOf(txtDuring.getText()));
@@ -75,7 +77,7 @@ public class CreateHighScore {
 
 				scoreSvc.UpdateScore(scoreObj, callback);
 			}
-			GlobalServices.ComebackHome(true);
+			
 		}
 	});
 
@@ -84,36 +86,23 @@ public class CreateHighScore {
 		appId_ = appId;
 	}
 
-	public CreateHighScore(String userId, Long appId, Long scoreId) {
-		userId_ = userId;
-		appId_ = appId;
-		scoreSvc.SelectScore(userId, scoreId, new AsyncCallback<HighScore>() {
-			public void onFailure(Throwable caught) {
-				// TODO: Do something with errors.
-			}
+	public CreateHighScore(HighScore object) {
+		btnAddScore.setText("Update score");
+		scoreObj = object;
+		userId_ = scoreObj.getUserID();
+		appId_ = scoreObj.getGameID();
+		txtPlayer.setText(scoreObj.getPlayer());
+		txtDuring.setText(String.valueOf(scoreObj.getDuring()));
+		txtSubBoard.setText(scoreObj.getSubBoard());
+		txtScore.setText(String.valueOf(scoreObj.getHighScore()));
+		txtLocation.setText(scoreObj.getLocation());
 
-			public void onSuccess(HighScore result) {
-				scoreObj = result;
-				btnAddScore.setText("Update advertisment");
-
-				txtAppId.setText(String.valueOf(scoreObj.getGameID()));
-				txtPlayer.setText(scoreObj.getPlayer());
-				txtDuring.setText(String.valueOf(scoreObj.getDuring()));
-				txtSubBoard.setText(scoreObj.getSubBoard());
-				txtScore.setText(String.valueOf(scoreObj.getHighScore()));
-				txtLocation.setText(scoreObj.getLocation());
-				txtComment.setText(scoreObj.getComment());
-			}
-		});
 	}
 
 	public Widget Initialize() {
 		VerticalPanel mainContent = new VerticalPanel();
 		mainContent.setStyleName("contentBackgroud");
 		mainContent.add(new Label("Create new score entry"));
-
-		mainContent.add(new Label("App Identifier:"));
-		mainContent.add(txtAppId);
 
 		mainContent.add(new Label("Level:"));
 		mainContent.add(txtSubBoard);
