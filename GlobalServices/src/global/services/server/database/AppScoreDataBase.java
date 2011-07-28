@@ -2,6 +2,7 @@ package global.services.server.database;
 
 import global.services.server.PMF;
 import global.services.shared.AppScore;
+import global.services.shared.HighScore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,8 @@ import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
+import javax.jdo.Transaction;
+
 
 import com.google.gwt.user.client.Window;
 
@@ -31,14 +34,14 @@ public class AppScoreDataBase {
 		pm_.close();
 	}
 
-	public Long DeleteApp(String userId, String appId) {
+	public Long DeleteApp(String userId, Long appId) {
 		// TODO Auto-generated method stub
 		Long ret = null;
 		Query query = pm_.newQuery(AppScore.class);
 		if ((userId != null) && !userId.isEmpty())
 			query.setFilter("userId_ == \"" + userId + "\"");
-		if ((appId != null) && !appId.isEmpty())
-			query.setFilter("appId_ == \"" + appId + "\"");
+		if (appId != null)
+			query.setFilter("appId_ == " + appId);
 		ret = query.deletePersistentAll();
 		return ret;
 
@@ -89,6 +92,8 @@ public class AppScoreDataBase {
 	@SuppressWarnings("unchecked")
 	public List<AppScore> SelectApps(String userId) {
 		// TODO Auto-generated method stub
+		Transaction tx =  pm_.currentTransaction();
+		tx.begin();
 		String strQuery = "select from " + AppScore.class.getName();
 		// + HighScore.class.getName() ;
 		Query query = pm_.newQuery(strQuery);
@@ -99,7 +104,19 @@ public class AppScoreDataBase {
 		//(List<Question>)pm.detachCopyAll((List<Question>)query.execute());
 		//List<AppScore> selectedApps = (List<AppScore>)pm_.detachCopyAll((List<AppScore>) query.execute());
 		List<AppScore> selectedApps =(List<AppScore>) query.execute();
+		tx.commit();
 		for (AppScore app : selectedApps) {
+			tx.begin();
+			strQuery = "select from " + HighScore.class.getName();
+			query = pm_.newQuery(strQuery);
+			if (userId != null)
+				query.setFilter("userId_ == \"" + userId + "\"");
+
+			query.setFilter("appId_ == " + app.getId());
+			List<HighScore> scores = (List<HighScore>) query.execute();
+			
+			app.setScoreEntries(scores.size());
+			tx.commit();
 			retApps.add(app);
 		}
 		//Window.alert("selectedApps size in database: " + selectedApps.size());

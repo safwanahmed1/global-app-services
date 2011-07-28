@@ -16,7 +16,7 @@ AdvertisementService {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public Long DeleteAdv(String userId, String appId) {
+	public Long DeleteAdv(String userId, Long appId) {
 		// TODO Auto-generated method stub
 		Long ret = null;
 		if (userId != null) {
@@ -81,11 +81,11 @@ AdvertisementService {
 	}
 
 	@Override
-	public int DeleteAdvs(String userId, List<String> listAppId) {
+	public int DeleteAdvs(String userId, List<Long> listAppId) {
 		// TODO Auto-generated method stub
 		Long tmpRet = (long) 0;
 		int ret = 0;
-		for (String appId : listAppId) {
+		for (Long appId : listAppId) {
 			tmpRet = DeleteAdv(userId, appId);
 			if (tmpRet != null) 
 				ret++;

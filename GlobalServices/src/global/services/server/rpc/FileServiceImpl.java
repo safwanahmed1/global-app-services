@@ -16,7 +16,7 @@ FileService {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public Long DeleteFile(String userId, String fileId) {
+	public Long DeleteFile(String userId, Long fileId) {
 		// TODO Auto-generated method stub
 		Long ret = null;
 		if (userId != null) {
@@ -82,11 +82,11 @@ FileService {
 
 	
 	@Override
-	public int DeleteFiles(String userId, List<String> listFileId) {
+	public int DeleteFiles(String userId, List<Long> listFileId) {
 		// TODO Auto-generated method stub
 		Long tmpRet = (long) 0;
 		int ret = 0;
-		for (String fileId : listFileId) {
+		for (Long fileId : listFileId) {
 			tmpRet = DeleteFile(userId, fileId);
 			if (tmpRet != null) 
 				ret++;

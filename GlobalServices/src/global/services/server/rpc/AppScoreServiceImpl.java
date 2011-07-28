@@ -19,7 +19,7 @@ public class AppScoreServiceImpl extends RemoteServiceServlet implements
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public Long DeleteApp(String userId, String appId) {
+	public Long DeleteApp(String userId, Long appId) {
 		// TODO Auto-generated method stub
 		Long ret = null;
 		if (userId != null) {
@@ -86,12 +86,12 @@ public class AppScoreServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public int DeleteApps(String userId, List<String> listAppId) {
+	public int DeleteApps(String userId, List<Long> listAppId) {
 		// TODO Auto-generated method stub
 		Long tmpRet = (long) 0;
 		int ret = 0;
 		AppScoreDataBase appDB = new AppScoreDataBase();
-		for (String appId : listAppId) {
+		for (Long appId : listAppId) {
 			tmpRet = appDB.DeleteApp(userId, appId);
 			if (tmpRet != null) 
 				ret++;

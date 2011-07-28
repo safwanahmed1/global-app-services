@@ -25,7 +25,6 @@ public class AppScore implements Serializable  {
 	private String appName_;
 	@Persistent
 	private String appTittle_;
-	@Persistent
 	private int scoreEntries_;
 	
 	/**

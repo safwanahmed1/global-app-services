@@ -11,8 +11,8 @@ public interface AdvertisementService extends RemoteService {
 
 	public Long InsertAdv(Advertisement adv);
 	public Long UpdateAdv(Advertisement adv);
-	public Long DeleteAdv(String userId, String appId);
-	public int DeleteAdvs(String userId, List<String> listAppId);
+	public Long DeleteAdv(String userId, Long appId);
+	public int DeleteAdvs(String userId, List<Long> listAppId);
 	public Long DeleteAdvs(String userId);
 	public Advertisement SelectAdv(String userId, Long appId);
 	public List<Advertisement> SelectAdvs(String userId);

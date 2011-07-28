@@ -44,12 +44,12 @@ public class NotificationDataBase {
 		return note.getId();
 	}
 
-	public Long DeleteNote(String userId, String appId) {
+	public Long DeleteNote(String userId, Long appId) {
 		Query query = pm_.newQuery(Notification.class);
 		if ((userId != null) && !userId.isEmpty())
 			query.setFilter("userId_ == \"" + userId + "\"");
-		if ((appId != null) && !appId.isEmpty())
-			query.setFilter("appId_ == \"" + appId + "\"");
+		if (appId != null)
+			query.setFilter("appId_ == " + appId);
 		return query.deletePersistentAll();
 
 	}

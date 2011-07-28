@@ -62,8 +62,8 @@ public class ScoreDataBase {
 		if (appId != null)
 			query.setFilter("appId_ == " + appId);
 		List<HighScore> scores = (List<HighScore>) query.execute();
-		for (HighScore note : scores) {
-			retScores.add(note);
+		for (HighScore score : scores) {
+			retScores.add(score);
 		}
 		return retScores;
 
@@ -102,13 +102,13 @@ public class ScoreDataBase {
 
 	}
 
-	public Long DeleteScores(String userId, String appId) {
+	public Long DeleteScores(String userId, Long appId) {
 		// TODO Auto-generated method stub
 		Query query = pm_.newQuery(HighScore.class);
 		if ((userId != null) && !userId.isEmpty())
 			query.setFilter("userId_ == \"" + userId + "\"");
-		if ((appId != null) && !appId.isEmpty())
-			query.setFilter("appId_ == \"" + appId + "\"");
+		if (appId != null)
+			query.setFilter("appId_ == " + appId);
 		return query.deletePersistentAll();
 
 	}

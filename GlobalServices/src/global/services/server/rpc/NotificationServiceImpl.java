@@ -18,7 +18,7 @@ NotificationService {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public Long DeleteNote(String userId, String appId) {
+	public Long DeleteNote(String userId, Long appId) {
 		// TODO Auto-generated method stub
 		Long ret = null;
 		if (userId != null) {
@@ -83,11 +83,11 @@ NotificationService {
 	}
 
 	@Override
-	public int DeleteNotes(String userId, List<String> listAppId) {
+	public int DeleteNotes(String userId, List<Long> listAppId) {
 		// TODO Auto-generated method stub
 		Long tmpRet = (long) 0;
 		int ret = 0;
-		for (String appId : listAppId) {
+		for (Long appId : listAppId) {
 			tmpRet = DeleteNote(userId, appId);
 			if (tmpRet != null) 
 				ret++;
