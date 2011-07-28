@@ -10,8 +10,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public interface AppScoreServiceAsync {
 	 public void InsertApp(AppScore app, AsyncCallback<Long> callback);
 	 public void UpdateApp(AppScore app, AsyncCallback<Long> callback);
-	 public void DeleteApp(String userId, String appId, AsyncCallback<Long> callback);
-	 public void DeleteApps(String userId, List<String> listAppId, AsyncCallback<Integer> callback);
+	 public void DeleteApp(String userId, Long appId, AsyncCallback<Long> callback);
+	 public void DeleteApps(String userId, List<Long> listAppId, AsyncCallback<Integer> callback);
 	 public void DeleteApps(String userId, AsyncCallback<Long> callback);
 	 public void SelectApp(String userId, Long appId, AsyncCallback<AppScore> callback);
 	 public void SelectApps(String userId, AsyncCallback<List<AppScore>> callback);

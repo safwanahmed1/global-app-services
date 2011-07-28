@@ -11,8 +11,8 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface FileService extends RemoteService {
 
 	public Long UpdateFile(FileInfo file);
-	public Long DeleteFile(String userId, String fileId);
-	public int DeleteFiles(String userId, List<String> listFileId);
+	public Long DeleteFile(String userId, Long fileId);
+	public int DeleteFiles(String userId, List<Long> listFileId);
 	public Long DeleteFiles(String userId);
 	public FileInfo SelectFile(String userId, String appId);
 	public List<FileInfo> SelectFiles(String userId);

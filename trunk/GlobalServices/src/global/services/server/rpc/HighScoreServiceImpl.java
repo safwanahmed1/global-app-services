@@ -31,7 +31,7 @@ public class HighScoreServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public Long DeleteScores(String userId, String appId) {
+	public Long DeleteScores(String userId, Long appId) {
 		Long scoreId = null;
 		if (userId != null) {
 			ScoreDataBase scoreDB = new ScoreDataBase();

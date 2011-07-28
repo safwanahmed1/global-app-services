@@ -13,7 +13,6 @@ import global.services.client.rpc.NotificationServiceAsync;
 import global.services.shared.FileInfo;
 import global.services.shared.Advertisement;
 import global.services.shared.AppScore;
-import global.services.shared.HighScore;
 import global.services.shared.LoginInfo;
 import global.services.shared.Notification;
 import gwtupload.client.IUploader;
@@ -40,7 +39,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
@@ -56,7 +54,6 @@ import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionModel;
-import com.sun.java.swing.plaf.windows.resources.windows;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -106,6 +103,7 @@ public class GlobalServices implements EntryPoint {
 	static NotificationServiceAsync noteSvc = GWT
 			.create(NotificationService.class);
 	static FileServiceAsync fileSvc = GWT.create(FileService.class);
+	//static HighScoreServiceAsync scoreSvc = GWT.create(HighScoreService.class);
 
 	static Label lblAppRemaining = new Label(
 			"Calculating number apps remaining...");
@@ -125,10 +123,12 @@ public class GlobalServices implements EntryPoint {
 	static List<Notification> listNotes;
 	static List<FileInfo> listFiles;
 
-	private List<String> selectedApps = new ArrayList<String>();
-	private List<String> selectedAdvs = new ArrayList<String>();
-	private List<String> selectedNotes = new ArrayList<String>();
-	private List<String> selectedFiles = new ArrayList<String>();
+	private List<Long> selectedApps = new ArrayList<Long>();
+	private List<Long> selectedAdvs = new ArrayList<Long>();
+	private List<Long> selectedNotes = new ArrayList<Long>();
+	private List<Long> selectedFiles = new ArrayList<Long>();
+
+	//private String strEntryNum = "...";
 
 	static SingleUploader fileUploader;
 
@@ -222,7 +222,8 @@ public class GlobalServices implements EntryPoint {
 					mainPanel.clear();
 					mainPanel.addNorth(headerPanel, 50);
 					mainPanel.addSouth(footerPanel, 50);
-					CreateAppScores createApp = new CreateAppScores(loginInfo.getEmailAddress());
+					CreateAppScores createApp = new CreateAppScores(loginInfo
+							.getEmailAddress());
 					mainPanel.add(createApp.Initialize());
 				}
 
@@ -233,7 +234,6 @@ public class GlobalServices implements EntryPoint {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				// TODO Auto-generated method stub
 				if (selectedApps.size() == 0) {
 					Window.alert("You have to chose at least an application to delete.");
 				} else {
@@ -246,7 +246,6 @@ public class GlobalServices implements EntryPoint {
 									}
 
 									public void onSuccess(Integer result) {
-										// TODO Auto-generated method stub
 										Window.alert(result
 												+ " Applications have been deleted successful.");
 										RefreshAppScoreTbl();
@@ -277,11 +276,11 @@ public class GlobalServices implements EntryPoint {
 			public Boolean getValue(AppScore app) {
 				// TODO Auto-generated method stub
 				if (selectionAppModel.isSelected(app)) {
-					if (!selectedApps.contains(app.getAppName()))
-						selectedApps.add(app.getAppName());
+					if (!selectedApps.contains(app.getId()))
+						selectedApps.add(app.getId());
 				} else {
-					if (selectedApps.contains(app.getAppName()))
-						selectedApps.remove(app.getAppName());
+					if (selectedApps.contains(app.getId()))
+						selectedApps.remove(app.getId());
 				}
 				return selectionAppModel.isSelected(app);
 			}
@@ -293,7 +292,6 @@ public class GlobalServices implements EntryPoint {
 		// Create appId column.
 		Column<AppScore, String> appIdColumn = new Column<AppScore, String>(
 				new ClickableTextCell()) {
-			
 
 			@Override
 			public void render(Context context, AppScore object,
@@ -317,8 +315,9 @@ public class GlobalServices implements EntryPoint {
 					mainPanel.clear();
 					mainPanel.addNorth(headerPanel, 50);
 					mainPanel.addSouth(footerPanel, 50);
-					CreateAppScores createApp = new CreateAppScores(loginInfo.getEmailAddress(), object.getId());
-					
+					CreateAppScores createApp = new CreateAppScores(
+							loginInfo.getEmailAddress(), object.getId());
+
 					mainPanel.add(createApp.Initialize());
 				}
 			}
@@ -341,8 +340,7 @@ public class GlobalServices implements EntryPoint {
 			}
 		};
 		appNameColumn.setSortable(true);
-		gamesCellTable.addColumn(appNameColumn, "App Name");	
-		
+		gamesCellTable.addColumn(appNameColumn, "App Name");
 
 		// Create appTittle column.
 		TextColumn<AppScore> appTittleColumn = new TextColumn<AppScore>() {
@@ -353,10 +351,9 @@ public class GlobalServices implements EntryPoint {
 		};
 		appTittleColumn.setSortable(true);
 		gamesCellTable.addColumn(appTittleColumn, "Tittle");
-		
+
 		Column<AppScore, String> entriesColumn = new Column<AppScore, String>(
 				new ClickableTextCell()) {
-			
 
 			@Override
 			public void render(Context context, AppScore object,
@@ -364,22 +361,6 @@ public class GlobalServices implements EntryPoint {
 				// TODO Auto-generated method stub
 				super.render(context, object, sb);
 				if (object != null) {
-					scoreSvc.SelectScores(object.getUserId(), object.getga,
-							new AsyncCallback<List<HighScore>>() {
-								public void onFailure(Throwable caught) {
-									// TODO: Do something
-									// with
-									// errors.
-								}
-
-								public void onSuccess(List<HighScore> result) {
-
-									listScore.clear();
-									listScore.addAll(result);
-
-								}
-							});
-					
 					sb.appendHtmlConstant("<div class=\"clickableanchor\">");
 					sb.appendEscaped(String.valueOf(object.getScoreEntries()));
 					sb.appendHtmlConstant("</div>");
@@ -405,8 +386,6 @@ public class GlobalServices implements EntryPoint {
 		};
 		entriesColumn.setSortable(true);
 		gamesCellTable.addColumn(entriesColumn, "Entries");
-		
-		
 
 		// Create a data provider.
 		ListDataProvider<AppScore> dataProvider = new ListDataProvider<AppScore>();
@@ -445,7 +424,8 @@ public class GlobalServices implements EntryPoint {
 					mainPanel.clear();
 					mainPanel.addNorth(headerPanel, 50);
 					mainPanel.addSouth(footerPanel, 50);
-					CreateAdvertisment createAdv = new CreateAdvertisment(loginInfo.getEmailAddress());
+					CreateAdvertisment createAdv = new CreateAdvertisment(
+							loginInfo.getEmailAddress());
 					mainPanel.add(createAdv.Initialize());
 				}
 
@@ -501,11 +481,11 @@ public class GlobalServices implements EntryPoint {
 			public Boolean getValue(Advertisement adv) {
 				// TODO Auto-generated method stub
 				if (selectionAdvModel.isSelected(adv)) {
-					if (!selectedAdvs.contains(adv.getAppName()))
-						selectedAdvs.add(adv.getAppName());
+					if (!selectedAdvs.contains(adv.getId()))
+						selectedAdvs.add(adv.getId());
 				} else {
-					if (selectedAdvs.contains(adv.getAppName()))
-						selectedAdvs.remove(adv.getAppName());
+					if (selectedAdvs.contains(adv.getId()))
+						selectedAdvs.remove(adv.getId());
 				}
 				return selectionAdvModel.isSelected(adv);
 			}
@@ -528,11 +508,9 @@ public class GlobalServices implements EntryPoint {
 		Column<Advertisement, String> appIdColumn = new Column<Advertisement, String>(
 				new ClickableTextCell()) {
 			/*
-			@Override
-			public String getValue(AppScore app) {
-				return app.getAppId();
-			}
-			*/
+			 * @Override public String getValue(AppScore app) { return
+			 * app.getAppId(); }
+			 */
 
 			@Override
 			public void render(Context context, Advertisement object,
@@ -556,8 +534,9 @@ public class GlobalServices implements EntryPoint {
 					mainPanel.clear();
 					mainPanel.addNorth(headerPanel, 50);
 					mainPanel.addSouth(footerPanel, 50);
-					CreateAdvertisment createAdv = new CreateAdvertisment(loginInfo.getEmailAddress(), object.getId());
-					
+					CreateAdvertisment createAdv = new CreateAdvertisment(
+							loginInfo.getEmailAddress(), object.getId());
+
 					mainPanel.add(createAdv.Initialize());
 				}
 			}
@@ -571,7 +550,7 @@ public class GlobalServices implements EntryPoint {
 		};
 		appIdColumn.setSortable(true);
 		advsCellTable.addColumn(appIdColumn, "AppId");
-		
+
 		// Create appTittle column.
 		TextColumn<Advertisement> appNameColumn = new TextColumn<Advertisement>() {
 			@Override
@@ -581,7 +560,7 @@ public class GlobalServices implements EntryPoint {
 		};
 		appNameColumn.setSortable(true);
 		advsCellTable.addColumn(appNameColumn, "App Name");
-		
+
 		// Create appTittle column.
 		TextColumn<Advertisement> appTittleColumn = new TextColumn<Advertisement>() {
 			@Override
@@ -651,7 +630,8 @@ public class GlobalServices implements EntryPoint {
 					mainPanel.clear();
 					mainPanel.addNorth(headerPanel, 50);
 					mainPanel.addSouth(footerPanel, 50);
-					CreateNotification createNote = new CreateNotification(loginInfo.getEmailAddress());
+					CreateNotification createNote = new CreateNotification(
+							loginInfo.getEmailAddress());
 					mainPanel.add(createNote.Initialize());
 				}
 			}
@@ -704,11 +684,11 @@ public class GlobalServices implements EntryPoint {
 			public Boolean getValue(Notification note) {
 				// TODO Auto-generated method stub
 				if (selectionNoteModel.isSelected(note)) {
-					if (!selectedNotes.contains(note.getAppName()))
-						selectedNotes.add(note.getAppName());
+					if (!selectedNotes.contains(note.getId()))
+						selectedNotes.add(note.getId());
 				} else {
-					if (selectedNotes.contains(note.getAppName()))
-						selectedNotes.remove(note.getAppName());
+					if (selectedNotes.contains(note.getId()))
+						selectedNotes.remove(note.getId());
 				}
 				return selectionNoteModel.isSelected(note);
 			}
@@ -722,11 +702,9 @@ public class GlobalServices implements EntryPoint {
 		Column<Notification, String> appIdColumn = new Column<Notification, String>(
 				new ClickableTextCell()) {
 			/*
-			@Override
-			public String getValue(AppScore app) {
-				return app.getAppId();
-			}
-			*/
+			 * @Override public String getValue(AppScore app) { return
+			 * app.getAppId(); }
+			 */
 
 			@Override
 			public void render(Context context, Notification object,
@@ -750,8 +728,9 @@ public class GlobalServices implements EntryPoint {
 					mainPanel.clear();
 					mainPanel.addNorth(headerPanel, 50);
 					mainPanel.addSouth(footerPanel, 50);
-					CreateNotification createNote = new CreateNotification(loginInfo.getEmailAddress(), object.getId());
-					
+					CreateNotification createNote = new CreateNotification(
+							loginInfo.getEmailAddress(), object.getId());
+
 					mainPanel.add(createNote.Initialize());
 				}
 			}
@@ -765,7 +744,7 @@ public class GlobalServices implements EntryPoint {
 		};
 		appIdColumn.setSortable(true);
 		notesCellTable.addColumn(appIdColumn, "AppId");
-		
+
 		// Create appName column.
 		TextColumn<Notification> appNameColumn = new TextColumn<Notification>() {
 			@Override
@@ -775,7 +754,6 @@ public class GlobalServices implements EntryPoint {
 		};
 		appNameColumn.setSortable(true);
 		notesCellTable.addColumn(appNameColumn, "App Name");
-		
 
 		// Create appTittle column.
 		TextColumn<Notification> appTittleColumn = new TextColumn<Notification>() {
@@ -903,11 +881,11 @@ public class GlobalServices implements EntryPoint {
 			public Boolean getValue(FileInfo file) {
 				// TODO Auto-generated method stub
 				if (selectionFileModel.isSelected(file)) {
-					if (!selectedFiles.contains(String.valueOf(file.getId())))
-						selectedFiles.add(String.valueOf(file.getId()));
+					if (!selectedFiles.contains(file.getId()))
+						selectedFiles.add(file.getId());
 				} else {
-					if (selectedFiles.contains(String.valueOf(file.getId())))
-						selectedFiles.remove(String.valueOf(file.getId()));
+					if (selectedFiles.contains(file.getId()))
+						selectedFiles.remove(file.getId());
 				}
 				return selectionFileModel.isSelected(file);
 			}
@@ -1079,13 +1057,14 @@ public class GlobalServices implements EntryPoint {
 		GlobalServices.mainPanel.add(GlobalServices.servicesTabPanel);
 
 	}
-	static void HighScorePage(Long appId)
-	{
+
+	static void HighScorePage(Long appId) {
 		mainPanel.clear();
 		mainPanel.addNorth(headerPanel, 50);
 		mainPanel.addSouth(footerPanel, 50);
-		HighScoreTable highScore = new HighScoreTable(loginInfo.getEmailAddress(), appId);
-		
+		HighScoreTable highScore = new HighScoreTable(
+				loginInfo.getEmailAddress(), appId);
+
 		mainPanel.add(highScore.Initialize());
 	}
 }

@@ -9,8 +9,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public interface NotificationServiceAsync {
 	 public void InsertNote(Notification note, AsyncCallback<Long> callback);
 	 public void UpdateNote(Notification note, AsyncCallback<Long> callback);
-	 public void DeleteNote(String userId, String appId, AsyncCallback<Long> callback);
-	 public void DeleteNotes(String userId, List<String> listAppId, AsyncCallback<Integer> callback);
+	 public void DeleteNote(String userId, Long appId, AsyncCallback<Long> callback);
+	 public void DeleteNotes(String userId, List<Long> listAppId, AsyncCallback<Integer> callback);
 	 public void DeleteNotes(String userId, AsyncCallback<Long> callback);
 	 public void SelectNote(String userId, Long appId, AsyncCallback<Notification> callback);
 	 public void SelectNotes(String userId, AsyncCallback<List<Notification>> callback);
