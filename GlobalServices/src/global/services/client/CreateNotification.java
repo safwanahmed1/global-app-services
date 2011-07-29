@@ -107,7 +107,7 @@ public class CreateNotification {
 		mainContent.setStyleName("contentBackgroud");
 		mainContent.add(new Label("Create new notification"));
 
-		mainContent.add(new Label("App Identifier:"));
+		mainContent.add(new Label("App Name:"));
 		mainContent.add(txtAppId);
 
 		mainContent.add(new Label("Title:"));

@@ -1,12 +1,8 @@
 package global.services.client;
 
 import global.services.client.rpc.AdvertisementService;
-import global.services.client.rpc.AppScoreService;
-
 import global.services.client.rpc.AdvertisementServiceAsync;
 import global.services.shared.Advertisement;
-import global.services.shared.AppScore;
-import global.services.shared.LoginInfo;
 import gwtupload.client.IFileInput.FileInputType;
 import gwtupload.client.IUploadStatus.Status;
 import gwtupload.client.IUploader;
@@ -15,16 +11,12 @@ import gwtupload.client.PreloadedImage;
 import gwtupload.client.PreloadedImage.OnLoadPreloadedImageHandler;
 import gwtupload.client.SingleUploader;
 
-import com.google.gwt.user.client.Window;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.http.client.UrlBuilder;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.FormPanel;
-import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
@@ -132,7 +124,7 @@ public class CreateAdvertisment {
 		//formUpload = (FormPanel) FileUploader.getFileUploaderWidget();
 		//mainContent.add(formUpload);
 
-		mainContent.add(new Label("App Identifier:"));
+		mainContent.add(new Label("App Name:"));
 		txtAppId = new TextBox();
 		mainContent.add(txtAppId);
 

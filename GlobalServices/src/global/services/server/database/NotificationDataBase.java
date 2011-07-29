@@ -49,7 +49,7 @@ public class NotificationDataBase {
 		if ((userId != null) && !userId.isEmpty())
 			query.setFilter("userId_ == \"" + userId + "\"");
 		if (appId != null)
-			query.setFilter("appId_ == " + appId);
+			query.setFilter("id == " + appId);
 		return query.deletePersistentAll();
 
 	}

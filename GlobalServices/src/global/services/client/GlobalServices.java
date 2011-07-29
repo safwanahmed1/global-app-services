@@ -35,6 +35,8 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.TextColumn;
 
+import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.HistoryListener;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
@@ -58,7 +60,7 @@ import com.google.gwt.view.client.SelectionModel;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class GlobalServices implements EntryPoint {
+public class GlobalServices implements EntryPoint, HistoryListener {
 	/**
 	 * The message displayed to the user when the server cannot be reached or
 	 * returns an error.
@@ -103,7 +105,8 @@ public class GlobalServices implements EntryPoint {
 	static NotificationServiceAsync noteSvc = GWT
 			.create(NotificationService.class);
 	static FileServiceAsync fileSvc = GWT.create(FileService.class);
-	//static HighScoreServiceAsync scoreSvc = GWT.create(HighScoreService.class);
+	// static HighScoreServiceAsync scoreSvc =
+	// GWT.create(HighScoreService.class);
 
 	static Label lblAppRemaining = new Label(
 			"Calculating number apps remaining...");
@@ -128,12 +131,20 @@ public class GlobalServices implements EntryPoint {
 	private List<Long> selectedNotes = new ArrayList<Long>();
 	private List<Long> selectedFiles = new ArrayList<Long>();
 
-	//private String strEntryNum = "...";
+	static String rootToken = "Homepage";
+	static String appScoreToken = "Create-app-score";
+	static String advertisementToken = "Create-advertesment";
+	static String notificationToken = "Create-notification";
+	static String highScoreToken = "Highscore";
+	static String createHighScoreToken = "Create-highscore";
+
+	// private String strEntryNum = "...";
 
 	static SingleUploader fileUploader;
 
 	public void onModuleLoad() {
 
+		History.addHistoryListener(this);
 		LoginServiceAsync loginService = GWT.create(LoginService.class);
 		loginService.login(GWT.getHostPageBaseURL(),
 				new AsyncCallback<LoginInfo>() {
@@ -164,7 +175,6 @@ public class GlobalServices implements EntryPoint {
 	}
 
 	private void moduleLoad() {
-
 		// Create header panel
 		Image logo = new Image("images/GlobalAppServices.png");
 		headerPanel.add(logo);
@@ -182,7 +192,7 @@ public class GlobalServices implements EntryPoint {
 
 		// Building services tabs
 		// HighScore tab
-		CreateHighScorePanel();
+		CreateAppScorePanel();
 
 		// Advertisement tab
 		CreateAdvertisementPanel();
@@ -199,10 +209,10 @@ public class GlobalServices implements EntryPoint {
 		rootPanel = RootPanel.get("content");
 
 		RootLayoutPanel.get().add(mainPanel);
-
+		History.newItem(rootToken);
 	}
 
-	public void CreateHighScorePanel() {
+	public void CreateAppScorePanel() {
 		VerticalPanel highScorePanel = new VerticalPanel();
 		highScorePanel.setStyleName("tabBackgroud");
 
@@ -216,17 +226,14 @@ public class GlobalServices implements EntryPoint {
 
 			@Override
 			public void onClick(ClickEvent event) {
+
 				if (numAppRemaining <= 0) {
 					Window.alert("You can not create more appplication.");
 				} else {
-					mainPanel.clear();
-					mainPanel.addNorth(headerPanel, 50);
-					mainPanel.addSouth(footerPanel, 50);
-					CreateAppScores createApp = new CreateAppScores(loginInfo
-							.getEmailAddress());
-					mainPanel.add(createApp.Initialize());
-				}
+					CreateAppScoresPage(null);
 
+				}
+				History.newItem(appScoreToken);
 			}
 		}));
 
@@ -311,15 +318,10 @@ public class GlobalServices implements EntryPoint {
 				// TODO Auto-generated method stub
 				super.onBrowserEvent(context, elem, object, event);
 				if (event.getType().equals("click")) {
+					CreateAppScoresPage(object.getId());
 
-					mainPanel.clear();
-					mainPanel.addNorth(headerPanel, 50);
-					mainPanel.addSouth(footerPanel, 50);
-					CreateAppScores createApp = new CreateAppScores(
-							loginInfo.getEmailAddress(), object.getId());
-
-					mainPanel.add(createApp.Initialize());
 				}
+				History.newItem(appScoreToken);
 			}
 
 			@Override
@@ -373,8 +375,10 @@ public class GlobalServices implements EntryPoint {
 				// TODO Auto-generated method stub
 				super.onBrowserEvent(context, elem, object, event);
 				if (event.getType().equals("click")) {
+					appId = object.getId();
 					HighScorePage(object.getId());
 				}
+				History.newItem(highScoreToken);
 			}
 
 			@Override
@@ -404,6 +408,22 @@ public class GlobalServices implements EntryPoint {
 		servicesTabPanel.add(highScorePanel, "HighScores");
 	}
 
+	protected void CreateAppScoresPage(Long id) {
+		// TODO Auto-generated method stub
+		mainPanel.clear();
+		mainPanel.addNorth(headerPanel, 50);
+		mainPanel.addSouth(footerPanel, 50);
+		CreateAppScores createApp;
+		if (id == null) {
+			createApp = new CreateAppScores(loginInfo.getEmailAddress());
+		} else {
+
+			createApp = new CreateAppScores(loginInfo.getEmailAddress(), id);
+		}
+		mainPanel.add(createApp.Initialize());
+
+	}
+
 	public void CreateAdvertisementPanel() {
 		VerticalPanel advsPanel = new VerticalPanel();
 		advsPanel.setStyleName("tabBackgroud");
@@ -421,14 +441,10 @@ public class GlobalServices implements EntryPoint {
 				if ((numAdvRemaining <= 0) || (numFileRemaining <= 0)) {
 					Window.alert("You can not create more advertisment.");
 				} else {
-					mainPanel.clear();
-					mainPanel.addNorth(headerPanel, 50);
-					mainPanel.addSouth(footerPanel, 50);
-					CreateAdvertisment createAdv = new CreateAdvertisment(
-							loginInfo.getEmailAddress());
-					mainPanel.add(createAdv.Initialize());
-				}
+					CreateAdvertismentPage(null);
 
+				}
+				History.newItem(advertisementToken);
 			}
 		}));
 
@@ -530,15 +546,10 @@ public class GlobalServices implements EntryPoint {
 				// TODO Auto-generated method stub
 				super.onBrowserEvent(context, elem, object, event);
 				if (event.getType().equals("click")) {
+					CreateAdvertismentPage(object.getId());
 
-					mainPanel.clear();
-					mainPanel.addNorth(headerPanel, 50);
-					mainPanel.addSouth(footerPanel, 50);
-					CreateAdvertisment createAdv = new CreateAdvertisment(
-							loginInfo.getEmailAddress(), object.getId());
-
-					mainPanel.add(createAdv.Initialize());
 				}
+				History.newItem(advertisementToken);
 			}
 
 			@Override
@@ -610,6 +621,21 @@ public class GlobalServices implements EntryPoint {
 		servicesTabPanel.add(advsPanel, "Advertisement");
 	}
 
+	protected void CreateAdvertismentPage(Long id) {
+		// TODO Auto-generated method stub
+		mainPanel.clear();
+		mainPanel.addNorth(headerPanel, 50);
+		mainPanel.addSouth(footerPanel, 50);
+		CreateAdvertisment createAdv;
+		if (id == null) {
+			createAdv = new CreateAdvertisment(loginInfo.getEmailAddress());
+		} else {
+			createAdv = new CreateAdvertisment(loginInfo.getEmailAddress(), id);
+		}
+		mainPanel.add(createAdv.Initialize());
+
+	}
+
 	public void CreateNotificationPanel() {
 		VerticalPanel notesPanel = new VerticalPanel();
 		notesPanel.setStyleName("tabBackgroud");
@@ -627,13 +653,10 @@ public class GlobalServices implements EntryPoint {
 				if (numNoteRemaining <= 0) {
 					Window.alert("You can not create more notification.");
 				} else {
-					mainPanel.clear();
-					mainPanel.addNorth(headerPanel, 50);
-					mainPanel.addSouth(footerPanel, 50);
-					CreateNotification createNote = new CreateNotification(
-							loginInfo.getEmailAddress());
-					mainPanel.add(createNote.Initialize());
+					CreateNotificationPage(null);
+
 				}
+				History.newItem(notificationToken);
 			}
 		}));
 
@@ -724,15 +747,10 @@ public class GlobalServices implements EntryPoint {
 				// TODO Auto-generated method stub
 				super.onBrowserEvent(context, elem, object, event);
 				if (event.getType().equals("click")) {
+					CreateNotificationPage(object.getId());
 
-					mainPanel.clear();
-					mainPanel.addNorth(headerPanel, 50);
-					mainPanel.addSouth(footerPanel, 50);
-					CreateNotification createNote = new CreateNotification(
-							loginInfo.getEmailAddress(), object.getId());
-
-					mainPanel.add(createNote.Initialize());
 				}
+				History.newItem(notificationToken);
 			}
 
 			@Override
@@ -812,6 +830,21 @@ public class GlobalServices implements EntryPoint {
 		notesPanel.add(tableNotesFooterPanel);
 		servicesTabPanel.add(notesPanel, "Notification");
 
+	}
+
+	protected void CreateNotificationPage(Long id) {
+		// TODO Auto-generated method stub
+		mainPanel.clear();
+		mainPanel.addNorth(headerPanel, 50);
+		mainPanel.addSouth(footerPanel, 50);
+		CreateNotification createNote;
+		if (id == null) {
+			createNote = new CreateNotification(loginInfo.getEmailAddress());
+		} else {
+			createNote = new CreateNotification(loginInfo.getEmailAddress(), id);
+		}
+
+		mainPanel.add(createNote.Initialize());
 	}
 
 	public void CreateFileServerPanel() {
@@ -962,6 +995,8 @@ public class GlobalServices implements EntryPoint {
 		}
 	};
 
+	private Long appId;
+
 	static void RefreshAppScoreTbl() {
 		appScoreSvc.SelectApps(loginInfo.getEmailAddress(),
 				new AsyncCallback<List<AppScore>>() {
@@ -1066,5 +1101,33 @@ public class GlobalServices implements EntryPoint {
 				loginInfo.getEmailAddress(), appId);
 
 		mainPanel.add(highScore.Initialize());
+	}
+
+	@Override
+	public void onHistoryChanged(String historyToken) {
+		// TODO Auto-generated method stub
+		if (historyToken.equals(rootPanel)) {
+			ComebackHome(false);
+			return;
+		}
+		if (historyToken.equals(appScoreToken)) {
+			CreateAppScoresPage(null);
+			return;
+		}
+		if (historyToken.equals(advertisementToken)) {
+			CreateAdvertismentPage(null);
+			return;
+		}
+		if (historyToken.equals(notificationToken)) {
+			CreateNotificationPage(null);
+			return;
+		}
+		if (historyToken.equals(highScoreToken)) {
+			HighScorePage(appId);
+			return;
+		}
+		if (historyToken.equals(createHighScoreToken)) {
+			return;
+		}
 	}
 }

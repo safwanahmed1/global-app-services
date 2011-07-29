@@ -41,7 +41,7 @@ public class AppScoreDataBase {
 		if ((userId != null) && !userId.isEmpty())
 			query.setFilter("userId_ == \"" + userId + "\"");
 		if (appId != null)
-			query.setFilter("appId_ == " + appId);
+			query.setFilter("id == " + appId);
 		ret = query.deletePersistentAll();
 		return ret;
 
