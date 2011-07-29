@@ -48,7 +48,7 @@ public class AdvertisementDataBase {
 		if ((userId != null) && !userId.isEmpty())
 			query.setFilter("userId_ == \"" + userId + "\"");
 		if (appId != null) 
-			query.setFilter("appId_ == " + appId);
+			query.setFilter("id == " + appId);
 		return query.deletePersistentAll();
 
 	}
@@ -68,7 +68,7 @@ public class AdvertisementDataBase {
 		if ((userId != null) && !userId.isEmpty())
 			query.setFilter("userId_ == \"" + userId + "\"");
 		if (appId != null)
-			query.setFilter("id == \"" + appId);
+			query.setFilter("id == " + appId);
 		List<Advertisement> retAdv = (List<Advertisement>) query.execute();
 		return retAdv.get(0);
 
