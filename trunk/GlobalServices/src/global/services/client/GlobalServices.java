@@ -561,13 +561,48 @@ public class GlobalServices implements EntryPoint, HistoryListener {
 		};
 		appIdColumn.setSortable(true);
 		advsCellTable.addColumn(appIdColumn, "AppId");
+		
+		
+		
+		// Create icon column.
+		Column<Advertisement, String> iconColumn = new Column<Advertisement, String>(
+				new ClickableTextCell()) {
+			/*
+			 * @Override public String getValue(AppScore app) { return
+			 * app.getAppId(); }
+			 */
 
+			@Override
+			public void render(Context context, Advertisement object,
+					SafeHtmlBuilder sb) {
+				// TODO Auto-generated method stub
+				super.render(context, object, sb);
+				if (object != null) {
+					String iconUrl = "http://global-app-services.appspot.com/globalservices/download?fileid=";
+					iconUrl += object.getIconFile();
+					sb.appendHtmlConstant("<img src=\"");
+					sb.appendEscaped(iconUrl);
+					sb.appendHtmlConstant("\" width=\"64px\" height=\"64px\"/>");
+				}
+			}
+
+
+			@Override
+			public String getValue(Advertisement object) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+		};
+		iconColumn.setSortable(true);
+		advsCellTable.addColumn(iconColumn, "Icon");
 		// Create appTittle column.
 		TextColumn<Advertisement> appNameColumn = new TextColumn<Advertisement>() {
 			@Override
 			public String getValue(Advertisement adv) {
 				return adv.getAppName();
 			}
+			
 		};
 		appNameColumn.setSortable(true);
 		advsCellTable.addColumn(appNameColumn, "App Name");
