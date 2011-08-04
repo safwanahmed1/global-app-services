@@ -57,7 +57,8 @@ FileService {
 		fileInfo.setId(file.getId());
 		fileInfo.setFileName(file.getName());
 		fileInfo.setFileType(file.getFileType());
-		fileInfo.setFileSize(file.getContent().toString());
+		String blogContent = file.getContent().toString();
+		fileInfo.setFileSize(blogContent.substring(7, blogContent.length()-1));
 		fileDB.Finalize();
 		return fileInfo;
 	}
@@ -73,7 +74,8 @@ FileService {
 			fileInfo.setId(file.getId());
 			fileInfo.setFileName(file.getName());
 			fileInfo.setFileType(file.getFileType());
-			fileInfo.setFileSize(file.getContent().toString());
+			String blogContent = file.getContent().toString();
+			fileInfo.setFileSize(blogContent.substring(7, blogContent.length()-1));
 			retFiles.add(fileInfo);
 		}
 		fileDB.Finalize();

@@ -96,6 +96,7 @@ public class CreateHighScore {
 		txtSubBoard.setText(scoreObj.getSubBoard());
 		txtScore.setText(String.valueOf(scoreObj.getHighScore()));
 		txtLocation.setText(scoreObj.getLocation());
+		txtComment.setText(scoreObj.getComment());
 
 	}
 
