@@ -20,6 +20,7 @@ import gwtupload.client.SingleUploader;
 import gwtupload.client.IFileInput.FileInputType;
 import gwtupload.client.IUploadStatus.Status;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.cell.client.Cell.Context;
@@ -832,7 +833,8 @@ public class GlobalServices implements EntryPoint, HistoryListener {
 		TextColumn<Notification> fromDateColumn = new TextColumn<Notification>() {
 			@Override
 			public String getValue(Notification note) {
-				return String.valueOf(note.getFromDate());
+				Date fromDate = new Date(note.getFromDate());
+				return fromDate.toString();
 			}
 		};
 		fromDateColumn.setSortable(true);
@@ -842,7 +844,7 @@ public class GlobalServices implements EntryPoint, HistoryListener {
 		TextColumn<Notification> toDateColumn = new TextColumn<Notification>() {
 			@Override
 			public String getValue(Notification note) {
-				return String.valueOf(note.getToDate());
+				return new Date(note.getToDate()).toString();
 			}
 		};
 		toDateColumn.setSortable(true);

@@ -7,7 +7,9 @@ import global.services.client.rpc.HighScoreServiceAsync;
 import global.services.shared.AppScore;
 import global.services.shared.HighScore;
 
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.cell.client.CheckboxCell;
@@ -180,7 +182,7 @@ public class HighScoreTable {
 			@Override
 			public String getValue(HighScore score) {
 				// TODO Auto-generated method stub
-				return String.valueOf(score.getDuring());
+				return new Time(score.getDuring()).toString();
 			}
 
 		};
@@ -192,7 +194,7 @@ public class HighScoreTable {
 			@Override
 			public String getValue(HighScore score) {
 				// TODO Auto-generated method stub
-				return String.valueOf(score.getDuring());
+				return String.valueOf(score.getLocation());
 			}
 
 		};
@@ -215,7 +217,7 @@ public class HighScoreTable {
 			@Override
 			public String getValue(HighScore score) {
 				// TODO Auto-generated method stub
-				return String.valueOf(score.getDate());
+				return new Date(score.getDate()).toString();
 			}
 
 		};
