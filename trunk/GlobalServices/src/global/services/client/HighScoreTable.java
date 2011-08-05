@@ -6,9 +6,7 @@ import global.services.client.rpc.HighScoreService;
 import global.services.client.rpc.HighScoreServiceAsync;
 import global.services.shared.AppScore;
 import global.services.shared.HighScore;
-import global.services.shared.TimeFormatter;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -50,7 +48,7 @@ public class HighScoreTable {
 	private List<Long> selectedScores = new ArrayList<Long>();
 	private VerticalPanel mainContent = new VerticalPanel();
 	private List<HighScore> listScore = null;
-	private Label lblAppInfo =new Label("Highscore table of ... application.");
+	private Label lblAppInfo = new Label("Highscore table of ... application.");
 	static HighScoreServiceAsync scoreSvc = GWT.create(HighScoreService.class);
 	static AppScoreServiceAsync appSvc = GWT.create(AppScoreService.class);
 
@@ -58,25 +56,26 @@ public class HighScoreTable {
 		userId_ = userId;
 		appId_ = appId;
 		appSvc.SelectApp(userId, appId, new AsyncCallback<AppScore>() {
-					public void onFailure(Throwable caught) {
-						// TODO: Do something
-						// with
-						// errors.
-					}
+			public void onFailure(Throwable caught) {
+				// TODO: Do something
+				// with
+				// errors.
+			}
 
-					public void onSuccess(AppScore result) {
+			public void onSuccess(AppScore result) {
 
-						appName_ = result.getAppName();
-						lblAppInfo.setText("Highscore table of " + appName_ + " application.");
-					}
-				});
+				appName_ = result.getAppName();
+				lblAppInfo.setText("Highscore table of " + appName_
+						+ " application.");
+			}
+		});
 		RefreshHighScoreTbl();
 	}
 
 	public Widget Initialize() {
 
 		mainContent.setStyleName("contentBackgroud");
-		mainContent.add(lblAppInfo );
+		mainContent.add(lblAppInfo);
 
 		final SelectionModel<HighScore> selectionAppModel = new MultiSelectionModel<HighScore>(
 				HighScore.KEY_PROVIDER);
@@ -100,8 +99,8 @@ public class HighScoreTable {
 				return selectionAppModel.isSelected(score);
 			}
 		};
-		scoreCellTable.addColumn(checkColumn,
-				SafeHtmlUtils.fromSafeConstant("<br/>"));
+		scoreCellTable.addColumn(checkColumn, SafeHtmlUtils
+				.fromSafeConstant("<br/>"));
 		scoreCellTable.setColumnWidth(checkColumn, 40, Unit.PX);
 
 		// Create scoreId column.
@@ -131,7 +130,7 @@ public class HighScoreTable {
 					mainContent.clear();
 					mainContent.add(createScore.Initialize());
 				}
-				//History.newItem(GlobalServices.createHighScoreToken);
+				// History.newItem(GlobalServices.createHighScoreToken);
 			}
 
 			@Override
@@ -183,7 +182,31 @@ public class HighScoreTable {
 			@Override
 			public String getValue(HighScore score) {
 				// TODO Auto-generated method stub
-				return new TimeFormatter().format(score.getDuring());
+				Long time = score.getDuring();
+				StringBuilder sb = new StringBuilder();
+				int hour = (int) (time / 3600000);
+				if (hour > 1) {
+					sb.append(hour + ":");
+					time = time % 3600000;
+				}
+				int minute = (int) (time / 60000);
+				if (minute > 1) {
+					if (minute < 10)
+						sb.append("0");
+					sb.append(minute + ":");
+					time = time % 60000;
+				} else {
+					sb.append("00:");
+				}
+				int second = (int) (time / 1000);
+				if (second > 1) {
+					if (second < 10)
+						sb.append("0");
+					sb.append(second);
+				} else {
+					sb.append("00");
+				}
+				return sb.toString();
 			}
 
 		};
@@ -245,10 +268,11 @@ public class HighScoreTable {
 			@Override
 			public void onClick(ClickEvent event) {
 
-				CreateHighScore createScore = new CreateHighScore(userId_, appId_);
+				CreateHighScore createScore = new CreateHighScore(userId_,
+						appId_);
 				mainContent.clear();
 				mainContent.add(createScore.Initialize());
-				//History.newItem(GlobalServices.createHighScoreToken);
+				// History.newItem(GlobalServices.createHighScoreToken);
 			}
 		}));
 
@@ -258,7 +282,8 @@ public class HighScoreTable {
 			public void onClick(ClickEvent event) {
 				// TODO Auto-generated method stub
 				if (selectedScores.size() == 0) {
-					Window.alert("You have to chose at least an entry to delete.");
+					Window
+							.alert("You have to chose at least an entry to delete.");
 				} else {
 					if (Window.confirm("Would you want to delete entries")) {
 						HighScoreServiceAsync scoreService = GWT
@@ -270,8 +295,9 @@ public class HighScoreTable {
 
 									public void onSuccess(Integer result) {
 										// TODO Auto-generated method stub
-										Window.alert(result
-												+ " Scores have been deleted successful.");
+										Window
+												.alert(result
+														+ " Scores have been deleted successful.");
 										RefreshHighScoreTbl();
 									}
 								});
