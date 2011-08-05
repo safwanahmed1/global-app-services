@@ -6,6 +6,7 @@ import global.services.client.rpc.HighScoreService;
 import global.services.client.rpc.HighScoreServiceAsync;
 import global.services.shared.AppScore;
 import global.services.shared.HighScore;
+import global.services.shared.TimeFormatter;
 
 import java.sql.Time;
 import java.util.ArrayList;
@@ -182,7 +183,7 @@ public class HighScoreTable {
 			@Override
 			public String getValue(HighScore score) {
 				// TODO Auto-generated method stub
-				return new Time(score.getDuring()).toString();
+				return new TimeFormatter().format(score.getDuring());
 			}
 
 		};
