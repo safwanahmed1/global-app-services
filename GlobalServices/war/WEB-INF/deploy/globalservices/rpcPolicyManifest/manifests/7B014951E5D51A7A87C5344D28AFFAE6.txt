@@ -1,0 +1,2 @@
+serviceClass: global.services.client.rpc.FileService
+path: 654B68FA0D9AF16518D37C537656DFF6.gwt.rpc
