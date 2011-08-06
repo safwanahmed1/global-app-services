@@ -1,0 +1,2 @@
+serviceClass: global.services.client.rpc.HighScoreService
+path: FE7976AEDF41092318FB83BEE9C3ABD4.gwt.rpc

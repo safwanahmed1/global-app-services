@@ -1,0 +1,2 @@
+serviceClass: global.services.client.rpc.AppScoreService
+path: AAC64142192B9F4E00F36B278B5E16C5.gwt.rpc
