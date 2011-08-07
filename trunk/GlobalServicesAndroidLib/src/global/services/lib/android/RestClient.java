@@ -70,7 +70,13 @@ public class RestClient
         params = new ArrayList<NameValuePair>();
         headers = new ArrayList<NameValuePair>();
     }
- 
+    
+    
+    public void ClearParams()
+    {
+        params.clear();
+    }
+    
     public void AddParam(String name, String value)
     {
         params.add(new BasicNameValuePair(name, value));
