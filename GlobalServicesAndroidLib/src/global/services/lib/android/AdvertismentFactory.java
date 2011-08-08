@@ -1,5 +1,6 @@
 package global.services.lib.android;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class AdvertismentFactory {
 		String content;
 		String type;
 		String iconFileId;
+		File iconFile;
 		String storeUrl;
 
 		advRest.ClearParams();
@@ -84,7 +86,8 @@ public class AdvertismentFactory {
 						advObj.setType(type);
 
 						iconFileId = advs.getAttributeValue(null, "iconid");
-						advObj.setIconFile(iconFileId);
+						iconFile = GetIconFile(Long.parseLong(iconFileId));
+						advObj.setIconFile(iconFile);
 
 						storeUrl = advs.getAttributeValue(null, "storeurl");
 						advObj.setStoreUrl(storeUrl);
@@ -109,5 +112,10 @@ public class AdvertismentFactory {
 		return advList;
 
 	}
+	
+	private File GetIconFile(Long fileId) {
+		File iconFile = new File(""); 
+		return iconFile;
+	} 
 
 }

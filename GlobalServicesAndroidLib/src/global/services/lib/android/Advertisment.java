@@ -1,4 +1,7 @@
 package global.services.lib.android;
+
+import java.io.File;
+
 public class Advertisment {
 	/**
 	 * 
@@ -11,7 +14,7 @@ public class Advertisment {
 	private String tittle_;
 	private String content_;
 	private String type_;
-	private Long iconFileId_;
+	private File iconFile_;
 	private String storeUrl_;
 	
 	public Advertisment(){}
@@ -56,11 +59,11 @@ public class Advertisment {
 	public void setType(String type) {
 		type_ = type;
 	}
-	public Long getIconFile() {
-		return iconFileId_;
+	public File getIconFile() {
+		return iconFile_;
 	}
-	public void setIconFile(Long iconFileId) {
-		iconFileId_ = iconFileId;
+	public void setIconFile(File iconFile) {
+		iconFile_ = iconFile;
 	}
 	public String getStoreUrl() {
 		return storeUrl_;
