@@ -1,6 +1,6 @@
 package global.services.lib.android;
 
-public class Score {
+public class Highscore {
 	/**
 	 * 
 	 */
@@ -19,9 +19,9 @@ public class Score {
     private long date_;
     private String avatar_;
     
-    public Score(){}
+    public Highscore(){}
     
-    public Score(String userID, long appID) {
+    public Highscore(String userID, long appID) {
         //this.userID = userID;
     	this.userId_ = userID;
     	this.appId_ = appID;

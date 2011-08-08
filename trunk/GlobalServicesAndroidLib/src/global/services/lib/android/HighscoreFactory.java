@@ -8,7 +8,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
-public class Highscores {
+public class HighscoreFactory {
 
 	private static final String HIGHSCORE_SERVLET = "http://global-score.appspot.com/gethighscore";
 	private static final String TYPE_PROCESS_SUBMIT = "submit";
@@ -16,14 +16,14 @@ public class Highscores {
 	private String userId_;
 	private Long appId_;
 	private RestClient highScoreRest;
-	public Highscores(String userId, Long appId) {
+	public HighscoreFactory(String userId, Long appId) {
 		userId_ = userId;
 		appId_ = appId;
 		highScoreRest = new RestClient(HIGHSCORE_SERVLET);
 		
 	}
 	
-	public void SubmitScore(Score score) {
+	public void SubmitScore(Highscore score) {
 		highScoreRest.ClearParams();
 		highScoreRest.AddParam("typeProcess", TYPE_PROCESS_SUBMIT);
 		highScoreRest.AddParam("userid", score.getUserID());
@@ -47,8 +47,8 @@ public class Highscores {
 		}
 	}
 
-	public List<Score> GetScores() {
-		List<Score> scoreList = new ArrayList<Score>();
+	public List<Highscore> GetScores() {
+		List<Highscore> scoreList = new ArrayList<Highscore>();
 		String strElemName; 
 		String id;
 		String userId;
@@ -95,7 +95,7 @@ public class Highscores {
 
 					if (strElemName.equals("score")) {
 						// bFoundScores = true;
-						Score scoreObj = new Score();
+						Highscore scoreObj = new Highscore();
 						id = scores.getAttributeValue(null, "id");
 						scoreObj.setId(Long.parseLong(id));
 						userId = scores.getAttributeValue(null, "useid");

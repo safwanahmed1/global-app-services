@@ -1,5 +1,5 @@
 package global.services.lib.android;
-public class Advertisement {
+public class Advertisment {
 	/**
 	 * 
 	 */
@@ -14,8 +14,8 @@ public class Advertisement {
 	private Long iconFileId_;
 	private String storeUrl_;
 	
-	public Advertisement(){}
-	public Advertisement(String appId){
+	public Advertisment(){}
+	public Advertisment(String appId){
 		setAppName(appId);
 	}
 	
