@@ -1,5 +1,7 @@
 package global.services.lib.android;
 
+import java.io.File;
+
 
 
 public class FileInfo {
@@ -9,7 +11,7 @@ public class FileInfo {
 	private String fileName_;
 	private String fileType_;
 	private String fileSize_;
-	private String fileUrl_;
+	private File file_;
 
 	public Long getId() {
 		return id;
@@ -51,12 +53,12 @@ public class FileInfo {
 		return fileType_;
 	}
 
-	public void setFileUrl(String fileUrl) {
-		this.fileUrl_ = fileUrl;
+	public void setFile(File file) {
+		this.file_ = file;
 	}
 
-	public String getFileUrl() {
-		return fileUrl_;
+	public File getFile() {
+		return file_;
 	}
 
 }
