@@ -9,6 +9,7 @@ public class FileInfo {
 	private String fileName_;
 	private String fileType_;
 	private String fileSize_;
+	private String fileUrl_;
 
 	public Long getId() {
 		return id;
@@ -48,6 +49,14 @@ public class FileInfo {
 
 	public String getFileType() {
 		return fileType_;
+	}
+
+	public void setFileUrl(String fileUrl) {
+		this.fileUrl_ = fileUrl;
+	}
+
+	public String getFileUrl() {
+		return fileUrl_;
 	}
 
 }

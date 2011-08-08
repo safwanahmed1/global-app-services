@@ -4,18 +4,17 @@ public class Notification {
 	
 	private Long id;
 	private String userId_;
-	private String appName_;
+	private String appId_;
 	private String tittle_;
 	private String content_;
 	private Long fromDate_;
 	private Long toDate_;
 
 	public Notification(){}
+	
 	public Notification(String appId){
-		setAppName(appId);
+		appId_ = appId;
 	}
-	
-	
 	
 	public Long getId() {
 		return id;
@@ -53,11 +52,11 @@ public class Notification {
 	public void setToDate(Long toDate) {
 		toDate_ = toDate;
 	}
-	public void setAppName(String appId) {
-		this.appName_ = appId;
+	public void setAppId(String appId) {
+		this.appId_ = appId;
 	}
-	public String getAppName() {
-		return appName_;
+	public String getAppId() {
+		return appId_;
 	}
 	
 	
