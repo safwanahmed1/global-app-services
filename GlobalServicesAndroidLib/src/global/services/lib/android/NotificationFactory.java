@@ -33,11 +33,11 @@ public class NotificationFactory {
 		String toDate;
 
 		noteRest.ClearParams();
-		noteRest.AddParam("userid", userId_);
-		noteRest.AddParam("appid", String.valueOf(appId_));
+		noteRest.AddHeader("userid", userId_);
+		noteRest.AddHeader("appid", String.valueOf(appId_));
 
 		try {
-			noteRest.Execute(RequestMethod.GET);
+			noteRest.Execute(RequestMethod.POST);
 		} catch (Exception e) {
 			// textView.setText(e.getMessage());
 		}

@@ -25,20 +25,20 @@ public class HighscoreFactory {
 	
 	public void SubmitScore(Highscore score) {
 		highScoreRest.ClearParams();
-		highScoreRest.AddParam("typeProcess", TYPE_PROCESS_SUBMIT);
-		highScoreRest.AddParam("userid", score.getUserID());
-		highScoreRest.AddParam("appid", String.valueOf(score.getGameID()));
-		highScoreRest.AddParam("subboard", score.getSubBoard());
-		highScoreRest.AddParam("player", score.getPlayer());
-		highScoreRest.AddParam("score", String.valueOf(score.getHighScore()));
-		highScoreRest.AddParam("during", String.valueOf(score.getDuring()));
-		highScoreRest.AddParam("location", score.getLocation());
-		highScoreRest.AddParam("comment", score.getComment());
-		highScoreRest.AddParam("date", String.valueOf(score.getDate()));
-		highScoreRest.AddParam("avatar", score.getAvatar());
+		highScoreRest.AddHeader("typeProcess", TYPE_PROCESS_SUBMIT);
+		highScoreRest.AddHeader("userid", score.getUserID());
+		highScoreRest.AddHeader("appid", String.valueOf(score.getGameID()));
+		highScoreRest.AddHeader("subboard", score.getSubBoard());
+		highScoreRest.AddHeader("player", score.getPlayer());
+		highScoreRest.AddHeader("score", String.valueOf(score.getHighScore()));
+		highScoreRest.AddHeader("during", String.valueOf(score.getDuring()));
+		highScoreRest.AddHeader("location", score.getLocation());
+		highScoreRest.AddHeader("comment", score.getComment());
+		highScoreRest.AddHeader("date", String.valueOf(score.getDate()));
+		highScoreRest.AddHeader("avatar", score.getAvatar());
 		
 		long now = System.currentTimeMillis();
-		highScoreRest.AddParam("Date", String.valueOf(now));
+		highScoreRest.AddHeader("Date", String.valueOf(now));
 
 		try {
 			highScoreRest.Execute(RequestMethod.GET);
@@ -63,12 +63,12 @@ public class HighscoreFactory {
 		String date;
 
 		highScoreRest.ClearParams();
-		highScoreRest.AddParam("typeProcess", TYPE_PROCESS_SUBMIT);
-		highScoreRest.AddParam("userid", userId_);
-		highScoreRest.AddParam("appid", String.valueOf(appId_));
+		highScoreRest.AddHeader("typeProcess", TYPE_PROCESS_SUBMIT);
+		highScoreRest.AddHeader("userid", userId_);
+		highScoreRest.AddHeader("appid", String.valueOf(appId_));
 
 		try {
-			highScoreRest.Execute(RequestMethod.GET);
+			highScoreRest.Execute(RequestMethod.POST);
 		} catch (Exception e) {
 			// textView.setText(e.getMessage());
 		}

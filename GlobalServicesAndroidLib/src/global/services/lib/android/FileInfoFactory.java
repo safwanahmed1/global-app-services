@@ -1,5 +1,6 @@
 package global.services.lib.android;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -28,16 +29,16 @@ public class FileInfoFactory {
 		String fileName;
 		String fileType;
 		String fileSize;
-		String fileUrl;
+		
 		
 
 		fileRest.ClearParams();
-		fileRest.AddParam("userid", userId_);
+		fileRest.AddHeader("userid", userId_);
 		if (fileId != null)
-			fileRest.AddParam("fileid", String.valueOf(fileId));
+			fileRest.AddHeader("fileid", String.valueOf(fileId));
 
 		try {
-			fileRest.Execute(RequestMethod.GET);
+			fileRest.Execute(RequestMethod.POST);
 		} catch (Exception e) {
 			// textView.setText(e.getMessage());
 		}
@@ -78,11 +79,6 @@ public class FileInfoFactory {
 
 						fileSize = files.getAttributeValue(null, "filesize");
 						fileInfoObj.setFileSize(fileSize);
-
-						
-						fileUrl = files.getAttributeValue(null, "fileurl");
-						fileInfoObj.setFileUrl(fileUrl);
-
 						fileList.add(fileInfoObj);
 
 					}
@@ -102,5 +98,10 @@ public class FileInfoFactory {
 
 		return fileList;
 
+	}
+	public File Download(FileInfo fileInfo) {
+		FileDownloader downloader = new FileDownloader(fileInfo.getUserId(), fileInfo.getFileName());
+		File retFile = downloader.Download(fileInfo.getId());
+		return retFile;
 	}
 }
