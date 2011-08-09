@@ -4,9 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
-
-import org.apache.http.util.ByteArrayBuffer;
 
 public class FileDownloader {
 	private static final String DOWNLOAD_SERVLET = "http://global-score.appspot.com/gethighscore";

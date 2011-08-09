@@ -25,7 +25,7 @@ public class HighscoreFactory {
 	
 	public void SubmitScore(Highscore score) {
 		highScoreRest.ClearParams();
-		highScoreRest.AddHeader("typeProcess", TYPE_PROCESS_SUBMIT);
+		highScoreRest.AddHeader("typeProcess", TYPE_PROCESS_GET);
 		highScoreRest.AddHeader("userid", score.getUserID());
 		highScoreRest.AddHeader("appid", String.valueOf(score.getGameID()));
 		highScoreRest.AddHeader("subboard", score.getSubBoard());
