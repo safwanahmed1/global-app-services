@@ -35,12 +35,12 @@ public class AdvertismentFactory {
 		String storeUrl;
 
 		advRest.ClearParams();
-		advRest.AddParam("userid", userId_);
+		advRest.AddHeader("userid", userId_);
 		if (appId != null)
-			advRest.AddParam("appid", String.valueOf(appId));
+			advRest.AddHeader("appid", String.valueOf(appId));
 
 		try {
-			advRest.Execute(RequestMethod.GET);
+			advRest.Execute(RequestMethod.POST);
 		} catch (Exception e) {
 			// textView.setText(e.getMessage());
 		}
@@ -86,7 +86,7 @@ public class AdvertismentFactory {
 						advObj.setType(type);
 
 						iconFileId = advs.getAttributeValue(null, "iconid");
-						iconFile = GetIconFile(Long.parseLong(iconFileId));
+						iconFile = new FileDownloader(userId, iconFileId).Download(Long.parseLong(iconFileId));
 						advObj.setIconFile(iconFile);
 
 						storeUrl = advs.getAttributeValue(null, "storeurl");
@@ -113,9 +113,6 @@ public class AdvertismentFactory {
 
 	}
 	
-	private File GetIconFile(Long fileId) {
-		File iconFile = new File(""); 
-		return iconFile;
-	} 
+	
 
 }
