@@ -20,7 +20,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
  
-// Code from: http://lukencode.com/2010/04/27/calling-web-services-in-android-using-httpclient/
 public class RestClient
 {
     private ArrayList<NameValuePair> params;
