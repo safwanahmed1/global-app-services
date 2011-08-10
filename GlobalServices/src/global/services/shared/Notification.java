@@ -27,7 +27,7 @@ public class Notification implements Serializable {
 	@Persistent
 	private String userId_;
 	@Persistent
-	private String appName_;
+	private Long appId_;
 	@Persistent
 	private String tittle_;
 	@Persistent
@@ -84,11 +84,11 @@ public class Notification implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	public void setAppName(String appId) {
-		this.appName_ = appId;
+	public void setAppId(Long appId) {
+		this.appId_ = appId;
 	}
-	public String getAppName() {
-		return appName_;
+	public Long getAppId() {
+		return appId_;
 	}
 	
 	
