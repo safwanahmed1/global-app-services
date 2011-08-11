@@ -279,5 +279,17 @@ public class NotificationTable {
 	public String getAppName() {
 		return appName_;
 	}
+	protected void CreateNotificationPage(Notification note) {
+		// TODO Auto-generated method stub
+		mainContent.clear();
+		CreateNotification createNote;
+		if (note == null) {
+			createNote = new CreateNotification(userId_, appId_);
+		} else {
+			createNote = new CreateNotification(note);
+		}
+
+		mainContent.add(createNote.Initialize());
+	}
 
 }

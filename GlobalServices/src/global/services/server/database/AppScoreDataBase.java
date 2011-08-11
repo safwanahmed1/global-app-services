@@ -3,6 +3,7 @@ package global.services.server.database;
 import global.services.server.PMF;
 import global.services.shared.AppScore;
 import global.services.shared.HighScore;
+import global.services.shared.Notification;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,8 @@ import java.util.logging.Logger;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
+
+import org.apache.tools.ant.taskdefs.condition.Not;
 
 
 import com.google.gwt.user.client.Window;
@@ -117,6 +120,22 @@ public class AppScoreDataBase {
 			
 			app.setScoreEntries(scores.size());
 			tx.commit();
+			
+			tx.begin();
+			
+			strQuery = "select from " + Notification.class.getName();
+			
+			query = pm_.newQuery(strQuery);
+			if (userId != null)
+				query.setFilter("userId_ == \"" + userId + "\"");
+
+			query.setFilter("appId_ == " + app.getId());
+			List<Notification> notes = (List<Notification>) query.execute();
+			
+			app.setNoteEntries(notes.size());
+			tx.commit();
+			
+			
 			retApps.add(app);
 		}
 		//Window.alert("selectedApps size in database: " + selectedApps.size());
