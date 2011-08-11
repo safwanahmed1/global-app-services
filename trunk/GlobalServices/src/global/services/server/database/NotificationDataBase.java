@@ -36,7 +36,6 @@ public class NotificationDataBase {
 
 	public Long UpdateNote(Notification note) {
 		Notification noteTemp = pm_.getObjectById(Notification.class, note.getId());
-		noteTemp.setAppName(note.getAppName());
 		noteTemp.setContent(note.getContent());
 		noteTemp.setFromDate(note.getFromDate());
 		noteTemp.setTittle(note.getTittle());

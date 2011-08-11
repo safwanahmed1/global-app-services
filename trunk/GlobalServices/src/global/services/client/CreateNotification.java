@@ -4,6 +4,7 @@ import java.util.Date;
 
 import global.services.client.rpc.NotificationService;
 import global.services.client.rpc.NotificationServiceAsync;
+import global.services.shared.HighScore;
 import global.services.shared.Notification;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -25,6 +26,7 @@ public class CreateNotification {
 	private DateBox dateTo = new DateBox();
 
 	private String userId_ = null;
+	private Long appId_ = null;
 	private Notification noteObj = null;
 	private Button btnAddNote = new Button("Create note",  new ClickHandler() {
 
@@ -48,7 +50,7 @@ public class CreateNotification {
 				};
 
 				if (noteObj == null) {
-					noteObj = new Notification(appID);
+					noteObj = new Notification(userId_, appId_);
 
 					noteObj.setUserId(userId_);
 					noteObj.setTittle(txtTitle.getText());
@@ -60,7 +62,6 @@ public class CreateNotification {
 
 					noteSvc.InsertNote(noteObj, callback);
 				} else {
-					noteObj.setAppName(appID);
 					noteObj.setTittle(txtTitle.getText());
 					noteObj.setContent(txtContent.getText());
 					noteObj.setFromDate(Date.parse(dateFrom.getValue()
@@ -79,27 +80,21 @@ public class CreateNotification {
 	private NotificationServiceAsync noteSvc = GWT
 			.create(NotificationService.class);
 
-	public CreateNotification(String userId) {
-		userId_ = userId;
-	}
-
 	public CreateNotification(String userId, Long appId) {
 		userId_ = userId;
-		noteSvc.SelectNote(userId, appId, new AsyncCallback<Notification>() {
-			public void onFailure(Throwable caught) {
-				// TODO: Do something with errors.
-			}
+		appId_ = appId;
+	}
 
-			public void onSuccess(Notification result) {
-				noteObj = result;
-				btnAddNote.setText("Update note");
-				txtAppId.setText(noteObj.getAppName());
-				txtContent.setText(noteObj.getContent());
-				txtTitle.setText(noteObj.getTittle());
-				dateFrom.setValue(new Date(noteObj.getFromDate()));
-				dateTo.setValue(new Date(noteObj.getToDate()));
-			}
-		});
+	public CreateNotification(Notification note) {
+		noteObj = note;
+		userId_ = note.getUserId();
+		appId_ = note.getAppId();
+		btnAddNote.setText("Update note");
+		txtTitle.setText(noteObj.getTittle());
+		txtContent.setText(noteObj.getContent());
+		dateFrom.setValue(new Date(noteObj.getFromDate()));
+		dateTo.setValue(new Date(noteObj.getToDate()));
+		
 	}
 
 	public Widget Initialize() {

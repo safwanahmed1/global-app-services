@@ -39,8 +39,9 @@ public class Notification implements Serializable {
 	
 
 	public Notification(){}
-	public Notification(String appId){
-		setAppName(appId);
+	public Notification(String userId, Long appId){
+		userId_ = userId;
+		appId_ = appId;
 	}
 	
 	

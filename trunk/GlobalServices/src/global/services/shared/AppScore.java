@@ -26,6 +26,7 @@ public class AppScore implements Serializable  {
 	@Persistent
 	private String appTittle_;
 	private int scoreEntries_;
+	private int noteEntries_;
 	
 	/**
      * The key provider that provides the unique ID of a contact.
@@ -80,6 +81,12 @@ public class AppScore implements Serializable  {
 	}
 	public String getUserId() {
 		return userId_;
+	}
+	public void setNoteEntries(int noteEntries) {
+		this.noteEntries_ = noteEntries;
+	}
+	public int getNoteEntries() {
+		return noteEntries_;
 	}
 
 }

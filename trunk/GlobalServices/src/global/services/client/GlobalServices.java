@@ -135,8 +135,8 @@ public class GlobalServices implements EntryPoint, HistoryListener {
 	static String rootToken = "Homepage";
 	static String appScoreToken = "Create-app-score";
 	static String advertisementToken = "Create-advertesment";
-	static String notificationToken = "Create-notification";
 	static String highScoreToken = "Highscore";
+	static String notificationToken = "Notification";
 	static String createHighScoreToken = "Create-highscore";
 
 	// private String strEntryNum = "...";
@@ -353,9 +353,11 @@ public class GlobalServices implements EntryPoint, HistoryListener {
 			}
 		};
 		appTittleColumn.setSortable(true);
-		gamesCellTable.addColumn(appTittleColumn, "Tittle");
+		gamesCellTable.addColumn(appTittleColumn, "Description");
 
-		Column<AppScore, String> entriesColumn = new Column<AppScore, String>(
+		
+		// Create Score entries column
+		Column<AppScore, String> scoreEntriesColumn = new Column<AppScore, String>(
 				new ClickableTextCell()) {
 
 			@Override
@@ -389,8 +391,46 @@ public class GlobalServices implements EntryPoint, HistoryListener {
 			}
 
 		};
-		entriesColumn.setSortable(true);
-		gamesCellTable.addColumn(entriesColumn, "Entries");
+		scoreEntriesColumn.setSortable(true);
+		gamesCellTable.addColumn(scoreEntriesColumn, "Score entries");
+
+		// Create notification entries column
+		Column<AppScore, String> noteEntriesColumn = new Column<AppScore, String>(
+				new ClickableTextCell()) {
+
+			@Override
+			public void render(Context context, AppScore object,
+					SafeHtmlBuilder sb) {
+				// TODO Auto-generated method stub
+				super.render(context, object, sb);
+				if (object != null) {
+					sb.appendHtmlConstant("<div class=\"clickableanchor\">");
+					sb.appendEscaped(String.valueOf(object.getNoteEntries()));
+					sb.appendHtmlConstant("</div>");
+				}
+			}
+
+			@Override
+			public void onBrowserEvent(Context context, Element elem,
+					AppScore object, NativeEvent event) {
+				// TODO Auto-generated method stub
+				super.onBrowserEvent(context, elem, object, event);
+				if (event.getType().equals("click")) {
+					appId = object.getId();
+					NotificationPage(object.getId());
+				}
+				History.newItem(notificationToken);
+			}
+
+			@Override
+			public String getValue(AppScore object) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+		};
+		noteEntriesColumn.setSortable(true);
+		gamesCellTable.addColumn(noteEntriesColumn, "Note entries");
 
 		// Create a data provider.
 		ListDataProvider<AppScore> dataProvider = new ListDataProvider<AppScore>();
@@ -672,20 +712,7 @@ public class GlobalServices implements EntryPoint, HistoryListener {
 
 	}
 
-	protected void CreateNotificationPage(Long id) {
-		// TODO Auto-generated method stub
-		mainPanel.clear();
-		mainPanel.addNorth(headerPanel, 50);
-		mainPanel.addSouth(footerPanel, 50);
-		CreateNotification createNote;
-		if (id == null) {
-			createNote = new CreateNotification(loginInfo.getEmailAddress());
-		} else {
-			createNote = new CreateNotification(loginInfo.getEmailAddress(), id);
-		}
-
-		mainPanel.add(createNote.Initialize());
-	}
+	
 
 	public void CreateFileServerPanel() {
 		VerticalPanel filesPanel = new VerticalPanel();
@@ -942,6 +969,15 @@ public class GlobalServices implements EntryPoint, HistoryListener {
 
 		mainPanel.add(highScore.Initialize());
 	}
+	static void NotificationPage(Long appId) {
+		mainPanel.clear();
+		mainPanel.addNorth(headerPanel, 50);
+		mainPanel.addSouth(footerPanel, 50);
+		NotificationTable noteTable = new NotificationTable(
+				loginInfo.getEmailAddress(), appId);
+
+		mainPanel.add(noteTable.Initialize());
+	}
 
 	@Override
 	public void onHistoryChanged(String historyToken) {
@@ -958,10 +994,7 @@ public class GlobalServices implements EntryPoint, HistoryListener {
 			CreateAdvertismentPage(null);
 			return;
 		}
-		if (historyToken.equals(notificationToken)) {
-			CreateNotificationPage(null);
-			return;
-		}
+		
 		if (historyToken.equals(highScoreToken)) {
 			HighScorePage(appId);
 			return;
