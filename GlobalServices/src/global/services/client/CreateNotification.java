@@ -4,7 +4,6 @@ import java.util.Date;
 
 import global.services.client.rpc.NotificationService;
 import global.services.client.rpc.NotificationServiceAsync;
-import global.services.shared.HighScore;
 import global.services.shared.Notification;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -19,7 +18,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DateBox;
 
 public class CreateNotification {
-	private TextBox txtAppId = new TextBox();
 	private TextBox txtTitle = new TextBox();
 	private TextBox txtContent = new TextBox();
 	private DateBox dateFrom = new DateBox();
@@ -28,16 +26,24 @@ public class CreateNotification {
 	private String userId_ = null;
 	private Long appId_ = null;
 	private Notification noteObj = null;
-	private Button btnAddNote = new Button("Create note",  new ClickHandler() {
+	private VerticalPanel mainContent;
+	public VerticalPanel getMainContent() {
+		return mainContent;
+	}
 
+	public void setMainContent(VerticalPanel mainContent) {
+		this.mainContent = mainContent;
+	}
+
+	private Button btnAddNote = new Button("Create note",  new ClickHandler() {
+		
 		@SuppressWarnings("deprecation")
 		@Override
 		public void onClick(ClickEvent event) {
 			// TODO Auto-generated method stub
-			String appID = txtAppId.getText();
 			String appTittle = txtTitle.getText();
 
-			if ((appID != null) && (!appID.equals(""))) {
+			if (appId_ != null)  {
 
 				// Set up the callback object.
 				AsyncCallback<Long> callback = new AsyncCallback<Long>() {
@@ -55,19 +61,19 @@ public class CreateNotification {
 					noteObj.setUserId(userId_);
 					noteObj.setTittle(txtTitle.getText());
 					noteObj.setContent(txtContent.getText());
-					noteObj.setFromDate(Date.parse(dateFrom.getValue()
-							.toString()));
-					noteObj.setToDate(Date.parse(dateTo.getValue()
-							.toString()));
+					noteObj.setFromDate(dateFrom.getValue()
+							.getTime());
+					noteObj.setToDate(dateTo.getValue()
+							.getTime());
 
 					noteSvc.InsertNote(noteObj, callback);
 				} else {
 					noteObj.setTittle(txtTitle.getText());
 					noteObj.setContent(txtContent.getText());
-					noteObj.setFromDate(Date.parse(dateFrom.getValue()
-							.toString()));
-					noteObj.setToDate(Date.parse(dateTo.getValue()
-							.toString()));
+					noteObj.setFromDate(dateFrom.getValue()
+							.getTime());
+					noteObj.setToDate(dateTo.getValue()
+							.getTime());
 
 					noteSvc.UpdateNote(noteObj, callback);
 				}
@@ -98,12 +104,8 @@ public class CreateNotification {
 	}
 
 	public Widget Initialize() {
-		VerticalPanel mainContent = new VerticalPanel();
-		mainContent.setStyleName("contentBackgroud");
+		
 		mainContent.add(new Label("Create new notification"));
-
-		mainContent.add(new Label("App Name:"));
-		mainContent.add(txtAppId);
 
 		mainContent.add(new Label("Title:"));
 		mainContent.add(txtTitle);

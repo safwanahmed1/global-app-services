@@ -31,6 +31,14 @@ public class CreateHighScore {
 	private Long appId_ = null;
 	private FlowPanel panelImages = new FlowPanel();
 	private HighScore scoreObj = null;
+	private VerticalPanel mainContent;
+	public VerticalPanel getMainContent() {
+		return mainContent;
+	}
+
+	public void setMainContent(VerticalPanel mainContent) {
+		this.mainContent = mainContent;
+	}
 
 	private HighScoreServiceAsync scoreSvc = GWT.create(HighScoreService.class);
 
@@ -80,6 +88,7 @@ public class CreateHighScore {
 			
 		}
 	});
+	
 
 	public CreateHighScore(String userId, Long appId) {
 		userId_ = userId;
@@ -101,8 +110,6 @@ public class CreateHighScore {
 	}
 
 	public Widget Initialize() {
-		VerticalPanel mainContent = new VerticalPanel();
-		mainContent.setStyleName("contentBackgroud");
 		mainContent.add(new Label("Create new score entry"));
 
 		mainContent.add(new Label("Level:"));

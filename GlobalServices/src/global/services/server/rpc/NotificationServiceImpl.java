@@ -55,20 +55,20 @@ NotificationService {
 	}
 
 	@Override
-	public Notification SelectNote(String userId, Long appId) {
+	public Notification SelectNote(String userId, Long noteId) {
 		// TODO Auto-generated method stub
 		NotificationDataBase noteDB = new NotificationDataBase();
-		Notification noteRet = noteDB.SelectNote(userId, appId);
+		Notification noteRet = noteDB.SelectNote(userId, noteId);
 		noteDB.Finalize();
 		return noteRet;
 
 	}
 
 	@Override
-	public List<Notification> SelectNotes(String userId) {
+	public List<Notification> SelectNotes(String userId, Long appId) {
 		// TODO Auto-generated method stub
 		NotificationDataBase noteDB = new NotificationDataBase();
-		List<Notification> noteListRet = noteDB.SelectNotes(userId);
+		List<Notification> noteListRet = noteDB.SelectNotes(userId, appId);
 		noteDB.Finalize();
 		return noteListRet;
 	}

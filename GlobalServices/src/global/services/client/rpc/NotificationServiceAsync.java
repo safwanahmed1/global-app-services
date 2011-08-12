@@ -12,6 +12,6 @@ public interface NotificationServiceAsync {
 	 public void DeleteNote(String userId, Long appId, AsyncCallback<Long> callback);
 	 public void DeleteNotes(String userId, List<Long> listAppId, AsyncCallback<Integer> callback);
 	 public void DeleteNotes(String userId, AsyncCallback<Long> callback);
-	 public void SelectNote(String userId, Long appId, AsyncCallback<Notification> callback);
-	 public void SelectNotes(String userId, AsyncCallback<List<Notification>> callback);
+	 public void SelectNote(String userId, Long noteId, AsyncCallback<Notification> callback);
+	 public void SelectNotes(String userId, Long appId, AsyncCallback<List<Notification>> callback);
 }

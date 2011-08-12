@@ -20,7 +20,6 @@ import gwtupload.client.SingleUploader;
 import gwtupload.client.IFileInput.FileInputType;
 import gwtupload.client.IUploadStatus.Status;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.cell.client.Cell.Context;
@@ -30,6 +29,8 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -37,7 +38,7 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.TextColumn;
 
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.HistoryListener;
+
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
@@ -61,7 +62,8 @@ import com.google.gwt.view.client.SelectionModel;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class GlobalServices implements EntryPoint, HistoryListener {
+
+public class GlobalServices implements EntryPoint {
 	/**
 	 * The message displayed to the user when the server cannot be reached or
 	 * returns an error.
@@ -145,7 +147,6 @@ public class GlobalServices implements EntryPoint, HistoryListener {
 
 	public void onModuleLoad() {
 
-		History.addHistoryListener(this);
 		LoginServiceAsync loginService = GWT.create(LoginService.class);
 		loginService.login(GWT.getHostPageBaseURL(),
 				new AsyncCallback<LoginInfo>() {
@@ -161,6 +162,74 @@ public class GlobalServices implements EntryPoint, HistoryListener {
 						}
 					}
 				});
+
+		History.addValueChangeHandler(new ValueChangeHandler<String>() {
+			public void onValueChange(ValueChangeEvent<String> event) {
+				String historyToken = event.getValue();
+				String[] tokenList = historyToken.split("-");
+
+				// Parse the history token
+				try {
+					if (tokenList[0].equals("root")) {
+						if (tokenList[1].equals("app"))
+							servicesTabPanel.selectTab(0);
+						if (tokenList[1].equals("adv"))
+							servicesTabPanel.selectTab(1);
+						if (tokenList[1].equals("file"))
+							servicesTabPanel.selectTab(2);
+						GlobalServices.ComebackHome(true);
+					}
+					if (tokenList[0].equals("application")) {
+						if (tokenList[1] != null) {
+							CreateAppScoresPage(Long.parseLong(tokenList[1]));
+						} else {
+							CreateAppScoresPage(null);
+						}
+
+					}
+
+					if (tokenList[0].equals("advertisement")) {
+						if (tokenList[1] != null) {
+							CreateAdvertismentPage(Long.parseLong(tokenList[1]));
+						} else {
+							CreateAdvertismentPage(null);
+						}
+					}
+
+					if (tokenList[0].equals("highscore")) {
+						if (tokenList[1] != null) {
+
+						} else {
+
+						}
+					}
+
+					if (tokenList[0].equals("notetification")) {
+						if (tokenList[1] != null) {
+
+						} else {
+
+						}
+					}
+
+					if (tokenList[0].equals("scorelist")) {
+						if (tokenList[1] != null) {
+
+						} 
+					}
+
+					if (tokenList[0].equals("notelist")) {
+						if (tokenList[1] != null) {
+
+						}
+					}
+
+				} catch (IndexOutOfBoundsException e) {
+
+				}
+			}
+		});
+
 	}
 
 	private void loadLogin() {
@@ -199,7 +268,7 @@ public class GlobalServices implements EntryPoint, HistoryListener {
 		CreateAdvertisementPanel();
 
 		// Notification tab
-		//CreateNotificationPanel();
+		// CreateNotificationPanel();
 		// File server tab
 		CreateFileServerPanel();
 
@@ -355,7 +424,6 @@ public class GlobalServices implements EntryPoint, HistoryListener {
 		appTittleColumn.setSortable(true);
 		gamesCellTable.addColumn(appTittleColumn, "Description");
 
-		
 		// Create Score entries column
 		Column<AppScore, String> scoreEntriesColumn = new Column<AppScore, String>(
 				new ClickableTextCell()) {
@@ -602,9 +670,7 @@ public class GlobalServices implements EntryPoint, HistoryListener {
 		};
 		appIdColumn.setSortable(true);
 		advsCellTable.addColumn(appIdColumn, "AppId");
-		
-		
-		
+
 		// Create icon column.
 		Column<Advertisement, String> iconColumn = new Column<Advertisement, String>(
 				new ClickableTextCell()) {
@@ -627,7 +693,6 @@ public class GlobalServices implements EntryPoint, HistoryListener {
 				}
 			}
 
-
 			@Override
 			public String getValue(Advertisement object) {
 				// TODO Auto-generated method stub
@@ -643,7 +708,7 @@ public class GlobalServices implements EntryPoint, HistoryListener {
 			public String getValue(Advertisement adv) {
 				return adv.getAppName();
 			}
-			
+
 		};
 		appNameColumn.setSortable(true);
 		advsCellTable.addColumn(appNameColumn, "App Name");
@@ -711,8 +776,6 @@ public class GlobalServices implements EntryPoint, HistoryListener {
 		mainPanel.add(createAdv.Initialize());
 
 	}
-
-	
 
 	public void CreateFileServerPanel() {
 		VerticalPanel filesPanel = new VerticalPanel();
@@ -906,26 +969,6 @@ public class GlobalServices implements EntryPoint, HistoryListener {
 
 	}
 
-	static void RefreshNotificationTbl() {
-		noteSvc.SelectNotes(loginInfo.getEmailAddress(),
-				new AsyncCallback<List<Notification>>() {
-					public void onFailure(Throwable caught) {
-						// TODO: Do something
-						// with
-						// errors.
-					}
-
-					public void onSuccess(List<Notification> result) {
-						listNotes.clear();
-						listNotes.addAll(result);
-						numNoteRemaining = 10 - result.size();
-						lblNoteRemaining.setText("You have " + numNoteRemaining
-								+ " remaining notes.");
-					}
-				});
-
-	}
-
 	static void RefreshFileTbl() {
 		fileSvc.SelectFiles(loginInfo.getEmailAddress(),
 				new AsyncCallback<List<FileInfo>>() {
@@ -951,7 +994,7 @@ public class GlobalServices implements EntryPoint, HistoryListener {
 		if (reload) {
 			RefreshAppScoreTbl();
 			RefreshAdvertisementTbl();
-			RefreshNotificationTbl();
+			RefreshFileTbl();
 		}
 		GlobalServices.mainPanel.clear();
 		GlobalServices.mainPanel.addNorth(GlobalServices.headerPanel, 50);
@@ -969,6 +1012,7 @@ public class GlobalServices implements EntryPoint, HistoryListener {
 
 		mainPanel.add(highScore.Initialize());
 	}
+
 	static void NotificationPage(Long appId) {
 		mainPanel.clear();
 		mainPanel.addNorth(headerPanel, 50);
@@ -979,28 +1023,15 @@ public class GlobalServices implements EntryPoint, HistoryListener {
 		mainPanel.add(noteTable.Initialize());
 	}
 
-	@Override
-	public void onHistoryChanged(String historyToken) {
-		// TODO Auto-generated method stub
-		if (historyToken.equals(rootPanel)) {
-			ComebackHome(false);
-			return;
-		}
-		if (historyToken.equals(appScoreToken)) {
-			CreateAppScoresPage(null);
-			return;
-		}
-		if (historyToken.equals(advertisementToken)) {
-			CreateAdvertismentPage(null);
-			return;
-		}
-		
-		if (historyToken.equals(highScoreToken)) {
-			HighScorePage(appId);
-			return;
-		}
-		if (historyToken.equals(createHighScoreToken)) {
-			return;
-		}
-	}
+	/*
+	 * @Override public void onHistoryChanged(String historyToken) { // TODO
+	 * Auto-generated method stub if (historyToken.equals(rootPanel)) {
+	 * ComebackHome(false); return; } if (historyToken.equals(appScoreToken)) {
+	 * CreateAppScoresPage(null); return; } if
+	 * (historyToken.equals(advertisementToken)) { CreateAdvertismentPage(null);
+	 * return; }
+	 * 
+	 * if (historyToken.equals(highScoreToken)) { HighScorePage(appId); return;
+	 * } if (historyToken.equals(createHighScoreToken)) { return; } }
+	 */
 }

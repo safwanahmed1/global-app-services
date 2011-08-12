@@ -46,7 +46,6 @@ public class NotificationTable {
 	private Long appId_ = null;
 	private String appName_ = null;
 
-	private CellTable<HighScore> scoreCellTable = new CellTable<HighScore>();
 	private VerticalPanel mainContent = new VerticalPanel();
 	private List<Notification> listNotes = null;
 	private Label lblAppInfo = new Label("Highscore table of ... application.");
@@ -136,7 +135,8 @@ public class NotificationTable {
 				if (event.getType().equals("click")) {
 					CreateNotification createNote = new CreateNotification(object.getUserId(), object.getId());
 					mainContent.clear();
-					mainContent.add(createNote.Initialize());
+					createNote.setMainContent(mainContent);
+					createNote.Initialize();
 
 				}
 			}
@@ -205,7 +205,7 @@ public class NotificationTable {
 
 		RefreshNotificationTbl();
 
-		mainContent.add(scoreCellTable);
+		mainContent.add(notesCellTable);
 		HorizontalPanel tableNotesCtrPanel = new HorizontalPanel();
 		tableNotesCtrPanel.add(new Button("Create note", new ClickHandler() {
 
@@ -214,7 +214,8 @@ public class NotificationTable {
 				
 					CreateNotification createScore = new CreateNotification(userId_, appId_);
 					mainContent.clear();
-					mainContent.add(createScore.Initialize());
+					createScore.setMainContent(mainContent);
+					createScore.Initialize();
 
 		
 			}
@@ -256,7 +257,7 @@ public class NotificationTable {
 
 	private void RefreshNotificationTbl() {
 		// TODO Auto-generated method stub
-		noteSvc.SelectNotes(userId_,
+		noteSvc.SelectNotes(userId_,appId_,
 				new AsyncCallback<List<Notification>>() {
 					public void onFailure(Throwable caught) {
 						// TODO: Do something
@@ -288,8 +289,8 @@ public class NotificationTable {
 		} else {
 			createNote = new CreateNotification(note);
 		}
-
-		mainContent.add(createNote.Initialize());
+		createNote.setMainContent(mainContent);
+		createNote.Initialize();
 	}
 
 }
