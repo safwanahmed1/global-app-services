@@ -61,23 +61,25 @@ public class NotificationDataBase {
 
 	}
 	@SuppressWarnings("unchecked")
-	public Notification SelectNote(String userId, Long appId) {
+	public Notification SelectNote(String userId, Long noteId) {
 		String strQuery = "select from " + Notification.class.getName();
 		Query query = pm_.newQuery(strQuery);
 		if ((userId != null) && !userId.isEmpty())
 			query.setFilter("userId_ == \"" + userId + "\"");
-		if (appId != null)
-			query.setFilter("id == " + appId);
+		if (noteId != null)
+			query.setFilter("id == " + noteId);
 		List<Notification> retAdvs = (List<Notification>) query.execute();
 		return retAdvs.get(0);
 
 	}
 	@SuppressWarnings("unchecked")
-	public List<Notification> SelectNotes(String userId) {
+	public List<Notification> SelectNotes(String userId, Long appId) {
 		String strQuery = "select from " + Notification.class.getName();
 		Query query = pm_.newQuery(strQuery);
 		if ((userId != null) && !userId.isEmpty())
 			query.setFilter("userId_ == \"" + userId + "\"");
+		if (appId != null)
+			query.setFilter("appId_ == " + appId);
 		List<Notification> retNotes = new ArrayList<Notification>();
 		List<Notification> selectedNotes = (List<Notification>) query.execute();
 		for (Notification note : selectedNotes) {

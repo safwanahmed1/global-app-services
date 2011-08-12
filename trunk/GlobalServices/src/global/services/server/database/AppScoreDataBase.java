@@ -16,11 +16,11 @@ import javax.jdo.Transaction;
 
 import org.apache.tools.ant.taskdefs.condition.Not;
 
-
 import com.google.gwt.user.client.Window;
 
 public class AppScoreDataBase {
-	private static final Logger LOG = Logger.getLogger(AdvertisementDataBase.class.getName());
+	private static final Logger LOG = Logger
+			.getLogger(AdvertisementDataBase.class.getName());
 	private AppScore application_;
 	private PersistenceManager pm_;
 
@@ -92,10 +92,11 @@ public class AppScoreDataBase {
 
 		return appscores.get(0);
 	}
+
 	@SuppressWarnings("unchecked")
 	public List<AppScore> SelectApps(String userId) {
 		// TODO Auto-generated method stub
-		Transaction tx =  pm_.currentTransaction();
+		Transaction tx = pm_.currentTransaction();
 		tx.begin();
 		String strQuery = "select from " + AppScore.class.getName();
 		// + HighScore.class.getName() ;
@@ -104,9 +105,10 @@ public class AppScoreDataBase {
 		if (userId != null)
 			query.setFilter("userId_ == \"" + userId + "\"");
 		List<AppScore> retApps = new ArrayList<AppScore>();
-		//(List<Question>)pm.detachCopyAll((List<Question>)query.execute());
-		//List<AppScore> selectedApps = (List<AppScore>)pm_.detachCopyAll((List<AppScore>) query.execute());
-		List<AppScore> selectedApps =(List<AppScore>) query.execute();
+		// (List<Question>)pm.detachCopyAll((List<Question>)query.execute());
+		// List<AppScore> selectedApps =
+		// (List<AppScore>)pm_.detachCopyAll((List<AppScore>) query.execute());
+		List<AppScore> selectedApps = (List<AppScore>) query.execute();
 		tx.commit();
 		for (AppScore app : selectedApps) {
 			tx.begin();
@@ -117,28 +119,34 @@ public class AppScoreDataBase {
 
 			query.setFilter("appId_ == " + app.getId());
 			List<HighScore> scores = (List<HighScore>) query.execute();
-			
-			app.setScoreEntries(scores.size());
+			if (scores != null)
+				app.setScoreEntries(scores.size());
+			else
+				app.setScoreEntries(0);
+
 			tx.commit();
-			
+
 			tx.begin();
-			
+
 			strQuery = "select from " + Notification.class.getName();
-			
+
 			query = pm_.newQuery(strQuery);
 			if (userId != null)
 				query.setFilter("userId_ == \"" + userId + "\"");
 
 			query.setFilter("appId_ == " + app.getId());
 			List<Notification> notes = (List<Notification>) query.execute();
-			
-			app.setNoteEntries(notes.size());
+			if (notes != null)
+				app.setNoteEntries(notes.size());
+			else
+				app.setNoteEntries(0);
+
 			tx.commit();
-			
-			
+
 			retApps.add(app);
 		}
-		//Window.alert("selectedApps size in database: " + selectedApps.size());
+		// Window.alert("selectedApps size in database: " +
+		// selectedApps.size());
 		return retApps;
 	}
 

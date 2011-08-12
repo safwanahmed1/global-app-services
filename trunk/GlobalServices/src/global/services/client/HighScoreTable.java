@@ -127,7 +127,8 @@ public class HighScoreTable {
 
 					CreateHighScore createScore = new CreateHighScore(object);
 					mainContent.clear();
-					mainContent.add(createScore.Initialize());
+					createScore.setMainContent(mainContent);
+					createScore.Initialize();
 				}
 				// History.newItem(GlobalServices.createHighScoreToken);
 			}
@@ -270,7 +271,8 @@ public class HighScoreTable {
 				CreateHighScore createScore = new CreateHighScore(userId_,
 						appId_);
 				mainContent.clear();
-				mainContent.add(createScore.Initialize());
+				createScore.setMainContent(mainContent);
+				createScore.Initialize();
 				// History.newItem(GlobalServices.createHighScoreToken);
 			}
 		}));
