@@ -53,12 +53,12 @@ public class CreateHighScore {
 				public void onFailure(Throwable caught) {
 					// TODO: Do something with errors.
 					Window.alert("Creating score has NOT successful.");
-					GlobalServices.HighScorePage(appId_);
+					GlobalServices.HighScoreListPage(appId_);
 				}
 
 				public void onSuccess(Long result) {
 					Window.alert("Creating score has successful.");
-					GlobalServices.HighScorePage(appId_);
+					GlobalServices.HighScoreListPage(appId_);
 				}
 			};
 			if (scoreObj == null) {
