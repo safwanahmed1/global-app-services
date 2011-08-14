@@ -21,7 +21,6 @@ import gwtupload.client.IFileInput.FileInputType;
 import gwtupload.client.IUploadStatus.Status;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.google.gwt.cell.client.Cell.Context;
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.ClickableTextCell;
@@ -133,14 +132,14 @@ public class GlobalServices implements EntryPoint {
 	private List<Long> selectedAdvs = new ArrayList<Long>();
 	private List<Long> selectedNotes = new ArrayList<Long>();
 	private List<Long> selectedFiles = new ArrayList<Long>();
-
+/*
 	static String rootToken = "Homepage";
 	static String appScoreToken = "Create-app-score";
 	static String advertisementToken = "Create-advertesment";
 	static String highScoreToken = "Highscore";
 	static String notificationToken = "Notification";
 	static String createHighScoreToken = "Create-highscore";
-
+*/
 	// private String strEntryNum = "...";
 
 	static SingleUploader fileUploader;
@@ -162,7 +161,7 @@ public class GlobalServices implements EntryPoint {
 						}
 					}
 				});
-
+		
 		History.addValueChangeHandler(new ValueChangeHandler<String>() {
 			public void onValueChange(ValueChangeEvent<String> event) {
 				String historyToken = event.getValue();
@@ -171,9 +170,9 @@ public class GlobalServices implements EntryPoint {
 				// Parse the history token
 				try {
 					if (tokenList[0].equals("root")) {
-						if (tokenList[1].equals("app"))
+						if (tokenList[1].equals("application"))
 							servicesTabPanel.selectTab(0);
-						if (tokenList[1].equals("adv"))
+						if (tokenList[1].equals("advertisement"))
 							servicesTabPanel.selectTab(1);
 						if (tokenList[1].equals("file"))
 							servicesTabPanel.selectTab(2);
@@ -197,30 +196,29 @@ public class GlobalServices implements EntryPoint {
 					}
 
 					if (tokenList[0].equals("highscore")) {
+
 						if (tokenList[1] != null) {
 
-						} else {
+							CreateHighscorePage(Long.parseLong(tokenList[1]));
 
 						}
 					}
 
 					if (tokenList[0].equals("notetification")) {
 						if (tokenList[1] != null) {
-
-						} else {
-
+							CreateNotificationPage(Long.parseLong(tokenList[1]));
 						}
 					}
 
 					if (tokenList[0].equals("scorelist")) {
 						if (tokenList[1] != null) {
-
-						} 
+							HighScoreListPage(Long.parseLong(tokenList[1]));
+						}
 					}
 
 					if (tokenList[0].equals("notelist")) {
 						if (tokenList[1] != null) {
-
+							NotificationListPage(Long.parseLong(tokenList[1]));
 						}
 					}
 
@@ -279,7 +277,7 @@ public class GlobalServices implements EntryPoint {
 		rootPanel = RootPanel.get("content");
 
 		RootLayoutPanel.get().add(mainPanel);
-		History.newItem(rootToken);
+		//History.newItem(rootToken);
 	}
 
 	public void CreateAppScorePanel() {
@@ -312,7 +310,8 @@ public class GlobalServices implements EntryPoint {
 			@Override
 			public void onClick(ClickEvent event) {
 				if (selectedApps.size() == 0) {
-					Window.alert("You have to chose at least an application to delete.");
+					Window
+							.alert("You have to chose at least an application to delete.");
 				} else {
 					if (Window.confirm("Would you want to delete applications")) {
 						AppScoreServiceAsync appScoreService = GWT
@@ -323,8 +322,9 @@ public class GlobalServices implements EntryPoint {
 									}
 
 									public void onSuccess(Integer result) {
-										Window.alert(result
-												+ " Applications have been deleted successful.");
+										Window
+												.alert(result
+														+ " Applications have been deleted successful.");
 										RefreshAppScoreTbl();
 									}
 								});
@@ -362,8 +362,8 @@ public class GlobalServices implements EntryPoint {
 				return selectionAppModel.isSelected(app);
 			}
 		};
-		gamesCellTable.addColumn(checkColumn,
-				SafeHtmlUtils.fromSafeConstant("<br/>"));
+		gamesCellTable.addColumn(checkColumn, SafeHtmlUtils
+				.fromSafeConstant("<br/>"));
 		gamesCellTable.setColumnWidth(checkColumn, 40, Unit.PX);
 
 		// Create appId column.
@@ -447,7 +447,7 @@ public class GlobalServices implements EntryPoint {
 				super.onBrowserEvent(context, elem, object, event);
 				if (event.getType().equals("click")) {
 					appId = object.getId();
-					HighScorePage(object.getId());
+					HighScoreListPage(object.getId());
 				}
 				History.newItem(highScoreToken);
 			}
@@ -485,7 +485,7 @@ public class GlobalServices implements EntryPoint {
 				super.onBrowserEvent(context, elem, object, event);
 				if (event.getType().equals("click")) {
 					appId = object.getId();
-					NotificationPage(object.getId());
+					NotificationListPage(object.getId());
 				}
 				History.newItem(notificationToken);
 			}
@@ -515,22 +515,6 @@ public class GlobalServices implements EntryPoint {
 		highScorePanel.add(gamesCellTable);
 		highScorePanel.add(tableGamesFooterPanel);
 		servicesTabPanel.add(highScorePanel, "HighScores");
-	}
-
-	protected void CreateAppScoresPage(Long id) {
-		// TODO Auto-generated method stub
-		mainPanel.clear();
-		mainPanel.addNorth(headerPanel, 50);
-		mainPanel.addSouth(footerPanel, 50);
-		CreateAppScores createApp;
-		if (id == null) {
-			createApp = new CreateAppScores(loginInfo.getEmailAddress());
-		} else {
-
-			createApp = new CreateAppScores(loginInfo.getEmailAddress(), id);
-		}
-		mainPanel.add(createApp.Initialize());
-
 	}
 
 	public void CreateAdvertisementPanel() {
@@ -563,22 +547,24 @@ public class GlobalServices implements EntryPoint {
 			public void onClick(ClickEvent event) {
 				// TODO Auto-generated method stub
 				if (selectedAdvs.size() == 0) {
-					Window.alert("You have to chose at least an advertisement to delete.");
+					Window
+							.alert("You have to chose at least an advertisement to delete.");
 				} else {
 					if (Window
 							.confirm("Would you want to delete advertisements")) {
 						AdvertisementServiceAsync advertisementService = GWT
 								.create(AdvertisementService.class);
-						advertisementService.DeleteAdvs(
-								loginInfo.getEmailAddress(), selectedAdvs,
+						advertisementService.DeleteAdvs(loginInfo
+								.getEmailAddress(), selectedAdvs,
 								new AsyncCallback<Integer>() {
 									public void onFailure(Throwable caught) {
 									}
 
 									public void onSuccess(Integer result) {
 										// TODO Auto-generated method stub
-										Window.alert(result
-												+ " Advertisements have been deleted successful.");
+										Window
+												.alert(result
+														+ " Advertisements have been deleted successful.");
 										RefreshAdvertisementTbl();
 
 									}
@@ -615,8 +601,8 @@ public class GlobalServices implements EntryPoint {
 				return selectionAdvModel.isSelected(adv);
 			}
 		};
-		advsCellTable.addColumn(checkColumn,
-				SafeHtmlUtils.fromSafeConstant("<br/>"));
+		advsCellTable.addColumn(checkColumn, SafeHtmlUtils
+				.fromSafeConstant("<br/>"));
 		advsCellTable.setColumnWidth(checkColumn, 40, Unit.PX);
 		// Create icon column.
 		/*
@@ -689,7 +675,8 @@ public class GlobalServices implements EntryPoint {
 					iconUrl += object.getIconFile();
 					sb.appendHtmlConstant("<img src=\"");
 					sb.appendEscaped(iconUrl);
-					sb.appendHtmlConstant("\" width=\"64px\" height=\"64px\"/>");
+					sb
+							.appendHtmlConstant("\" width=\"64px\" height=\"64px\"/>");
 				}
 			}
 
@@ -762,21 +749,6 @@ public class GlobalServices implements EntryPoint {
 		servicesTabPanel.add(advsPanel, "Advertisement");
 	}
 
-	protected void CreateAdvertismentPage(Long id) {
-		// TODO Auto-generated method stub
-		mainPanel.clear();
-		mainPanel.addNorth(headerPanel, 50);
-		mainPanel.addSouth(footerPanel, 50);
-		CreateAdvertisment createAdv;
-		if (id == null) {
-			createAdv = new CreateAdvertisment(loginInfo.getEmailAddress());
-		} else {
-			createAdv = new CreateAdvertisment(loginInfo.getEmailAddress(), id);
-		}
-		mainPanel.add(createAdv.Initialize());
-
-	}
-
 	public void CreateFileServerPanel() {
 		VerticalPanel filesPanel = new VerticalPanel();
 		filesPanel.setStyleName("tabBackgroud");
@@ -803,7 +775,8 @@ public class GlobalServices implements EntryPoint {
 			public void onClick(ClickEvent event) {
 				// TODO Auto-generated method stub
 				if (selectedFiles.size() == 0) {
-					Window.alert("You have to chose at least a file to delete.");
+					Window
+							.alert("You have to chose at least a file to delete.");
 				} else {
 					if (Window.confirm("Would you want to delete files")) {
 						FileServiceAsync fileService = GWT
@@ -815,8 +788,9 @@ public class GlobalServices implements EntryPoint {
 
 									public void onSuccess(Integer result) {
 										// TODO Auto-generated method stub
-										Window.alert(result
-												+ " files have been deleted successful.");
+										Window
+												.alert(result
+														+ " files have been deleted successful.");
 										RefreshFileTbl();
 									}
 								});
@@ -853,8 +827,8 @@ public class GlobalServices implements EntryPoint {
 				return selectionFileModel.isSelected(file);
 			}
 		};
-		filesCellTable.addColumn(checkColumn,
-				SafeHtmlUtils.fromSafeConstant("<br/>"));
+		filesCellTable.addColumn(checkColumn, SafeHtmlUtils
+				.fromSafeConstant("<br/>"));
 		filesCellTable.setColumnWidth(checkColumn, 40, Unit.PX);
 
 		// Create file id column.
@@ -1003,26 +977,81 @@ public class GlobalServices implements EntryPoint {
 
 	}
 
-	static void HighScorePage(Long appId) {
+	private void CreateAppScoresPage(Long id) {
+		// TODO Auto-generated method stub
 		mainPanel.clear();
 		mainPanel.addNorth(headerPanel, 50);
 		mainPanel.addSouth(footerPanel, 50);
-		HighScoreTable highScore = new HighScoreTable(
-				loginInfo.getEmailAddress(), appId);
+		CreateAppScores createApp;
+		if (id == null) {
+			createApp = new CreateAppScores(loginInfo.getEmailAddress());
+		} else {
+
+			createApp = new CreateAppScores(loginInfo.getEmailAddress(), id);
+		}
+		mainPanel.add(createApp.Initialize());
+
+	}
+
+	static void HighScoreListPage(Long appId) {
+		mainPanel.clear();
+		mainPanel.addNorth(headerPanel, 50);
+		mainPanel.addSouth(footerPanel, 50);
+		HighScoreTable highScore = new HighScoreTable(loginInfo
+				.getEmailAddress(), appId);
 
 		mainPanel.add(highScore.Initialize());
 	}
 
-	static void NotificationPage(Long appId) {
+	static void NotificationListPage(Long appId) {
 		mainPanel.clear();
 		mainPanel.addNorth(headerPanel, 50);
 		mainPanel.addSouth(footerPanel, 50);
-		NotificationTable noteTable = new NotificationTable(
-				loginInfo.getEmailAddress(), appId);
+		NotificationTable noteTable = new NotificationTable(loginInfo
+				.getEmailAddress(), appId);
 
 		mainPanel.add(noteTable.Initialize());
 	}
 
+	private void CreateAdvertismentPage(Long id) {
+		// TODO Auto-generated method stub
+		mainPanel.clear();
+		mainPanel.addNorth(headerPanel, 50);
+		mainPanel.addSouth(footerPanel, 50);
+		CreateAdvertisment createAdv;
+		if (id == null) {
+			createAdv = new CreateAdvertisment(loginInfo.getEmailAddress());
+		} else {
+			createAdv = new CreateAdvertisment(loginInfo.getEmailAddress(), id);
+		}
+		mainPanel.add(createAdv.Initialize());
+
+	}
+
+	private void CreateHighscorePage(Long id) {
+		// TODO Auto-generated method stub
+		mainPanel.clear();
+		mainPanel.addNorth(headerPanel, 50);
+		mainPanel.addSouth(footerPanel, 50);
+		CreateHighScore createHighscore = null;
+		if (id != null) {
+			createHighscore = new CreateHighScore(loginInfo.getEmailAddress(),
+					id);
+			mainPanel.add(createHighscore.Initialize());
+		}
+	}
+
+	private void CreateNotificationPage(Long id) {
+		// TODO Auto-generated method stub
+		mainPanel.clear();
+		mainPanel.addNorth(headerPanel, 50);
+		mainPanel.addSouth(footerPanel, 50);
+		CreateNotification createNote = null;
+		if (id != null) {
+			createNote = new CreateNotification(loginInfo.getEmailAddress(), id);
+			mainPanel.add(createNote.Initialize());
+		}
+	}
 	/*
 	 * @Override public void onHistoryChanged(String historyToken) { // TODO
 	 * Auto-generated method stub if (historyToken.equals(rootPanel)) {
