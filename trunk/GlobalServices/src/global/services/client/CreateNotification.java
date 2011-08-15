@@ -26,7 +26,7 @@ public class CreateNotification {
 	private String userId_ = null;
 	private Long appId_ = null;
 	private Notification noteObj = null;
-	private VerticalPanel mainContent;
+	private VerticalPanel mainContent = new VerticalPanel();
 	public VerticalPanel getMainContent() {
 		return mainContent;
 	}
@@ -49,9 +49,11 @@ public class CreateNotification {
 				AsyncCallback<Long> callback = new AsyncCallback<Long>() {
 					public void onFailure(Throwable caught) {
 						// TODO: Do something with errors.
+						GlobalServices.NotificationListPage(appId_);
 					}
 
 					public void onSuccess(Long result) {
+						GlobalServices.NotificationListPage(appId_);
 					}
 				};
 
@@ -78,7 +80,7 @@ public class CreateNotification {
 					noteSvc.UpdateNote(noteObj, callback);
 				}
 
-				GlobalServices.ComebackHome(true);
+				
 			}
 		}
 	});
@@ -89,6 +91,7 @@ public class CreateNotification {
 	public CreateNotification(String userId, Long appId) {
 		userId_ = userId;
 		appId_ = appId;
+		mainContent.setStyleName("contentBackgroud");
 	}
 
 	public CreateNotification(Notification note) {
@@ -100,6 +103,7 @@ public class CreateNotification {
 		txtContent.setText(noteObj.getContent());
 		dateFrom.setValue(new Date(noteObj.getFromDate()));
 		dateTo.setValue(new Date(noteObj.getToDate()));
+		mainContent.setStyleName("contentBackgroud");
 		
 	}
 
@@ -126,7 +130,7 @@ public class CreateNotification {
 			@Override
 			public void onClick(ClickEvent event) {
 				// TODO Auto-generated method stub
-				GlobalServices.ComebackHome(false);
+				GlobalServices.NotificationListPage(appId_);
 			}
 		}));
 		mainContent.add(controlButton);

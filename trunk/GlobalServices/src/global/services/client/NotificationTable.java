@@ -133,11 +133,11 @@ public class NotificationTable {
 				// TODO Auto-generated method stub
 				super.onBrowserEvent(context, elem, object, event);
 				if (event.getType().equals("click")) {
-					CreateNotification createNote = new CreateNotification(object.getUserId(), object.getId());
+					CreateNotification createNote = new CreateNotification(object);
 					mainContent.clear();
 					createNote.setMainContent(mainContent);
 					createNote.Initialize();
-
+					History.newItem("highscore-" + object.getAppId());
 				}
 			}
 
@@ -216,6 +216,7 @@ public class NotificationTable {
 					mainContent.clear();
 					createScore.setMainContent(mainContent);
 					createScore.Initialize();
+					History.newItem("notification-" + appId_);
 
 		
 			}
