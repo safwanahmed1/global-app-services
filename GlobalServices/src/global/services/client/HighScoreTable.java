@@ -25,6 +25,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -129,8 +130,9 @@ public class HighScoreTable {
 					mainContent.clear();
 					createScore.setMainContent(mainContent);
 					createScore.Initialize();
+					History.newItem("highscore-" + object.getGameID());
 				}
-				// History.newItem(GlobalServices.createHighScoreToken);
+				
 			}
 
 			@Override
@@ -273,7 +275,7 @@ public class HighScoreTable {
 				mainContent.clear();
 				createScore.setMainContent(mainContent);
 				createScore.Initialize();
-				// History.newItem(GlobalServices.createHighScoreToken);
+				History.newItem("highscore-" + appId_);
 			}
 		}));
 

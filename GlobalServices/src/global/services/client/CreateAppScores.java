@@ -6,6 +6,7 @@ import global.services.shared.AppScore;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -54,6 +55,7 @@ public class CreateAppScores {
 				}
 
 				GlobalServices.ComebackHome(true);
+				History.newItem("root-application");
 			} else {
 				Window.alert("Please input fully application information.");
 			}
@@ -100,6 +102,7 @@ public class CreateAppScores {
 			public void onClick(ClickEvent event) {
 				// TODO Auto-generated method stub
 				GlobalServices.ComebackHome(false);
+				History.newItem("root-application");
 			}
 		}));
 		mainContent.add(controlButton);

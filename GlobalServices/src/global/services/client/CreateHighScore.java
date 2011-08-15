@@ -31,7 +31,7 @@ public class CreateHighScore {
 	private Long appId_ = null;
 	private FlowPanel panelImages = new FlowPanel();
 	private HighScore scoreObj = null;
-	private VerticalPanel mainContent;
+	private VerticalPanel mainContent = new VerticalPanel();
 	public VerticalPanel getMainContent() {
 		return mainContent;
 	}
@@ -52,12 +52,12 @@ public class CreateHighScore {
 			AsyncCallback<Long> callback = new AsyncCallback<Long>() {
 				public void onFailure(Throwable caught) {
 					// TODO: Do something with errors.
-					Window.alert("Creating score has NOT successful.");
+					
 					GlobalServices.HighScoreListPage(appId_);
 				}
 
 				public void onSuccess(Long result) {
-					Window.alert("Creating score has successful.");
+					
 					GlobalServices.HighScoreListPage(appId_);
 				}
 			};
@@ -93,6 +93,7 @@ public class CreateHighScore {
 	public CreateHighScore(String userId, Long appId) {
 		userId_ = userId;
 		appId_ = appId;
+		mainContent.setStyleName("contentBackgroud");
 	}
 
 	public CreateHighScore(HighScore object) {
@@ -106,6 +107,7 @@ public class CreateHighScore {
 		txtScore.setText(String.valueOf(scoreObj.getHighScore()));
 		txtLocation.setText(scoreObj.getLocation());
 		txtComment.setText(scoreObj.getComment());
+		mainContent.setStyleName("contentBackgroud");
 
 	}
 
@@ -137,7 +139,7 @@ public class CreateHighScore {
 			@Override
 			public void onClick(ClickEvent event) {
 				// TODO Auto-generated method stub
-				GlobalServices.ComebackHome(false);
+				GlobalServices.HighScoreListPage(appId_);
 			}
 		}));
 		mainContent.add(controlButton);
