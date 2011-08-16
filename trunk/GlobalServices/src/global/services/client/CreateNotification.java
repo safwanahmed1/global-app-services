@@ -8,6 +8,7 @@ import global.services.shared.Notification;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -49,11 +50,13 @@ public class CreateNotification {
 				AsyncCallback<Long> callback = new AsyncCallback<Long>() {
 					public void onFailure(Throwable caught) {
 						// TODO: Do something with errors.
-						GlobalServices.NotificationListPage(appId_);
+						//GlobalServices.NotificationListPage(appId_);
+						History.newItem("notelist-" + appId_);
 					}
 
 					public void onSuccess(Long result) {
-						GlobalServices.NotificationListPage(appId_);
+						//GlobalServices.NotificationListPage(appId_);
+						History.newItem("notelist-" + appId_);
 					}
 				};
 
@@ -130,7 +133,8 @@ public class CreateNotification {
 			@Override
 			public void onClick(ClickEvent event) {
 				// TODO Auto-generated method stub
-				GlobalServices.NotificationListPage(appId_);
+				//GlobalServices.NotificationListPage(appId_);
+				History.newItem("notelist-" + appId_);
 			}
 		}));
 		mainContent.add(controlButton);

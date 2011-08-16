@@ -54,7 +54,7 @@ public class CreateAppScores {
 					appScoreSvc.UpdateApp(appObj, callback);
 				}
 
-				GlobalServices.ComebackHome(true);
+				//GlobalServices.ComebackHome(true);
 				History.newItem("root-application");
 			} else {
 				Window.alert("Please input fully application information.");
@@ -101,7 +101,7 @@ public class CreateAppScores {
 			@Override
 			public void onClick(ClickEvent event) {
 				// TODO Auto-generated method stub
-				GlobalServices.ComebackHome(false);
+				//GlobalServices.ComebackHome(false);
 				History.newItem("root-application");
 			}
 		}));

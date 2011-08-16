@@ -31,6 +31,8 @@ import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -45,11 +47,13 @@ public class NotificationTable {
 	private String userId_ = null;
 	private Long appId_ = null;
 	private String appName_ = null;
-
+	private AbsolutePanel headerTblPanel = new AbsolutePanel();
+	private AbsolutePanel tableGamesCtrPanel = new AbsolutePanel();
 	private VerticalPanel mainContent = new VerticalPanel();
 	private List<Notification> listNotes = null;
-	private Label lblAppInfo = new Label("Highscore table of ... application.");
-	static NotificationServiceAsync noteSvc = GWT.create(NotificationService.class);
+	private Label lblAppInfo = new Label("Notification table of ... application.");
+	Anchor myAppLink = new Anchor("<< My applications");
+			.create(NotificationService.class);
 	static AppScoreServiceAsync appSvc = GWT.create(AppScoreService.class);
 
 	private CellTable<Notification> notesCellTable = new CellTable<Notification>();
@@ -78,7 +82,21 @@ public class NotificationTable {
 	public Widget Initialize() {
 
 		mainContent.setStyleName("contentBackgroud");
-		mainContent.add(lblAppInfo);
+		tableGamesCtrPanel.setStyleName("header-footer");
+		headerTblPanel.setStyleName("header-footer");
+		
+		myAppLink.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				// TODO Auto-generated method stub
+				History.newItem("root-application");
+			}
+		});
+		
+		headerTblPanel.add(lblAppInfo);
+		headerTblPanel.add(myAppLink);
+		mainContent.add(headerTblPanel);
 
 		final SelectionModel<Notification> selectionNoteModel = new MultiSelectionModel<Notification>(
 				Notification.KEY_PROVIDER);
@@ -133,11 +151,14 @@ public class NotificationTable {
 				// TODO Auto-generated method stub
 				super.onBrowserEvent(context, elem, object, event);
 				if (event.getType().equals("click")) {
-					CreateNotification createNote = new CreateNotification(object);
-					mainContent.clear();
-					createNote.setMainContent(mainContent);
-					createNote.Initialize();
-					History.newItem("highscore-" + object.getAppId());
+					/*
+					 * CreateNotification createNote = new
+					 * CreateNotification(object); mainContent.clear();
+					 * createNote.setMainContent(mainContent);
+					 * createNote.Initialize();
+					 */
+					History.newItem("notification-" + object.getAppId() + "-"
+							+ object.getId());
 				}
 			}
 
@@ -211,14 +232,15 @@ public class NotificationTable {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				
-					CreateNotification createScore = new CreateNotification(userId_, appId_);
-					mainContent.clear();
-					createScore.setMainContent(mainContent);
-					createScore.Initialize();
-					History.newItem("notification-" + appId_);
+				/*
+				CreateNotification createScore = new CreateNotification(
+						userId_, appId_);
+				mainContent.clear();
+				createScore.setMainContent(mainContent);
+				createScore.Initialize();
+				*/
+				History.newItem("notification-" + appId_);
 
-		
 			}
 		}));
 
@@ -234,8 +256,8 @@ public class NotificationTable {
 							.confirm("Would you want to delete notifications")) {
 						NotificationServiceAsync noteService = GWT
 								.create(NotificationService.class);
-						noteService.DeleteNotes(userId_,
-								selectedNotes, new AsyncCallback<Integer>() {
+						noteService.DeleteNotes(userId_, selectedNotes,
+								new AsyncCallback<Integer>() {
 									public void onFailure(Throwable caught) {
 									}
 
@@ -251,6 +273,10 @@ public class NotificationTable {
 				}
 			}
 		}));
+		tableNotesCtrPanel.add(crtScore);
+		tableNotesCtrPanel.add(delScore);
+		tableNotesCtrPanel.setWidgetPosition(delScore, crtScore.getOffsetWidth() + 5, 0);
+		tableNotesCtrPanel.add(myAppLink);
 		mainContent.add(tableNotesCtrPanel);
 
 		return mainContent;
@@ -258,7 +284,7 @@ public class NotificationTable {
 
 	private void RefreshNotificationTbl() {
 		// TODO Auto-generated method stub
-		noteSvc.SelectNotes(userId_,appId_,
+		noteSvc.SelectNotes(userId_, appId_,
 				new AsyncCallback<List<Notification>>() {
 					public void onFailure(Throwable caught) {
 						// TODO: Do something
@@ -269,7 +295,11 @@ public class NotificationTable {
 					public void onSuccess(List<Notification> result) {
 						listNotes.clear();
 						listNotes.addAll(result);
-						
+						headerTblPanel.setWidth(scoreCellTable.getOffsetWidth() + "");
+						headerTblPanel.setWidgetPosition(myAppLink, headerTblPanel.getOffsetWidth()-myAppLink.getOffsetWidth(), 0);
+						tableGamesCtrPanel.setWidth(scoreCellTable.getOffsetWidth() + "");
+						tableGamesCtrPanel.setWidgetPosition(myAppLink, tableGamesCtrPanel.getOffsetWidth()-myAppLink.getOffsetWidth(), 0);
+
 					}
 				});
 	}
@@ -281,17 +311,7 @@ public class NotificationTable {
 	public String getAppName() {
 		return appName_;
 	}
-	protected void CreateNotificationPage(Notification note) {
-		// TODO Auto-generated method stub
-		mainContent.clear();
-		CreateNotification createNote;
-		if (note == null) {
-			createNote = new CreateNotification(userId_, appId_);
-		} else {
-			createNote = new CreateNotification(note);
-		}
-		createNote.setMainContent(mainContent);
-		createNote.Initialize();
-	}
+
+
 
 }

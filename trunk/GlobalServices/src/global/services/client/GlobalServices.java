@@ -6,6 +6,8 @@ import global.services.client.rpc.AppScoreService;
 import global.services.client.rpc.AppScoreServiceAsync;
 import global.services.client.rpc.FileService;
 import global.services.client.rpc.FileServiceAsync;
+import global.services.client.rpc.HighScoreService;
+import global.services.client.rpc.HighScoreServiceAsync;
 import global.services.client.rpc.LoginService;
 import global.services.client.rpc.LoginServiceAsync;
 import global.services.client.rpc.NotificationService;
@@ -107,16 +109,18 @@ public class GlobalServices implements EntryPoint {
 	static AppScoreServiceAsync appScoreSvc = GWT.create(AppScoreService.class);
 	static AdvertisementServiceAsync advSvc = GWT
 			.create(AdvertisementService.class);
+
+	static FileServiceAsync fileSvc = GWT.create(FileService.class);
 	static NotificationServiceAsync noteSvc = GWT
 			.create(NotificationService.class);
-	static FileServiceAsync fileSvc = GWT.create(FileService.class);
+	static HighScoreServiceAsync scoreSvc = GWT.create(HighScoreService.class);
 	// static HighScoreServiceAsync scoreSvc =
 	// GWT.create(HighScoreService.class);
 
 	static Label lblAppRemaining = new Label(
 			"Calculating number apps remaining...");
 	static Label lblAdvRemaining = new Label(
-			"Calculating number advertisments remaining...");
+			"Calculating number advertisements remaining...");
 	static Label lblNoteRemaining = new Label(
 			"Calculating number notes remaining...");
 	static Label lblFileRemaining = new Label(
@@ -186,7 +190,6 @@ public class GlobalServices implements EntryPoint {
 		History.addValueChangeHandler(new ValueChangeHandler<String>() {
 			public void onValueChange(ValueChangeEvent<String> event) {
 
-				
 				String historyToken = event.getValue();
 				String[] tokenList = historyToken.split("-");
 
@@ -199,7 +202,7 @@ public class GlobalServices implements EntryPoint {
 							servicesTabPanel.selectTab(1);
 						if (tokenList[1].equals("file"))
 							servicesTabPanel.selectTab(2);
-						GlobalServices.ComebackHome(false);
+						GlobalServices.ComebackHome(true);
 					}
 					if (tokenList[0].equals("application")) {
 						if (tokenList[1] != null) {
@@ -212,24 +215,36 @@ public class GlobalServices implements EntryPoint {
 
 					if (tokenList[0].equals("advertisement")) {
 						if (tokenList[1] != null) {
-							CreateAdvertismentPage(Long.parseLong(tokenList[1]));
+							CreateAdvertisementPage(Long
+									.parseLong(tokenList[1]));
 						} else {
-							CreateAdvertismentPage(null);
+							CreateAdvertisementPage(null);
 						}
 					}
 
 					if (tokenList[0].equals("highscore")) {
+						if (tokenList[2] != null) {
+							UpdateHighscorePage(Long.parseLong(tokenList[2]));
+						} else
 
-						if (tokenList[1] != null) {
+						{
+							if (tokenList[1] != null) {
 
-							CreateHighscorePage(Long.parseLong(tokenList[1]));
+								CreateHighscorePage(Long
+										.parseLong(tokenList[1]));
 
+							}
 						}
 					}
 
-					if (tokenList[0].equals("notetification")) {
-						if (tokenList[1] != null) {
-							CreateNotificationPage(Long.parseLong(tokenList[1]));
+					if (tokenList[0].equals("notification")) {
+						if (tokenList[2] != null) {
+							UpdateNotificationPage(Long.parseLong(tokenList[2]));
+						} else {
+							if (tokenList[1] != null) {
+								CreateNotificationPage(Long
+										.parseLong(tokenList[1]));
+							}
 						}
 					}
 
@@ -250,7 +265,6 @@ public class GlobalServices implements EntryPoint {
 				}
 			}
 		});
-		
 
 	}
 
@@ -295,12 +309,11 @@ public class GlobalServices implements EntryPoint {
 		CreateFileServerPanel();
 
 		// Add panels to RootLayout
-		GlobalServices.ComebackHome(false);
+		// GlobalServices.ComebackHome(false);
 		/*
-		mainPanel.addNorth(headerPanel, 50);
-		mainPanel.addSouth(footerPanel, 50);
-		mainPanel.add(servicesTabPanel);
-		*/
+		 * mainPanel.addNorth(headerPanel, 50); mainPanel.addSouth(footerPanel,
+		 * 50); mainPanel.add(servicesTabPanel);
+		 */
 		rootPanel = RootPanel.get("content");
 
 		RootLayoutPanel.get().add(mainPanel);
@@ -329,7 +342,7 @@ public class GlobalServices implements EntryPoint {
 					CreateAppScoresPage(null);
 
 				}
-				
+
 			}
 		}));
 
@@ -414,10 +427,11 @@ public class GlobalServices implements EntryPoint {
 				// TODO Auto-generated method stub
 				super.onBrowserEvent(context, elem, object, event);
 				if (event.getType().equals("click")) {
-					CreateAppScoresPage(object.getId());
+					// CreateAppScoresPage(object.getId());
+					History.newItem("application-" + object.getId());
 
 				}
-				
+
 			}
 
 			@Override
@@ -473,9 +487,10 @@ public class GlobalServices implements EntryPoint {
 				super.onBrowserEvent(context, elem, object, event);
 				if (event.getType().equals("click")) {
 					appId = object.getId();
-					HighScoreListPage(object.getId());
+					// HighScoreListPage(object.getId());
+					History.newItem("scorelist-" + object.getId());
 				}
-				
+
 			}
 
 			@Override
@@ -511,9 +526,10 @@ public class GlobalServices implements EntryPoint {
 				super.onBrowserEvent(context, elem, object, event);
 				if (event.getType().equals("click")) {
 					appId = object.getId();
-					NotificationListPage(object.getId());
+					// NotificationListPage(object.getId());
+					History.newItem("notelist-" + object.getId());
 				}
-				
+
 			}
 
 			@Override
@@ -558,12 +574,13 @@ public class GlobalServices implements EntryPoint {
 			@Override
 			public void onClick(ClickEvent event) {
 				if ((numAdvRemaining <= 0) || (numFileRemaining <= 0)) {
-					Window.alert("You can not create more advertisment.");
+					Window.alert("You can not create more advertisement.");
 				} else {
-					CreateAdvertismentPage(null);
+					// CreateAdvertisementPage(null);
+					History.newItem("advertisement");
 
 				}
-				
+
 			}
 		}));
 
@@ -665,10 +682,11 @@ public class GlobalServices implements EntryPoint {
 				// TODO Auto-generated method stub
 				super.onBrowserEvent(context, elem, object, event);
 				if (event.getType().equals("click")) {
-					CreateAdvertismentPage(object.getId());
+					// CreateAdvertisementPage(object.getId());
+					History.newItem("advertisement-" + object.getId());
 
 				}
-				
+
 			}
 
 			@Override
@@ -958,7 +976,7 @@ public class GlobalServices implements EntryPoint {
 						listAdvs.addAll(result);
 						numAdvRemaining = 10 - result.size();
 						lblAdvRemaining.setText("You have " + numAdvRemaining
-								+ " remaining advertisments.");
+								+ " remaining advertisements.");
 					}
 				});
 
@@ -1011,11 +1029,11 @@ public class GlobalServices implements EntryPoint {
 			createApp = new CreateAppScores(loginInfo.getEmailAddress(), id);
 		}
 		mainPanel.add(createApp.Initialize());
-		History.newItem("application");
+		// History.newItem("application");
 
 	}
 
-	static void HighScoreListPage(Long appId) {
+	private void HighScoreListPage(Long appId) {
 		mainPanel.clear();
 		mainPanel.addNorth(headerPanel, 50);
 		mainPanel.addSouth(footerPanel, 50);
@@ -1023,10 +1041,10 @@ public class GlobalServices implements EntryPoint {
 				loginInfo.getEmailAddress(), appId);
 
 		mainPanel.add(highScore.Initialize());
-		History.newItem("scorelist-" + appId);
+		// History.newItem("scorelist-" + appId);
 	}
 
-	static void NotificationListPage(Long appId) {
+	private void NotificationListPage(Long appId) {
 		mainPanel.clear();
 		mainPanel.addNorth(headerPanel, 50);
 		mainPanel.addSouth(footerPanel, 50);
@@ -1034,71 +1052,132 @@ public class GlobalServices implements EntryPoint {
 				loginInfo.getEmailAddress(), appId);
 
 		mainPanel.add(noteTable.Initialize());
-		History.newItem("notelist-" + appId);
+		// History.newItem("notelist-" + appId);
 	}
 
-	private void CreateAdvertismentPage(Long id) {
+	private void CreateAdvertisementPage(Long id) {
 		// TODO Auto-generated method stub
 		mainPanel.clear();
 		mainPanel.addNorth(headerPanel, 50);
 		mainPanel.addSouth(footerPanel, 50);
-		CreateAdvertisment createAdv;
+		CreateAdvertisement createAdv;
 		if (id == null) {
-			createAdv = new CreateAdvertisment(loginInfo.getEmailAddress());
+			createAdv = new CreateAdvertisement(loginInfo.getEmailAddress());
 		} else {
-			createAdv = new CreateAdvertisment(loginInfo.getEmailAddress(), id);
+			createAdv = new CreateAdvertisement(loginInfo.getEmailAddress(), id);
 		}
 		mainPanel.add(createAdv.Initialize());
-		History.newItem("advertisment");
+		// History.newItem("advertisement");
 	}
 
-	private void CreateHighscorePage(Long id) {
+	private void CreateHighscorePage(Long appId) {
 		// TODO Auto-generated method stub
 		mainPanel.clear();
 		mainPanel.addNorth(headerPanel, 50);
 		mainPanel.addSouth(footerPanel, 50);
 		CreateHighScore createHighscore = null;
-		if (id != null) {
+		if (appId != null) {
 			createHighscore = new CreateHighScore(loginInfo.getEmailAddress(),
-					id);
-			
+					appId);
+
 			mainPanel.add(createHighscore.Initialize());
 		}
-		History.newItem("highscore-" + id);
+		// History.newItem("highscore-" + id);
 	}
-	
-	private void CreateHighscorePage(HighScore score) {
+
+	private void UpdateHighscorePage(Long scoreId) {
 		// TODO Auto-generated method stub
 		mainPanel.clear();
 		mainPanel.addNorth(headerPanel, 50);
 		mainPanel.addSouth(footerPanel, 50);
-		CreateHighScore createHighscore = null;
-		if (score != null) {
-			createHighscore = new CreateHighScore(score);
-			mainPanel.add(createHighscore.Initialize());
-		}
-		History.newItem("highscore-" + score.getGameID());
+		scoreSvc.SelectScore(loginInfo.getEmailAddress(), scoreId,
+				new AsyncCallback<HighScore>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						// TODO Auto-generated method stub
+						CreateHighScore createHighscore = null;
+						if (appId != null) {
+							createHighscore = new CreateHighScore(loginInfo
+									.getEmailAddress(), appId);
+
+							mainPanel.add(createHighscore.Initialize());
+						}
+
+					}
+
+					@Override
+					public void onSuccess(HighScore result) {
+						// TODO Auto-generated method stub
+						if (result != null) {
+							CreateHighScore createHighscore = new CreateHighScore(
+									result);
+							mainPanel.add(createHighscore.Initialize());
+						}
+					}
+
+				});
+
+		// History.newItem("highscore-" + score.getGameID());
 	}
 
-	private void CreateNotificationPage(Long id) {
+	private void CreateNotificationPage(Long appId) {
 		// TODO Auto-generated method stub
 		mainPanel.clear();
 		mainPanel.addNorth(headerPanel, 50);
 		mainPanel.addSouth(footerPanel, 50);
 		CreateNotification createNote = null;
-		if (id != null) {
-			createNote = new CreateNotification(loginInfo.getEmailAddress(), id);
+		if (appId != null) {
+			createNote = new CreateNotification(loginInfo.getEmailAddress(),
+					appId);
 			mainPanel.add(createNote.Initialize());
 		}
-		History.newItem("notification-" + id);
+		// History.newItem("notification-" + appId);
+	}
+
+	private void UpdateNotificationPage(Long noteId) {
+		// TODO Auto-generated method stub
+		mainPanel.clear();
+		mainPanel.addNorth(headerPanel, 50);
+		mainPanel.addSouth(footerPanel, 50);
+
+		noteSvc.SelectNote(loginInfo.getEmailAddress(), noteId,
+				new AsyncCallback<Notification>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						// TODO Auto-generated method stub
+						CreateHighScore createHighscore = null;
+						if (appId != null) {
+							createHighscore = new CreateHighScore(loginInfo
+									.getEmailAddress(), appId);
+
+							mainPanel.add(createHighscore.Initialize());
+						}
+
+					}
+
+					@Override
+					public void onSuccess(Notification result) {
+						// TODO Auto-generated method stub
+						if (result != null) {
+							CreateNotification createNote = new CreateNotification(
+									result);
+							mainPanel.add(createNote.Initialize());
+						}
+					}
+
+				});
+
+		// History.newItem("notification-" + appId);
 	}
 	/*
 	 * @Override public void onHistoryChanged(String historyToken) { // TODO
 	 * Auto-generated method stub if (historyToken.equals(rootPanel)) {
 	 * ComebackHome(false); return; } if (historyToken.equals(appScoreToken)) {
 	 * CreateAppScoresPage(null); return; } if
-	 * (historyToken.equals(advertisementToken)) { CreateAdvertismentPage(null);
-	 * return; }
+	 * (historyToken.equals(advertisementToken)) {
+	 * CreateAdvertisementPage(null); return; }
 	 * 
 	 * if (historyToken.equals(highScoreToken)) { HighScorePage(appId); return;
 	 * } if (historyToken.equals(createHighScoreToken)) { return; } }

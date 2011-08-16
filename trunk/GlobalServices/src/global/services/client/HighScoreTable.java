@@ -14,12 +14,14 @@ import java.util.List;
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.ClickableTextCell;
 import com.google.gwt.cell.client.Cell.Context;
+import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -28,6 +30,8 @@ import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -43,12 +47,14 @@ public class HighScoreTable {
 	private String userId_ = null;
 	private Long appId_ = null;
 	private String appName_ = null;
-
+	private AbsolutePanel headerTblPanel = new AbsolutePanel();
+	private AbsolutePanel tableGamesCtrPanel = new AbsolutePanel();
 	private CellTable<HighScore> scoreCellTable = new CellTable<HighScore>();
 	private List<Long> selectedScores = new ArrayList<Long>();
 	private VerticalPanel mainContent = new VerticalPanel();
 	private List<HighScore> listScore = null;
 	private Label lblAppInfo = new Label("Highscore table of ... application.");
+	Anchor myAppLink = new Anchor("<< My applications");
 	static HighScoreServiceAsync scoreSvc = GWT.create(HighScoreService.class);
 	static AppScoreServiceAsync appSvc = GWT.create(AppScoreService.class);
 
@@ -75,7 +81,23 @@ public class HighScoreTable {
 	public Widget Initialize() {
 
 		mainContent.setStyleName("contentBackgroud");
-		mainContent.add(lblAppInfo);
+		
+		tableGamesCtrPanel.setStyleName("header-footer");
+		headerTblPanel.setStyleName("header-footer");
+		
+		myAppLink.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				// TODO Auto-generated method stub
+				History.newItem("root-application");
+			}
+		});
+		
+		headerTblPanel.add(lblAppInfo);
+		headerTblPanel.add(myAppLink);
+		
+		mainContent.add(headerTblPanel);
 
 		final SelectionModel<HighScore> selectionAppModel = new MultiSelectionModel<HighScore>(
 				HighScore.KEY_PROVIDER);
@@ -125,12 +147,13 @@ public class HighScoreTable {
 				// TODO Auto-generated method stub
 				super.onBrowserEvent(context, elem, object, event);
 				if (event.getType().equals("click")) {
-
+					/*
 					CreateHighScore createScore = new CreateHighScore(object);
 					mainContent.clear();
 					createScore.setMainContent(mainContent);
 					createScore.Initialize();
-					History.newItem("highscore-" + object.getGameID());
+					*/
+					History.newItem("highscore-" + object.getGameID()+ "-" + object.getId());
 				}
 				
 			}
@@ -264,22 +287,23 @@ public class HighScoreTable {
 
 		mainContent.add(scoreCellTable);
 
-		HorizontalPanel tableGamesCtrPanel = new HorizontalPanel();
-		tableGamesCtrPanel.add(new Button("Create score", new ClickHandler() {
+		//HorizontalPanel tableGamesCtrPanel = new HorizontalPanel();
+		Button crtScore = new Button("Create score", new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
-
+				/*
 				CreateHighScore createScore = new CreateHighScore(userId_,
 						appId_);
 				mainContent.clear();
 				createScore.setMainContent(mainContent);
 				createScore.Initialize();
+				*/
 				History.newItem("highscore-" + appId_);
 			}
-		}));
+		});
 
-		tableGamesCtrPanel.add(new Button("Delete score", new ClickHandler() {
+		Button delScore = new Button("Delete score", new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
@@ -309,7 +333,11 @@ public class HighScoreTable {
 				}
 
 			}
-		}));
+		});
+		tableGamesCtrPanel.add(crtScore);
+		tableGamesCtrPanel.add(delScore);
+		tableGamesCtrPanel.setWidgetPosition(delScore, crtScore.getOffsetWidth() + 5, 0);
+		tableGamesCtrPanel.add(myAppLink);
 		mainContent.add(tableGamesCtrPanel);
 
 		return mainContent;
@@ -330,6 +358,10 @@ public class HighScoreTable {
 
 						listScore.clear();
 						listScore.addAll(result);
+						headerTblPanel.setWidth(scoreCellTable.getOffsetWidth() + "");
+						headerTblPanel.setWidgetPosition(myAppLink, headerTblPanel.getOffsetWidth()-myAppLink.getOffsetWidth(), 0);
+						tableGamesCtrPanel.setWidth(scoreCellTable.getOffsetWidth() + "");
+						tableGamesCtrPanel.setWidgetPosition(myAppLink, tableGamesCtrPanel.getOffsetWidth()-myAppLink.getOffsetWidth(), 0);
 
 					}
 				});
