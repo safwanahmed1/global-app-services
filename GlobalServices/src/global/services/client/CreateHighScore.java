@@ -8,6 +8,7 @@ import global.services.shared.HighScore;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -52,13 +53,13 @@ public class CreateHighScore {
 			AsyncCallback<Long> callback = new AsyncCallback<Long>() {
 				public void onFailure(Throwable caught) {
 					// TODO: Do something with errors.
-					
-					GlobalServices.HighScoreListPage(appId_);
+					History.newItem("scorelist-" + appId_);
+					//GlobalServices.HighScoreListPage(appId_);
 				}
 
 				public void onSuccess(Long result) {
-					
-					GlobalServices.HighScoreListPage(appId_);
+					History.newItem("scorelist-" + appId_);
+					//GlobalServices.HighScoreListPage(appId_);
 				}
 			};
 			if (scoreObj == null) {
@@ -139,7 +140,8 @@ public class CreateHighScore {
 			@Override
 			public void onClick(ClickEvent event) {
 				// TODO Auto-generated method stub
-				GlobalServices.HighScoreListPage(appId_);
+				//GlobalServices.HighScoreListPage(appId_);
+				History.newItem("scorelist-" + appId_);
 			}
 		}));
 		mainContent.add(controlButton);
