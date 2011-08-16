@@ -48,17 +48,62 @@ public class NotificationTable {
 	private Long appId_ = null;
 	private String appName_ = null;
 	private AbsolutePanel headerTblPanel = new AbsolutePanel();
-	private AbsolutePanel tableGamesCtrPanel = new AbsolutePanel();
+	//private AbsolutePanel tableGamesCtrPanel = new AbsolutePanel();
 	private VerticalPanel mainContent = new VerticalPanel();
 	private List<Notification> listNotes = null;
 	private Label lblAppInfo = new Label("Notification table of ... application.");
 	Anchor myAppLink = new Anchor("<< My applications");
-			.create(NotificationService.class);
+	private NotificationServiceAsync noteSvc = GWT.create(NotificationService.class);
 	static AppScoreServiceAsync appSvc = GWT.create(AppScoreService.class);
 
 	private CellTable<Notification> notesCellTable = new CellTable<Notification>();
 	private List<Long> selectedNotes = new ArrayList<Long>();
+	private AbsolutePanel tableNotesCtrPanel = new AbsolutePanel();
+	private Button crtScore = new Button("Create note", new ClickHandler() {
 
+		@Override
+		public void onClick(ClickEvent event) {
+			/*
+			CreateNotification createScore = new CreateNotification(
+					userId_, appId_);
+			mainContent.clear();
+			createScore.setMainContent(mainContent);
+			createScore.Initialize();
+			*/
+			History.newItem("notification-" + appId_);
+
+		}
+	});
+
+	private Button delScore = new Button("Delete notes", new ClickHandler() {
+
+		@Override
+		public void onClick(ClickEvent event) {
+			// TODO Auto-generated method stub
+			if (selectedNotes.size() == 0) {
+				Window.alert("You have to chose at least a notification to delete.");
+			} else {
+				if (Window
+						.confirm("Would you want to delete notifications")) {
+					NotificationServiceAsync noteService = GWT
+							.create(NotificationService.class);
+					noteService.DeleteNotes(userId_, selectedNotes,
+							new AsyncCallback<Integer>() {
+								public void onFailure(Throwable caught) {
+								}
+
+								public void onSuccess(Integer result) {
+									// TODO Auto-generated method stub
+									Window.alert(result
+											+ " Notifications have been deleted successful.");
+									RefreshNotificationTbl();
+								}
+							});
+					selectedNotes.clear();
+				}
+			}
+		}
+	});
 	public NotificationTable(String userId, Long appId) {
 		userId_ = userId;
 		appId_ = appId;
@@ -82,7 +127,7 @@ public class NotificationTable {
 	public Widget Initialize() {
 
 		mainContent.setStyleName("contentBackgroud");
-		tableGamesCtrPanel.setStyleName("header-footer");
+		tableNotesCtrPanel.setStyleName("header-footer");
 		headerTblPanel.setStyleName("header-footer");
 		
 		myAppLink.addClickHandler(new ClickHandler() {
@@ -227,56 +272,10 @@ public class NotificationTable {
 		RefreshNotificationTbl();
 
 		mainContent.add(notesCellTable);
-		HorizontalPanel tableNotesCtrPanel = new HorizontalPanel();
-		tableNotesCtrPanel.add(new Button("Create note", new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				/*
-				CreateNotification createScore = new CreateNotification(
-						userId_, appId_);
-				mainContent.clear();
-				createScore.setMainContent(mainContent);
-				createScore.Initialize();
-				*/
-				History.newItem("notification-" + appId_);
-
-			}
-		}));
-
-		tableNotesCtrPanel.add(new Button("Delete notes", new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				// TODO Auto-generated method stub
-				if (selectedNotes.size() == 0) {
-					Window.alert("You have to chose at least a notification to delete.");
-				} else {
-					if (Window
-							.confirm("Would you want to delete notifications")) {
-						NotificationServiceAsync noteService = GWT
-								.create(NotificationService.class);
-						noteService.DeleteNotes(userId_, selectedNotes,
-								new AsyncCallback<Integer>() {
-									public void onFailure(Throwable caught) {
-									}
-
-									public void onSuccess(Integer result) {
-										// TODO Auto-generated method stub
-										Window.alert(result
-												+ " Notifications have been deleted successful.");
-										RefreshNotificationTbl();
-									}
-								});
-						selectedNotes.clear();
-					}
-				}
-			}
-		}));
+		
 		tableNotesCtrPanel.add(crtScore);
 		tableNotesCtrPanel.add(delScore);
-		tableNotesCtrPanel.setWidgetPosition(delScore, crtScore.getOffsetWidth() + 5, 0);
-		tableNotesCtrPanel.add(myAppLink);
+		
 		mainContent.add(tableNotesCtrPanel);
 
 		return mainContent;
@@ -295,11 +294,10 @@ public class NotificationTable {
 					public void onSuccess(List<Notification> result) {
 						listNotes.clear();
 						listNotes.addAll(result);
-						headerTblPanel.setWidth(scoreCellTable.getOffsetWidth() + "");
-						headerTblPanel.setWidgetPosition(myAppLink, headerTblPanel.getOffsetWidth()-myAppLink.getOffsetWidth(), 0);
-						tableGamesCtrPanel.setWidth(scoreCellTable.getOffsetWidth() + "");
-						tableGamesCtrPanel.setWidgetPosition(myAppLink, tableGamesCtrPanel.getOffsetWidth()-myAppLink.getOffsetWidth(), 0);
-
+						headerTblPanel.setWidth(notesCellTable.getOffsetWidth() + "");
+						headerTblPanel.setWidgetPosition(myAppLink, headerTblPanel.getOffsetWidth()-myAppLink.getOffsetWidth(), 5);
+						tableNotesCtrPanel.setWidth(notesCellTable.getOffsetWidth() + "");
+						tableNotesCtrPanel.setWidgetPosition(delScore, crtScore.getOffsetWidth() + 5, 5);
 					}
 				});
 	}

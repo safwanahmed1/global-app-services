@@ -57,7 +57,53 @@ public class HighScoreTable {
 	Anchor myAppLink = new Anchor("<< My applications");
 	static HighScoreServiceAsync scoreSvc = GWT.create(HighScoreService.class);
 	static AppScoreServiceAsync appSvc = GWT.create(AppScoreService.class);
+	//HorizontalPanel tableGamesCtrPanel = new HorizontalPanel();
+	private Button crtScore = new Button("Create score", new ClickHandler() {
 
+		@Override
+		public void onClick(ClickEvent event) {
+			/*
+			CreateHighScore createScore = new CreateHighScore(userId_,
+					appId_);
+			mainContent.clear();
+			createScore.setMainContent(mainContent);
+			createScore.Initialize();
+			*/
+			History.newItem("highscore-" + appId_);
+		}
+	});
+
+	private Button delScore = new Button("Delete score", new ClickHandler() {
+
+		@Override
+		public void onClick(ClickEvent event) {
+			// TODO Auto-generated method stub
+			if (selectedScores.size() == 0) {
+				Window
+						.alert("You have to chose at least an entry to delete.");
+			} else {
+				if (Window.confirm("Would you want to delete entries")) {
+					HighScoreServiceAsync scoreService = GWT
+							.create(HighScoreService.class);
+					scoreService.DeleteScores(userId_, selectedScores,
+							new AsyncCallback<Integer>() {
+								public void onFailure(Throwable caught) {
+								}
+
+								public void onSuccess(Integer result) {
+									// TODO Auto-generated method stub
+									Window
+											.alert(result
+													+ " Scores have been deleted successful.");
+									RefreshHighScoreTbl();
+								}
+							});
+					selectedScores.clear();
+				}
+			}
+
+		}
+	});
 	public HighScoreTable(String userId, Long appId) {
 		userId_ = userId;
 		appId_ = appId;
@@ -93,7 +139,6 @@ public class HighScoreTable {
 				History.newItem("root-application");
 			}
 		});
-		
 		headerTblPanel.add(lblAppInfo);
 		headerTblPanel.add(myAppLink);
 		
@@ -287,57 +332,11 @@ public class HighScoreTable {
 
 		mainContent.add(scoreCellTable);
 
-		//HorizontalPanel tableGamesCtrPanel = new HorizontalPanel();
-		Button crtScore = new Button("Create score", new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				/*
-				CreateHighScore createScore = new CreateHighScore(userId_,
-						appId_);
-				mainContent.clear();
-				createScore.setMainContent(mainContent);
-				createScore.Initialize();
-				*/
-				History.newItem("highscore-" + appId_);
-			}
-		});
-
-		Button delScore = new Button("Delete score", new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				// TODO Auto-generated method stub
-				if (selectedScores.size() == 0) {
-					Window
-							.alert("You have to chose at least an entry to delete.");
-				} else {
-					if (Window.confirm("Would you want to delete entries")) {
-						HighScoreServiceAsync scoreService = GWT
-								.create(HighScoreService.class);
-						scoreService.DeleteScores(userId_, selectedScores,
-								new AsyncCallback<Integer>() {
-									public void onFailure(Throwable caught) {
-									}
-
-									public void onSuccess(Integer result) {
-										// TODO Auto-generated method stub
-										Window
-												.alert(result
-														+ " Scores have been deleted successful.");
-										RefreshHighScoreTbl();
-									}
-								});
-						selectedScores.clear();
-					}
-				}
-
-			}
-		});
+		
 		tableGamesCtrPanel.add(crtScore);
 		tableGamesCtrPanel.add(delScore);
-		tableGamesCtrPanel.setWidgetPosition(delScore, crtScore.getOffsetWidth() + 5, 0);
-		tableGamesCtrPanel.add(myAppLink);
+		
+		
 		mainContent.add(tableGamesCtrPanel);
 
 		return mainContent;
@@ -359,10 +358,9 @@ public class HighScoreTable {
 						listScore.clear();
 						listScore.addAll(result);
 						headerTblPanel.setWidth(scoreCellTable.getOffsetWidth() + "");
-						headerTblPanel.setWidgetPosition(myAppLink, headerTblPanel.getOffsetWidth()-myAppLink.getOffsetWidth(), 0);
+						headerTblPanel.setWidgetPosition(myAppLink, headerTblPanel.getOffsetWidth()-myAppLink.getOffsetWidth(), 5);
 						tableGamesCtrPanel.setWidth(scoreCellTable.getOffsetWidth() + "");
-						tableGamesCtrPanel.setWidgetPosition(myAppLink, tableGamesCtrPanel.getOffsetWidth()-myAppLink.getOffsetWidth(), 0);
-
+						tableGamesCtrPanel.setWidgetPosition(delScore, crtScore.getOffsetWidth() + 5, 5);
 					}
 				});
 	}
