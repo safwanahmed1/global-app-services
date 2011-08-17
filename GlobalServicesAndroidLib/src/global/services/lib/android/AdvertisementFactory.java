@@ -86,7 +86,7 @@ public class AdvertisementFactory {
 						advObj.setType(type);
 
 						iconFileId = advs.getAttributeValue(null, "iconid");
-						iconFile = new FileDownloader(userId, iconFileId).Download(Long.parseLong(iconFileId));
+						iconFile = new FileDownloader(userId, Long.parseLong(iconFileId)).Download();
 						advObj.setIconFile(iconFile);
 
 						storeUrl = advs.getAttributeValue(null, "storeurl");
