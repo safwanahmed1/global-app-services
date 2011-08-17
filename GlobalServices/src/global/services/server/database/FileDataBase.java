@@ -107,10 +107,10 @@ public class FileDataBase implements Serializable {
 		return pm_.makePersistent(this);
 	}
 
-	public FileDataBase SelectFile(Long fileId) {
+	public FileDataBase SelectFile(String userId, Long fileId) {
 		String strQuery = "select from " + FileDataBase.class.getName();
 		Query query = pm_.newQuery(strQuery);
-		if ((userId_ != null) && !userId_.isEmpty())
+		if ((userId != null) && !userId.isEmpty())
 			query.setFilter("userId_ == \"" + userId_ + "\"");
 		if (fileId != null)
 			query.setFilter("id == " + fileId);
