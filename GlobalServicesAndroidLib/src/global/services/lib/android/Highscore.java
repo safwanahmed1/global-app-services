@@ -17,7 +17,7 @@ public class Highscore {
     private String location_;
     private long during_;
     private long date_;
-    private String avatar_;
+    //private String avatar_;
     
     public Highscore(){}
     
@@ -87,12 +87,14 @@ public class Highscore {
 	public void setDate(long date) {
 		this.date_ = date;
 	}
+	/* Not support yet
 	public String getAvatar() {
 		return avatar_;
 	}
 	public void setAvatar(String avatar) {
 		this.avatar_ = avatar;
 	}
+	*/
     
     
     

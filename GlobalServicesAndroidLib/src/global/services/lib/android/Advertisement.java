@@ -2,7 +2,7 @@ package global.services.lib.android;
 
 import java.io.File;
 
-public class Advertisment {
+public class Advertisement {
 	/**
 	 * 
 	 */
@@ -17,8 +17,8 @@ public class Advertisment {
 	private File iconFile_;
 	private String storeUrl_;
 	
-	public Advertisment(){}
-	public Advertisment(String appId){
+	public Advertisement(){}
+	public Advertisement(String appId){
 		setAppName(appId);
 	}
 	

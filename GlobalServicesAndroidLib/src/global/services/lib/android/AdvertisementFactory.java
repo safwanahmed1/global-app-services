@@ -10,19 +10,19 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
-public class AdvertismentFactory {
-	private static final String ADVERTISMENT_SERVLET = "http://global-score.appspot.com/gethighscore";
+public class AdvertisementFactory {
+	private static final String ADVERTISEMENT_SERVLET = "http://global-score.appspot.com/gethighscore";
 	private String userId_;
 	private RestClient advRest;
 
-	public AdvertismentFactory(String userId) {
+	public AdvertisementFactory(String userId) {
 		userId_ = userId;
-		advRest = new RestClient(ADVERTISMENT_SERVLET);
+		advRest = new RestClient(ADVERTISEMENT_SERVLET);
 
 	}
 
-	public List<Advertisment> GetAdvertisments(Long appId) {
-		List<Advertisment> advList = new ArrayList<Advertisment>();
+	public List<Advertisement> GetAdvertisements(Long appId) {
+		List<Advertisement> advList = new ArrayList<Advertisement>();
 		String strElemName;
 		String id;
 		String userId;
@@ -67,7 +67,7 @@ public class AdvertismentFactory {
 
 					if (strElemName.equals("advertesment")) {
 						// bFoundScores = true;
-						Advertisment advObj = new Advertisment();
+						Advertisement advObj = new Advertisement();
 						id = advs.getAttributeValue(null, "id");
 						advObj.setId(Long.parseLong(id));
 						userId = advs.getAttributeValue(null, "useid");

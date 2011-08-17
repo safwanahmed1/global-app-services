@@ -10,9 +10,9 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 public class HighscoreFactory {
 
-	private static final String HIGHSCORE_SERVLET = "http://global-score.appspot.com/gethighscore";
-	private static final String TYPE_PROCESS_SUBMIT = "submit";
-	private static final String TYPE_PROCESS_GET = "get";
+	private static final String HIGHSCORE_SERVLET = "http://global-score.appspot.com/highscore";
+	private static final String REQUEST_TYPE_SUBMIT = "submitscore";
+	private static final String REQUEST_TYPE_GET = "getscore";
 	private String userId_;
 	private Long appId_;
 	private RestClient highScoreRest;
@@ -25,7 +25,7 @@ public class HighscoreFactory {
 	
 	public void SubmitScore(Highscore score) {
 		highScoreRest.ClearParams();
-		highScoreRest.AddHeader("typeProcess", TYPE_PROCESS_GET);
+		highScoreRest.AddHeader("requesttype", REQUEST_TYPE_SUBMIT);
 		highScoreRest.AddHeader("userid", score.getUserID());
 		highScoreRest.AddHeader("appid", String.valueOf(score.getGameID()));
 		highScoreRest.AddHeader("subboard", score.getSubBoard());
@@ -35,13 +35,14 @@ public class HighscoreFactory {
 		highScoreRest.AddHeader("location", score.getLocation());
 		highScoreRest.AddHeader("comment", score.getComment());
 		highScoreRest.AddHeader("date", String.valueOf(score.getDate()));
-		highScoreRest.AddHeader("avatar", score.getAvatar());
-		
+		//highScoreRest.AddHeader("avatar", score.getAvatar()); Not support yet
+		/*
 		long now = System.currentTimeMillis();
 		highScoreRest.AddHeader("Date", String.valueOf(now));
+		*/
 
 		try {
-			highScoreRest.Execute(RequestMethod.GET);
+			highScoreRest.Execute(RequestMethod.POST);
 		} catch (Exception e) {
 			// textView.setText(e.getMessage());
 		}
@@ -59,11 +60,11 @@ public class HighscoreFactory {
 		String during;
 		String comment;
 		String location;
-		String avatar;
+		//String avatar; Not support yet
 		String date;
 
 		highScoreRest.ClearParams();
-		highScoreRest.AddHeader("typeProcess", TYPE_PROCESS_SUBMIT);
+		highScoreRest.AddHeader("requesttype", REQUEST_TYPE_GET);
 		highScoreRest.AddHeader("userid", userId_);
 		highScoreRest.AddHeader("appid", String.valueOf(appId_));
 
@@ -119,8 +120,8 @@ public class HighscoreFactory {
 						location = scores.getAttributeValue(null,
 								"location");
 						scoreObj.setLocation(location);
-						avatar = scores.getAttributeValue(null, "avatar");
-						scoreObj.setAvatar(avatar);
+						//avatar = scores.getAttributeValue(null, "avatar"); Not support yet
+						//scoreObj.setAvatar(avatar);Not support yet
 						date = scores.getAttributeValue(null, "date");
 						scoreObj.setDate(Long.parseLong(date));
 						
