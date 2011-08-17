@@ -23,38 +23,40 @@ public class HighscoreServlet extends HttpServlet {
 			SubmitScore(req, resp);
 		}
 		if ((reqType != null) && (reqType == "getscore")) {
-			
+
 			GetScore(req, resp);
 		}
 	}
-	private void SubmitScore(HttpServletRequest req, HttpServletResponse resp){
+
+	private void SubmitScore(HttpServletRequest req, HttpServletResponse resp) {
 		resp.setContentType("text/plain");
 		// UserService userService = UserServiceFactory.getUserService();
 		// User user = userService.getCurrentUser();
-		String userID = req.getParameter("UserID");
-		Long gameID = Long.parseLong(req.getParameter("GameID"));
-		String subBoard = req.getParameter("SubBoard");
-		String player = req.getParameter("Player");
-		String highScore = req.getParameter("HighScore");
-		String comment = req.getParameter("Comment");
-		String location = req.getParameter("Location");
-		String during = req.getParameter("During");
-		String date = req.getParameter("Date");
-		String avatar = req.getParameter("Avatar");
+		String userID = req.getHeader("userid");
+		Long gameID = Long.parseLong(req.getHeader("appid"));
+		String subBoard = req.getHeader("subboard");
+		String player = req.getHeader("player");
+		Integer highScore = Integer.parseInt(req.getHeader("score"));
+		Long during = Long.parseLong(req.getHeader("during"));
+		String location = req.getHeader("location");
+		String comment = req.getHeader("comment");
+		Long date = Long.parseLong(req.getHeader("date"));
+		String avatar = req.getHeader("avatar");
+
 		if ((gameID != null) && (player != null)) {
 			HighScore highscore = new HighScore(userID, gameID);
 			if (subBoard != null)
 				highscore.setSubBoard(subBoard);
 			if (highScore != null)
-				highscore.setHighScore(Integer.parseInt(highScore));
+				highscore.setHighScore(highScore);
 			if (comment != null)
 				highscore.setComment(comment);
 			if (location != null)
 				highscore.setLocation(location);
 			if (during != null)
-				highscore.setDuring(Integer.parseInt(during));
+				highscore.setDuring(during);
 			if (date != null)
-				highscore.setDate(Long.parseLong(date));
+				highscore.setDate(date);
 			if (avatar != null)
 				highscore.setAvatar(avatar);
 			ScoreDataBase scoreDB = new ScoreDataBase();
@@ -66,14 +68,8 @@ public class HighscoreServlet extends HttpServlet {
 			throws IOException {
 		String userId = null;
 		Long appId = null;
-		String subBoard = null;
-		// resp.setContentType("text/xml");
-		if (req.getParameterMap().containsKey("userid"))
-			userId = req.getParameter("userid");
-		if (req.getParameterMap().containsKey("appid"))
-			appId = Long.parseLong(req.getParameter("appid"));
-		if (req.getParameterMap().containsKey("subboard"))
-			subBoard = req.getParameter("subboard");
+		userId = req.getHeader("userid");
+		appId = Long.parseLong(req.getHeader("appid"));
 
 		ScoreDataBase scoreDB = new ScoreDataBase();
 		ServletOutputStream stream = null;
@@ -90,8 +86,7 @@ public class HighscoreServlet extends HttpServlet {
 				stream.print("<scores>");
 
 				for (HighScore score : highscore) {
-					stream.print("<score ");// username="ABC" score="456"
-											// rank="3" />
+					stream.print("<score ");
 					if (score.getSubBoard() != null)
 						stream.print(" subboard=\"" + score.getSubBoard()
 								+ "\"");
@@ -109,8 +104,11 @@ public class HighscoreServlet extends HttpServlet {
 					if (score.getLocation() != null)
 						stream.print(" location=\"" + score.getLocation()
 								+ "\"");
-					if (score.getAvatar() != null)
-						stream.print(" avatar=\"" + score.getAvatar() + "\"");
+					/*
+					 * Not support yet 
+					 * if (score.getAvatar() != null)
+					 * stream.print(" avatar=\"" + score.getAvatar() + "\"");
+					 */
 					stream.println("/>");
 				}
 				stream.print("</scores>");
