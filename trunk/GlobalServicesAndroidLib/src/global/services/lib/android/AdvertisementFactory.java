@@ -11,7 +11,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 public class AdvertisementFactory {
-	private static final String ADVERTISEMENT_SERVLET = "http://global-score.appspot.com/gethighscore";
+	private static final String ADVERTISEMENT_SERVLET = "http://global-score.appspot.com/globalservices/advertisementservlet";
 	private String userId_;
 	private RestClient advRest;
 
