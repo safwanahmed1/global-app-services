@@ -1,15 +1,16 @@
 package global.services.server.servlet;
 
 import global.services.server.database.FileDataBase;
-
 import java.io.IOException;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class FilesDownloadServlet extends HttpServlet {
+public class FileServlet extends HttpServlet {
 	/**
 	 * 
 	 */
@@ -23,7 +24,7 @@ public class FilesDownloadServlet extends HttpServlet {
 		String fileId = req.getParameter("fileid");
 
 		FileDataBase fileDownload = new FileDataBase();
-		fileDownload.SelectFile(Long.parseLong(fileId));
+		fileDownload.SelectFile(userId, Long.parseLong(fileId));
 		resp.reset();
 		resp.setContentType(fileDownload.getFileType());
 		ServletOutputStream outStream = resp.getOutputStream();
@@ -34,11 +35,21 @@ public class FilesDownloadServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) {
+		String reqType = request.getHeader("requesttype");
 		String userId = request.getHeader("userid");
 		String fileId = request.getHeader("fileid");
+		if (reqType == "download") {
+			Download(userId, Long.parseLong(fileId), response);
+		}
+		if (reqType == "getinfo") {
+			GetFileInfos(userId, response);
+		}
+	}
 
+	private void Download(String userId, Long fileId,
+			HttpServletResponse response) {
 		FileDataBase fileDownload = new FileDataBase();
-		fileDownload.SelectFile(Long.parseLong(fileId));
+		fileDownload.SelectFile(userId, fileId);
 		response.reset();
 		response.setContentType(fileDownload.getFileType());
 		response.setHeader("filename", fileDownload.getName());
@@ -47,6 +58,37 @@ public class FilesDownloadServlet extends HttpServlet {
 			outStream = response.getOutputStream();
 			byte[] fileData = fileDownload.getContent().getBytes();
 			outStream.write(fileData);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void GetFileInfos(String userId, HttpServletResponse response) {
+		FileDataBase fileDB = new FileDataBase();
+		List<FileDataBase> fileList = fileDB.SelectFiles(userId);
+		
+		response.setContentType("text/xml; charset=UTF-8");
+		try {
+			ServletOutputStream outStream = response.getOutputStream();
+			outStream.print("<?xml version=\"1.0\" encoding=\"utf-8\" ?>");
+
+			outStream.print("<files>");
+			for (FileDataBase file : fileList) {
+
+				outStream.print("<file ");
+				if (file.getId() != null)
+					outStream.print(" id=\"" + file.getId() + "\"");
+				if (file.getName() != null)
+					outStream.print(" name=\"" + file.getName() + "\"");
+				if (file.getFileType() != null)
+					outStream.print(" type=\"" + file.getFileType() + "\"");
+				if (file.getUserId() != null)
+					outStream.print(" user=\"" + file.getUserId() + "\"");
+				outStream.println("/>");
+
+			}
+			outStream.print("</files>");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

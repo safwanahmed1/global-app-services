@@ -713,7 +713,7 @@ public class GlobalServices implements EntryPoint {
 				// TODO Auto-generated method stub
 				super.render(context, object, sb);
 				if (object != null) {
-					String iconUrl = "http://global-app-services.appspot.com/globalservices/download?fileid=";
+					String iconUrl = "http://global-app-services.appspot.com/globalservices/fileservlet?fileid=";
 					iconUrl += object.getIconFile();
 					sb.appendHtmlConstant("<img src=\"");
 					sb.appendEscaped(iconUrl);

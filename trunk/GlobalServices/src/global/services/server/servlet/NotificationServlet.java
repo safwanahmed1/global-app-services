@@ -4,6 +4,7 @@ import global.services.server.database.NotificationDataBase;
 import global.services.shared.Notification;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -44,16 +45,14 @@ public class NotificationServlet extends HttpServlet {
 		NotificationDataBase noteDB = new NotificationDataBase();
 		ServletOutputStream stream = null;
 		try {
-			Notification note = noteDB.SelectNote(userId, appId);
-
-			if (note != null) {
-				resp.setContentType("text/xml; charset=UTF-8");
-				resp.setHeader("Content-Disposition",
-						"attachment; filename=globalscore.xml");
-				// resp.setLocale(arg0)
-				stream = resp.getOutputStream();
-				stream.print("<?xml version=\"1.0\" encoding=\"utf-8\" ?>");
-				stream.print("<notes>");
+			List<Notification> noteList = noteDB.SelectNotes(userId, appId);
+			resp.setContentType("text/xml; charset=UTF-8");
+			resp.setHeader("Content-Disposition",
+					"attachment; filename=globalscore.xml");
+			stream = resp.getOutputStream();
+			stream.print("<?xml version=\"1.0\" encoding=\"utf-8\" ?>");
+			stream.print("<notes>");
+			for (Notification note : noteList) {
 
 				stream.print("<note ");
 				if (note.getTittle() != null)
@@ -65,9 +64,9 @@ public class NotificationServlet extends HttpServlet {
 				if (note.getToDate() != null)
 					stream.print(" to=\"" + note.getToDate() + "\"");
 				stream.println("/>");
-				stream.print("</notes>");
 
 			}
+			stream.print("</notes>");
 		} finally {
 			if (stream != null) {
 				stream.close();

@@ -96,7 +96,7 @@ public class CreateAdvertisement {
 				advObj = result;
 				btnAddAdv.setText("Update advertisement");
 				iconFileId = String.valueOf(advObj.getIconFile());
-				String fileUrl = "http://global-app-services.appspot.com/globalservices/download?fileid=";
+				String fileUrl = "http://global-app-services.appspot.com/globalservices/fileservlet?fileid=";
 				fileUrl += iconFileId;
 				new PreloadedImage(fileUrl, showImage);
 				txtAppId.setText(advObj.getAppName());
@@ -179,7 +179,7 @@ public class CreateAdvertisement {
 				
 				Window.alert("Image url: " + fileUrl.buildString());
 				*/
-				String fileUrl = "http://global-app-services.appspot.com/globalservices/download?fileid=";
+				String fileUrl = "http://global-app-services.appspot.com/globalservices/fileservlet?fileid=";
 				fileUrl += iconFileId;
 				PreloadedImage image = new PreloadedImage(fileUrl, showImage);
 				// The server sends useful information to the client by default
