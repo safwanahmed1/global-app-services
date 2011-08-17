@@ -23,6 +23,7 @@ import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -48,12 +49,14 @@ public class NotificationTable {
 	private Long appId_ = null;
 	private String appName_ = null;
 	private AbsolutePanel headerTblPanel = new AbsolutePanel();
-	//private AbsolutePanel tableGamesCtrPanel = new AbsolutePanel();
+	// private AbsolutePanel tableGamesCtrPanel = new AbsolutePanel();
 	private VerticalPanel mainContent = new VerticalPanel();
 	private List<Notification> listNotes = null;
-	private Label lblAppInfo = new Label("Notification table of ... application.");
-	Anchor myAppLink = new Anchor("<< My applications");
-	private NotificationServiceAsync noteSvc = GWT.create(NotificationService.class);
+	private Label lblAppInfo = new Label(
+			"Notification table of ... application.");
+	Anchor myAppLink = new Anchor("<<My applications");
+	private NotificationServiceAsync noteSvc = GWT
+			.create(NotificationService.class);
 	static AppScoreServiceAsync appSvc = GWT.create(AppScoreService.class);
 
 	private CellTable<Notification> notesCellTable = new CellTable<Notification>();
@@ -64,12 +67,11 @@ public class NotificationTable {
 		@Override
 		public void onClick(ClickEvent event) {
 			/*
-			CreateNotification createScore = new CreateNotification(
-					userId_, appId_);
-			mainContent.clear();
-			createScore.setMainContent(mainContent);
-			createScore.Initialize();
-			*/
+			 * CreateNotification createScore = new CreateNotification( userId_,
+			 * appId_); mainContent.clear();
+			 * createScore.setMainContent(mainContent);
+			 * createScore.Initialize();
+			 */
 			History.newItem("notification-" + appId_);
 
 		}
@@ -83,8 +85,7 @@ public class NotificationTable {
 			if (selectedNotes.size() == 0) {
 				Window.alert("You have to chose at least a notification to delete.");
 			} else {
-				if (Window
-						.confirm("Would you want to delete notifications")) {
+				if (Window.confirm("Would you want to delete notifications")) {
 					NotificationServiceAsync noteService = GWT
 							.create(NotificationService.class);
 					noteService.DeleteNotes(userId_, selectedNotes,
@@ -104,6 +105,7 @@ public class NotificationTable {
 			}
 		}
 	});
+
 	public NotificationTable(String userId, Long appId) {
 		userId_ = userId;
 		appId_ = appId;
@@ -129,16 +131,16 @@ public class NotificationTable {
 		mainContent.setStyleName("contentBackgroud");
 		tableNotesCtrPanel.setStyleName("header-footer");
 		headerTblPanel.setStyleName("header-footer");
-		
+
 		myAppLink.addClickHandler(new ClickHandler() {
-			
+
 			@Override
 			public void onClick(ClickEvent event) {
 				// TODO Auto-generated method stub
 				History.newItem("root-application");
 			}
 		});
-		
+
 		headerTblPanel.add(lblAppInfo);
 		headerTblPanel.add(myAppLink);
 		mainContent.add(headerTblPanel);
@@ -242,7 +244,8 @@ public class NotificationTable {
 			@Override
 			public String getValue(Notification note) {
 				Date fromDate = new Date(note.getFromDate());
-				return fromDate.toString();
+				String dateString = DateTimeFormat.getMediumDateFormat().format(fromDate);
+				return dateString;
 			}
 		};
 		fromDateColumn.setSortable(true);
@@ -252,7 +255,9 @@ public class NotificationTable {
 		TextColumn<Notification> toDateColumn = new TextColumn<Notification>() {
 			@Override
 			public String getValue(Notification note) {
-				return new Date(note.getToDate()).toString();
+				Date toDate =  new Date(note.getToDate());
+				String dateString = DateTimeFormat.getMediumDateFormat().format(toDate);
+				return dateString;
 			}
 		};
 		toDateColumn.setSortable(true);
@@ -272,10 +277,10 @@ public class NotificationTable {
 		RefreshNotificationTbl();
 
 		mainContent.add(notesCellTable);
-		
+
 		tableNotesCtrPanel.add(crtScore);
 		tableNotesCtrPanel.add(delScore);
-		
+
 		mainContent.add(tableNotesCtrPanel);
 
 		return mainContent;
@@ -294,10 +299,16 @@ public class NotificationTable {
 					public void onSuccess(List<Notification> result) {
 						listNotes.clear();
 						listNotes.addAll(result);
-						headerTblPanel.setWidth(notesCellTable.getOffsetWidth() + "");
-						headerTblPanel.setWidgetPosition(myAppLink, headerTblPanel.getOffsetWidth()-myAppLink.getOffsetWidth(), 5);
-						tableNotesCtrPanel.setWidth(notesCellTable.getOffsetWidth() + "");
-						tableNotesCtrPanel.setWidgetPosition(delScore, crtScore.getOffsetWidth() + 5, 5);
+						headerTblPanel.setWidth(notesCellTable.getOffsetWidth()
+								+ "");
+						headerTblPanel.setWidgetPosition(
+								myAppLink,
+								headerTblPanel.getOffsetWidth()
+										- myAppLink.getOffsetWidth(), 5);
+						tableNotesCtrPanel.setWidth(notesCellTable
+								.getOffsetWidth() + "");
+						tableNotesCtrPanel.setWidgetPosition(delScore,
+								crtScore.getOffsetWidth() + 5, 5);
 					}
 				});
 	}
@@ -309,7 +320,5 @@ public class NotificationTable {
 	public String getAppName() {
 		return appName_;
 	}
-
-
 
 }
