@@ -11,7 +11,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 public class FileInfoFactory {
-	private static final String FILEINFO_SERVLET = "http://global-score.appspot.com/gethighscore";
+	private static final String FILEINFO_SERVLET = "http://global-score.appspot.com/globalservices/fileservlet";
 	private String userId_;
 	private RestClient fileRest;
 
@@ -33,6 +33,7 @@ public class FileInfoFactory {
 		
 
 		fileRest.ClearParams();
+		fileRest.AddHeader("requesttype", "fileinfo");
 		fileRest.AddHeader("userid", userId_);
 		if (fileId != null)
 			fileRest.AddHeader("fileid", String.valueOf(fileId));
@@ -99,9 +100,9 @@ public class FileInfoFactory {
 		return fileList;
 
 	}
-	public File Download(FileInfo fileInfo) {
-		FileDownloader downloader = new FileDownloader(fileInfo.getUserId(), fileInfo.getFileName());
-		File retFile = downloader.Download(fileInfo.getId());
+	public File Download(Long fileId) {
+		FileDownloader downloader = new FileDownloader(userId_, fileId);
+		File retFile = downloader.Download();
 		return retFile;
 	}
 }

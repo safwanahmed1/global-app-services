@@ -6,31 +6,33 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class FileDownloader {
-	private static final String DOWNLOAD_SERVLET = "http://global-score.appspot.com/gethighscore";
+	private static final String DOWNLOAD_SERVLET = "http://global-score.appspot.com/globalservices/fileservlet";
 	private String userId_;
-	// private Long fileId_;
+	private Long fileId_;
 	private String fileName_;
 	private RestClient downloadRest;
 
-	public FileDownloader(String userId, String fileName) {
+	public FileDownloader(String userId, Long fileId) {
 		userId_ = userId;
-		fileName_ = fileName;
+		fileId_ = fileId;
 		downloadRest = new RestClient(DOWNLOAD_SERVLET);
 
 	}
 
-	public File Download(Long fileId) {
+	public File Download() {
 
 		downloadRest.ClearParams();
+		downloadRest.AddHeader("requesttype", "download");
 		downloadRest.AddHeader("userid", userId_);
-		downloadRest.AddHeader("fileid", String.valueOf(fileId));
-		File file = new File(fileName_);
+		downloadRest.AddHeader("fileid", String.valueOf(fileId_));
+		File file = null;
 		try {
 			downloadRest.Execute(RequestMethod.POST);
 
 			String strResponse = downloadRest.getResponse();
+			fileName_ = (String) downloadRest.getHttpResponse().getFirstHeader("filename").getValue();
+			file = new File(fileName_);
 
-			
 			/* Convert the Bytes read to a String. */
 			FileOutputStream fos = new FileOutputStream(file);
 			fos.write(strResponse.getBytes());

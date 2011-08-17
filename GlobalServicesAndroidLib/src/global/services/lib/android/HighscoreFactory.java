@@ -10,7 +10,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 public class HighscoreFactory {
 
-	private static final String HIGHSCORE_SERVLET = "http://global-score.appspot.com/highscore";
+	private static final String HIGHSCORE_SERVLET = "http://global-score.appspot.com/globalservices/highscoresevrlet";
 	private static final String REQUEST_TYPE_SUBMIT = "submitscore";
 	private static final String REQUEST_TYPE_GET = "getscore";
 	private String userId_;
