@@ -8,6 +8,7 @@ import global.services.shared.Notification;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -113,19 +114,17 @@ public class CreateNotification {
 	public Widget Initialize() {
 		
 		mainContent.add(new Label("Create new notification"));
-
 		mainContent.add(new Label("Title:"));
 		mainContent.add(txtTitle);
-
 		mainContent.add(new Label("Content:"));
 		mainContent.add(txtContent);
-
 		mainContent.add(new Label("From:"));
 		mainContent.add(dateFrom);
-
 		mainContent.add(new Label("To:"));
 		mainContent.add(dateTo);
-
+		DateTimeFormat dateFormat = DateTimeFormat.getMediumDateFormat();
+		dateTo.setFormat(new DateBox.DefaultFormat(dateFormat)) ;
+		dateFrom.setFormat(new DateBox.DefaultFormat(dateFormat)) ;
 		HorizontalPanel controlButton = new HorizontalPanel();
 		controlButton.add( btnAddNote);
 		controlButton.add(new Button("Cancel", new ClickHandler() {
