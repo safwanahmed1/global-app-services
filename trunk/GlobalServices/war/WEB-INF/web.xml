@@ -23,25 +23,52 @@
 
 
 	<servlet>
-		<servlet-name>filesUploadServlet</servlet-name>
+		<servlet-name>FilesUploadServlet</servlet-name>
 		<servlet-class>global.services.server.servlet.FilesUploadServlet</servlet-class>
 	</servlet>
-	
+
 	<servlet-mapping>
-		<servlet-name>filesUploadServlet</servlet-name>
+		<servlet-name>FilesUploadServlet</servlet-name>
 		<url-pattern>*.gupld</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
-		<servlet-name>filesDownloadServlet</servlet-name>
-		<servlet-class>global.services.server.servlet.FilesDownloadServlet</servlet-class>
+		<servlet-name>FileServlet</servlet-name>
+		<servlet-class>global.services.server.servlet.FileServlet</servlet-class>
 	</servlet>
-	
+
 	<servlet-mapping>
-		<servlet-name>filesDownloadServlet</servlet-name>
-		<url-pattern>/globalservices/download</url-pattern>
+		<servlet-name>FileServlet</servlet-name>
+		<url-pattern>/globalservices/fileservlet</url-pattern>
 	</servlet-mapping>
-	
+
+	<servlet>
+		<servlet-name>ScoreServlet</servlet-name>
+		<servlet-class>global.services.server.servlet.HighscoreServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>ScoreServlet</servlet-name>
+		<url-pattern>/globalservices/scoreservlet</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>AdvertisementServlet</servlet-name>
+		<servlet-class>global.services.server.servlet.AdvertisementServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AdvertisementServlet</servlet-name>
+		<url-pattern>/globalservices/advertisementservlet</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>NotificationServlet</servlet-name>
+		<servlet-class>global.services.server.servlet.NotificationServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>NotificationServlet</servlet-name>
+		<url-pattern>/globalservices/notificationservlet</url-pattern>
+	</servlet-mapping>
+
+	<!-- Login service -->
 	<servlet>
 		<servlet-name>loginService</servlet-name>
 		<servlet-class>global.services.server.rpc.LoginServiceImpl</servlet-class>
@@ -52,6 +79,7 @@
 		<url-pattern>/globalservices/login</url-pattern>
 	</servlet-mapping>
 
+	<!-- RPC server implemention -->
 	<servlet>
 		<servlet-name>AppScoreServiceImpl</servlet-name>
 		<servlet-class>global.services.server.rpc.AppScoreServiceImpl</servlet-class>
@@ -94,7 +122,7 @@
 	</servlet-mapping>
 
 
-<servlet>
+	<servlet>
 		<servlet-name>HighScoreServiceImpl</servlet-name>
 		<servlet-class>global.services.server.rpc.HighScoreServiceImpl</servlet-class>
 	</servlet>
@@ -103,42 +131,9 @@
 		<servlet-name>HighScoreServiceImpl</servlet-name>
 		<url-pattern>/globalservices/highscores</url-pattern>
 	</servlet-mapping>
-	
-	
-	<servlet>
-		<servlet-name>SubmitScore</servlet-name>
-		<servlet-class>global.services.server.servlet.SubmitScoreServlet</servlet-class>
-	</servlet>
 
-	<servlet-mapping>
-		<servlet-name>SubmitScore</servlet-name>
-		<url-pattern>/globalservices/submitscore</url-pattern>
-	</servlet-mapping>
 
-	<servlet>
-		<servlet-name>GetScores</servlet-name>
-		<servlet-class>global.services.server.servlet.GetScoreServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>GetScores</servlet-name>
-		<url-pattern>/globalservices/getscores</url-pattern>
-	</servlet-mapping>
-	<servlet>
-		<servlet-name>GetAdvs</servlet-name>
-		<servlet-class>global.services.server.servlet.GetAdvertisementServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>GetAdvs</servlet-name>
-		<url-pattern>/globalservices/getadvs</url-pattern>
-	</servlet-mapping>
-	<servlet>
-		<servlet-name>GetNotes</servlet-name>
-		<servlet-class>global.services.server.servlet.GetNotificationServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>GetNotes</servlet-name>
-		<url-pattern>/globalservices/getnotes</url-pattern>
-	</servlet-mapping>
+
 
 	<!-- Default page to serve -->
 	<welcome-file-list>
