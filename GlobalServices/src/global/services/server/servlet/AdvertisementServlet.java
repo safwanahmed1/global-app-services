@@ -5,22 +5,46 @@ import global.services.shared.Advertisement;
 
 import java.io.IOException;
 import java.util.List;
+
+import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.*;
 
 
 
 @SuppressWarnings("serial")
-public class GetAdvertisementServlet extends HttpServlet {
+public class AdvertisementServlet extends HttpServlet {
 
-	public void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws IOException {
+	
+	
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		//super.doGet(req, resp);
 		String userId = null;
-		String type = null;
 		//resp.setContentType("text/xml");
 		if (req.getParameterMap().containsKey("userid"))
 			userId = req.getParameter("userid");
 
+		GetAdvertisement(userId, resp);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		//super.doPost(req, resp);
+		String userId = null;
+		//resp.setContentType("text/xml");
+		userId = req.getHeader("userid");
+		GetAdvertisement(userId, resp);
+
+	}
+
+	public void GetAdvertisement(String userId, HttpServletResponse resp)
+			throws IOException {
+		
 		AdvertisementDataBase advDB = new AdvertisementDataBase();
 		ServletOutputStream stream = null ;
 		try {

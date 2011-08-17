@@ -4,21 +4,42 @@ import global.services.server.database.NotificationDataBase;
 import global.services.shared.Notification;
 
 import java.io.IOException;
+
+import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.*;
 
 @SuppressWarnings("serial")
-public class GetNotificationServlet extends HttpServlet {
+public class NotificationServlet extends HttpServlet {
 
-	public void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws IOException {
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		// super.doGet(req, resp);
 		String userId = null;
 		Long appId = null;
-		// resp.setContentType("text/xml");
 		if (req.getParameterMap().containsKey("userid"))
 			userId = req.getParameter("userid");
 		if (req.getParameterMap().containsKey("appid"))
 			appId = Long.parseLong(req.getParameter("appid"));
+		GetNotification(userId, appId, resp);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		// super.doPost(req, resp);
+		String userId = null;
+		Long appId = null;
+		userId = req.getHeader("userid");
+		appId = Long.parseLong(req.getHeader("appid"));
+		GetNotification(userId, appId, resp);
+	}
+
+	public void GetNotification(String userId, Long appId,
+			HttpServletResponse resp) throws IOException {
 
 		NotificationDataBase noteDB = new NotificationDataBase();
 		ServletOutputStream stream = null;

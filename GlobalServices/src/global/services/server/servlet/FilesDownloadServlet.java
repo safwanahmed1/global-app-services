@@ -41,6 +41,7 @@ public class FilesDownloadServlet extends HttpServlet {
 		fileDownload.SelectFile(Long.parseLong(fileId));
 		response.reset();
 		response.setContentType(fileDownload.getFileType());
+		response.setHeader("filename", fileDownload.getName());
 		ServletOutputStream outStream;
 		try {
 			outStream = response.getOutputStream();
