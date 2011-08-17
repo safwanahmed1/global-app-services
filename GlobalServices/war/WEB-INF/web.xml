@@ -34,7 +34,7 @@
 
 	<servlet>
 		<servlet-name>FileServlet</servlet-name>
-		<servlet-class>global.services.server.servlet.FileServlet</servlet-class>
+		<servlet-class>global.services.server.servlet.FilesServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
@@ -52,19 +52,19 @@
 		<url-pattern>/globalservices/scoreservlet</url-pattern>
 	</servlet-mapping>
 	<servlet>
-		<servlet-name>AdvertisementServlet</servlet-name>
+		<servlet-name>AdvServlet</servlet-name>
 		<servlet-class>global.services.server.servlet.AdvertisementServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>AdvertisementServlet</servlet-name>
+		<servlet-name>AdvServlet</servlet-name>
 		<url-pattern>/globalservices/advertisementservlet</url-pattern>
 	</servlet-mapping>
 	<servlet>
-		<servlet-name>NotificationServlet</servlet-name>
+		<servlet-name>NoteServlet</servlet-name>
 		<servlet-class>global.services.server.servlet.NotificationServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>NotificationServlet</servlet-name>
+		<servlet-name>NoteServlet</servlet-name>
 		<url-pattern>/globalservices/notificationservlet</url-pattern>
 	</servlet-mapping>
 
