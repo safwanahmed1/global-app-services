@@ -1,6 +1,6 @@
 package global.services.sample.android;
 
-import global.sample.android.R;
+import global.services.sample.android.R;
 import android.app.ListActivity;
 import android.os.Bundle;
 
