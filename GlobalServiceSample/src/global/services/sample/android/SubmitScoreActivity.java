@@ -1,7 +1,7 @@
 package global.services.sample.android;
 
-import global.sample.android.R;
-import global.score.lib.android.GlobalScore;
+import global.services.lib.android.Highscore;
+import global.services.sample.android.R;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -21,8 +21,8 @@ public class SubmitScoreActivity extends Activity {
 
 			@Override
 			public void onClick(View arg0) {
-				GlobalScore gScore = new GlobalScore("Global");
-				
+				Highscore gScore = new Highscore(getResources().getString(R.string.userid), 48001);
+				/*
 				TextView txtPlayer = (TextView) findViewById(R.id.editPlayer);
 				gScore.setLevel(txtPlayer.getText().toString());
 				
@@ -44,7 +44,9 @@ public class SubmitScoreActivity extends Activity {
 				TextView txtComment = (TextView) findViewById(R.id.editComment);
 				gScore.setComment(txtComment.getText().toString());
 				
-				gScore.SubmitScore();
+				//gScore.SubmitScore();
+				 * 
+				 */
 
 			}
 

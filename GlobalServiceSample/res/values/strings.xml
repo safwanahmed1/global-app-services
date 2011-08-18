@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="hello">Hello World, GlobalScoreSample!</string>
-    <string name="app_name">GlobalScoreSample</string>
+    <string name="app_name">GlobalServicesSample</string>
+    <string name="userid">quanpn82@gmail.com</string>
+    <string name="appid">48001</string>
+     <string-array name="menus_array">
+        <item>Highscore</item>
+        <item>Advertisement</item>
+        <item>Notification</item>
+        <item>File</item>
+    </string-array>
 </resources>
