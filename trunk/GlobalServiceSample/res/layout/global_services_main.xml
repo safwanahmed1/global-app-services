@@ -1,5 +1,9 @@
 
-    <LinearLayout android:id="@+id/linearLayout1" android:layout_width="fill_parent" android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android">
-        <ImageView android:src="@drawable/global_services_logo" android:id="@+id/image_logo" android:layout_height="wrap_content" android:layout_width="fill_parent"></ImageView>
-        <ListView android:layout_weight="1" android:id="@+id/list_menu" android:layout_height="fill_parent" android:layout_width="fill_parent"></ListView>
-    </LinearLayout>
+<LinearLayout android:id="@+id/linearLayout2"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<ListView android:id="@+id/list_menu" android:layout_height="fill_parent"
+		android:layout_width="fill_parent"></ListView>
+
+</LinearLayout>
