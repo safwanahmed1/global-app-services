@@ -2,6 +2,10 @@
 <resources>
     <string name="hello">Hello World, GlobalScoreSample!</string>
     <string name="app_name">GlobalServicesSample</string>
+    <string name="app_name_highscore">GlobalServicesSample - Highscore</string>
+    <string name="app_name_adv">GlobalServicesSample - Advertisement</string>
+    <string name="app_name_note">GlobalServicesSample - Notification</string>
+    <string name="app_name_file">GlobalServicesSample - File</string>
     <string name="userid">quanpn82@gmail.com</string>
     <string name="appid">48001</string>
      <string-array name="menus_array">
@@ -9,5 +13,6 @@
         <item>Advertisement</item>
         <item>Notification</item>
         <item>File</item>
+        <item>Quit</item>
     </string-array>
 </resources>

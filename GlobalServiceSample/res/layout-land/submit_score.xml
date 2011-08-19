@@ -71,7 +71,7 @@
 			<TextView android:text="Comment" android:textSize="20dp"
 				android:width="120dp" android:id="@+id/textView1"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-			<EditText android:width="4700dp" android:id="@+id/editComment"
+			<EditText android:layout_width="4700dp" android:id="@+id/editComment"
 				android:layout_height="wrap_content" android:singleLine="true"></EditText>
 
 			<LinearLayout android:id="@+id/linearLayout3"
