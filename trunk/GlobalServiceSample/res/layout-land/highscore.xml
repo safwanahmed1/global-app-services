@@ -11,7 +11,7 @@
 			<TabWidget android:id="@android:id/tabs"
 				android:layout_height="wrap_content" android:layout_width="wrap_content"></TabWidget>
 			<FrameLayout android:id="@android:id/tabcontent"
-				android:layout_height="wrap_content" android:layout_width="wrap_content"></FrameLayout>
+				android:layout_height="wrap_content" android:layout_width="fill_parent"></FrameLayout>
 		</LinearLayout>
 
 	</TabHost>
