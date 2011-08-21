@@ -67,11 +67,21 @@ public class HighscoreActivity extends TabActivity {
     private View createIndicatorView(TabHost tabHost, CharSequence label, Drawable icon) {
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
+        /*
+        Resources res = getResources();
+		Configuration cfg = res.getConfiguration();
+		boolean hor = cfg.orientation == Configuration.ORIENTATION_LANDSCAPE;
+		 View tabIndicator = null;
+		if (hor) {
+			tabIndicator = inflater.inflate(R.layout.tab_indicator_vertical,
+	                tabHost.getTabWidget(), // tab widget is the parent
+	                false); // no inflate params
+		} else {
+		*/
         View tabIndicator = inflater.inflate(R.layout.tab_indicator,
                 tabHost.getTabWidget(), // tab widget is the parent
                 false); // no inflate params
-
+		//}
         final TextView tv = (TextView) tabIndicator.findViewById(R.id.title);
         tv.setText(label);
 

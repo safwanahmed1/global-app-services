@@ -12,8 +12,9 @@
 				<TextView android:text="Player" android:textSize="20dp"
 					android:width="100dp" android:id="@+id/textView1"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-				<EditText android:width="210dp" android:id="@+id/editPlayer"
-					android:layout_width="wrap_content" android:layout_height="wrap_content" android:singleLine="true"></EditText>
+				<EditText android:id="@+id/editPlayer"
+					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:singleLine="true"></EditText>
 
 			</LinearLayout>
 			<LinearLayout android:id="@+id/linearLayout3"
@@ -22,8 +23,8 @@
 				<TextView android:text="Level" android:textSize="20dp"
 					android:width="100dp" android:id="@+id/textView1"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-				<EditText android:width="210dp" android:id="@+id/editLevel"
-					android:layout_width="wrap_content" android:layout_height="wrap_content" android:singleLine="true"></EditText>
+				<EditText android:id="@+id/editLevel" android:layout_width="fill_parent"
+					android:layout_height="wrap_content" android:singleLine="true"></EditText>
 			</LinearLayout>
 			<LinearLayout android:id="@+id/linearLayout3"
 				android:orientation="horizontal" android:layout_width="fill_parent"
@@ -31,8 +32,8 @@
 				<TextView android:text="Highscore" android:textSize="20dp"
 					android:width="100dp" android:id="@+id/textView1"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-				<EditText android:width="210dp" android:id="@+id/editScore"
-					android:layout_width="wrap_content" android:layout_height="wrap_content" android:singleLine="true"></EditText>
+				<EditText android:id="@+id/editScore" android:layout_width="fill_parent"
+					android:layout_height="wrap_content" android:singleLine="true"></EditText>
 			</LinearLayout>
 			<LinearLayout android:id="@+id/linearLayout3"
 				android:orientation="horizontal" android:layout_width="fill_parent"
@@ -40,17 +41,20 @@
 				<TextView android:text="During" android:textSize="20dp"
 					android:width="100dp" android:id="@+id/textView1"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-				<EditText android:width="210dp" android:id="@+id/editDuring"
-					android:layout_width="wrap_content" android:layout_height="wrap_content" android:singleLine="true"></EditText>
+				<EditText android:id="@+id/editDuring"
+					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:singleLine="true"></EditText>
 			</LinearLayout>
 			<LinearLayout android:id="@+id/linearLayout3"
 				android:orientation="horizontal" android:layout_width="fill_parent"
 				android:layout_height="wrap_content">
 				<TextView android:text="Date" android:textSize="20dp"
-					android:width="100dp" android:id="@+id/textView1"
+					android:width="60dp" android:id="@+id/textView1"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-				<EditText android:width="210dp" android:id="@+id/editDate"
-					android:layout_width="wrap_content" android:layout_height="wrap_content" android:singleLine="true"></EditText>
+				<DatePicker android:id="@+id/editDate"
+					android:layout_width="fill_parent" android:layout_height="wrap_content"></DatePicker>
+
+
 			</LinearLayout>
 			<LinearLayout android:id="@+id/linearLayout3"
 				android:orientation="horizontal" android:layout_width="fill_parent"
@@ -58,21 +62,22 @@
 				<TextView android:text="Location" android:textSize="20dp"
 					android:width="100dp" android:id="@+id/textView1"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-				<EditText android:width="210dp" android:id="@+id/editLocation"
-					android:layout_width="wrap_content" android:layout_height="wrap_content" android:singleLine="true"></EditText>
+				<EditText android:id="@+id/editLocation"
+					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:singleLine="true"></EditText>
 			</LinearLayout>
 
 			<TextView android:text="Comment" android:textSize="20dp"
 				android:width="100dp" android:id="@+id/textView1"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-			<EditText android:width="310dp" android:id="@+id/editComment"
-				android:layout_width="fill_parent" android:layout_height="wrap_content" ></EditText>
+			<EditText android:id="@+id/editComment"
+				android:layout_width="fill_parent" android:layout_height="wrap_content"></EditText>
 
 			<LinearLayout android:id="@+id/linearLayout3"
 				android:orientation="horizontal" android:layout_width="fill_parent"
 				android:layout_height="wrap_content" android:gravity="center_horizontal">
 				<Button android:layout_height="wrap_content"
-					android:layout_width="100dp" android:text="Button" android:id="@+id/btnSubmit"></Button>
+					android:layout_width="100dp" android:text="Submit" android:id="@+id/btnSubmit"></Button>
 			</LinearLayout>
 
 
