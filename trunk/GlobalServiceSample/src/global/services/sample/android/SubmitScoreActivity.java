@@ -1,5 +1,8 @@
 package global.services.sample.android;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import global.services.lib.android.Highscore;
 import global.services.lib.android.HighscoreFactory;
 import global.services.sample.android.R;
@@ -43,7 +46,10 @@ public class SubmitScoreActivity extends Activity {
 								.toString()));
 
 				DatePicker dpkDate = (DatePicker) findViewById(R.id.editDate);
-				gScore.setDate(dpkDate.getDrawingTime());
+				//dpkDate.get
+				Date date = new Date(dpkDate.getYear() - 1900, dpkDate.getMonth(), dpkDate.getDayOfMonth());
+				
+				gScore.setDate(date.getTime());
 
 				TextView txtLocation = (TextView) findViewById(R.id.editLocation);
 				gScore.setLocation(txtLocation.getText().toString());

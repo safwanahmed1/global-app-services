@@ -15,7 +15,7 @@ public class GetScoreActivity extends ListActivity {
 	    public void onCreate(Bundle savedInstanceState) {
 	        super.onCreate(savedInstanceState);
 	        setContentView(R.layout.get_score);
-	        
+	        /*
 	        HighscoreFactory scoreFactory = new HighscoreFactory(
 					getResources().getString(R.string.userid), Long
 							.parseLong(getResources().getString(
@@ -24,7 +24,9 @@ public class GetScoreActivity extends ListActivity {
 			ListView scoreView = getListView();
 			scoreView.setAdapter(new ArrayAdapter<Highscore>(this, R.layout.menu_item,
 					scoreList){
+					
 				
 			});
+			*/
 	 }
 }

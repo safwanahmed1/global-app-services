@@ -1,36 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="global.services.sample.android"
-      android:versionCode="1"
-      android:versionName="1.0">
-    <uses-sdk android:minSdkVersion="4" />
+	package="global.services.sample.android" android:versionCode="1"
+	android:versionName="1.0">
+	<uses-sdk android:minSdkVersion="4" />
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+	<application android:icon="@drawable/icon" android:label="@string/app_name">
+		<activity android:name=".GlobalServicesSample" android:label="@string/app_name">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+		<activity android:name=".HighscoreActivity" android:label="@string/app_name_highscore">
+		</activity>
+		<activity android:name=".GetScoreActivity" android:label="@string/app_name">
+		</activity>
+		<activity android:name=".SubmitScoreActivity" android:label="@string/app_name">
+		</activity>
+		<activity android:name=".AdvertisementActivity"
+			android:label="@string/app_name_adv">
+		</activity>
+		<activity android:name=".NotificationActivity" android:label="@string/app_name_note">
+		</activity>
+		<activity android:name=".FilesActivity" android:label="@string/app_name_file">
+		</activity>
 
-    <application android:icon="@drawable/icon" android:label="@string/app_name">
-        <activity android:name=".GlobalServicesSample"
-                  android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".HighscoreActivity"
-                  android:label="@string/app_name_highscore">
-        </activity>
-        <activity android:name=".GetScoreActivity"
-                  android:label="@string/app_name">
-        </activity>
-        <activity android:name=".SubmitScoreActivity"
-                  android:label="@string/app_name">
-        </activity>
-        <activity android:name=".AdvertisementActivity"
-                  android:label="@string/app_name_adv">
-        </activity>
-        <activity android:name=".NotificationActivity"
-                  android:label="@string/app_name_note">
-        </activity>
-        <activity android:name=".FilesActivity"
-                  android:label="@string/app_name_file">
-        </activity>
-
-    </application>
+	</application>
 </manifest>

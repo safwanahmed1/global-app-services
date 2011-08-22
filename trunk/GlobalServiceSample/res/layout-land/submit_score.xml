@@ -52,7 +52,7 @@
 				<TextView android:text="Date" android:textSize="20dp"
 					android:width="120dp" android:id="@+id/textView1"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-				<DatePicker android:id="@+id/datePicker1"
+				<DatePicker android:id="@+id/editDate"
 					android:layout_width="fill_parent" android:layout_height="wrap_content"></DatePicker>
 			</LinearLayout>
 			<LinearLayout android:id="@+id/linearLayout3"
