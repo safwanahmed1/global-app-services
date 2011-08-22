@@ -41,7 +41,7 @@ public class HighscoreServlet extends HttpServlet {
 		String location = req.getHeader("location");
 		String comment = req.getHeader("comment");
 		Long date = Long.parseLong(req.getHeader("date"));
-		String avatar = req.getHeader("avatar");
+		//String avatar = req.getHeader("avatar"); not support yet
 
 		if ((gameID != null) && (player != null)) {
 			HighScore highscore = new HighScore(userID, gameID);
@@ -57,8 +57,10 @@ public class HighscoreServlet extends HttpServlet {
 				highscore.setDuring(during);
 			if (date != null)
 				highscore.setDate(date);
-			if (avatar != null)
+			/* Not support yet
+			if (avatar != null) 
 				highscore.setAvatar(avatar);
+			*/
 			ScoreDataBase scoreDB = new ScoreDataBase();
 			scoreDB.InsertScore(highscore);
 		}
