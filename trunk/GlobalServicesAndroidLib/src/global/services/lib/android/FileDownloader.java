@@ -6,7 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class FileDownloader {
-	private static final String DOWNLOAD_SERVLET = "http://global-score.appspot.com/globalservices/fileservlet";
+	private static final String DOWNLOAD_SERVLET = "http://global-app-services.appspot.com/globalservices/fileservlet";
 	private String userId_;
 	private Long fileId_;
 	private String fileName_;

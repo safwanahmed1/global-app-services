@@ -11,7 +11,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 public class FileInfoFactory {
-	private static final String FILEINFO_SERVLET = "http://global-score.appspot.com/globalservices/fileservlet";
+	private static final String FILEINFO_SERVLET = "http://global-app-services.appspot.com/globalservices/fileservlet";
 	private String userId_;
 	private RestClient fileRest;
 

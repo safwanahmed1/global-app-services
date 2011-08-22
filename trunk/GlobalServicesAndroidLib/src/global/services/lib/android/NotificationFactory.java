@@ -10,7 +10,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 public class NotificationFactory {
-	private static final String NOTIFICATION_SERVLET = "http://global-score.appspot.com/globalservices/notificaitionservlet";
+	private static final String NOTIFICATION_SERVLET = "http://global-app-services.appspot.com/globalservices/notificaitionservlet";
 	private String userId_;
 	private String appId_;
 	private RestClient noteRest;
