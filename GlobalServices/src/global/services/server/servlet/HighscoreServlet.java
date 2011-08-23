@@ -1,5 +1,4 @@
 package global.services.server.servlet;
-
 import global.services.server.database.ScoreDataBase;
 import global.services.shared.HighScore;
 
@@ -10,20 +9,26 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.*;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+
 @SuppressWarnings("serial")
 public class HighscoreServlet extends HttpServlet {
-
+	 private static Logger logger = Logger.getLogger("HighscoreServlet");
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		// super.doPost(req, resp);
+		log("Do Post method.");
 		String reqType = req.getHeader("requesttype");
 		if ((reqType != null) && (reqType == "submitscore")) {
+			logger.log(Level.SEVERE, "requesttype = submitscore");
 			SubmitScore(req, resp);
 		}
 		if ((reqType != null) && (reqType == "getscore")) {
-
+			logger.log(Level.SEVERE, "requesttype = getscore");
 			GetScore(req, resp);
 		}
 	}
@@ -33,7 +38,9 @@ public class HighscoreServlet extends HttpServlet {
 		// UserService userService = UserServiceFactory.getUserService();
 		// User user = userService.getCurrentUser();
 		String userID = req.getHeader("userid");
+		logger.log(Level.SEVERE, "userid = " + userID);
 		Long gameID = Long.parseLong(req.getHeader("appid"));
+		logger.log(Level.SEVERE, "appid = " + gameID);
 		String subBoard = req.getHeader("subboard");
 		String player = req.getHeader("player");
 		Integer highScore = Integer.parseInt(req.getHeader("score"));
