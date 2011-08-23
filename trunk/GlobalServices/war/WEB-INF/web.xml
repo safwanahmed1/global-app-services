@@ -133,8 +133,6 @@
 	</servlet-mapping>
 
 
-
-
 	<!-- Default page to serve -->
 	<welcome-file-list>
 		<welcome-file>GlobalServices.html</welcome-file>
