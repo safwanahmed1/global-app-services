@@ -2,9 +2,13 @@
 <module rename-to='globalservices'>
 	<!-- Inherit the core Web Toolkit stuff. -->
 	<inherits name='com.google.gwt.user.User' />
-
-
+	<inherits name="com.google.gwt.logging.Logging" />
 	<inherits name="com.google.gwt.xml.XML" />
+	
+	<set-property name="gwt.logging.logLevel" value="SEVERE" />
+	<set-property name="gwt.logging.enabled" value="TRUE" />
+	<!--  <set-property name="gwt.logging.consoleHandler" value="TRUE" />  -->
+	
 	<replace-with
 		class="gwtupload.client.DecoratedFileUpload.DecoratedFileUploadImplClick">
 		<when-type-is
