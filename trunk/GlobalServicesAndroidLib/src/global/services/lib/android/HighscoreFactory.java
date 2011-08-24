@@ -20,25 +20,26 @@ public class HighscoreFactory {
 		userId_ = userId;
 		appId_ = appId;
 		highScoreRest = new RestClient(HIGHSCORE_SERVLET);
+		highScoreRest.AddHeader("content_type", "text/plain; charset=\"UTF-8\"");
 		
 	}
 	
 	public void SubmitScore(Highscore score) {
 		highScoreRest.ClearParams();
-		highScoreRest.AddHeader("requesttype", REQUEST_TYPE_SUBMIT);
-		highScoreRest.AddHeader("userid", score.getUserID());
-		highScoreRest.AddHeader("appid", String.valueOf(score.getGameID()));
-		highScoreRest.AddHeader("subboard", score.getSubBoard());
-		highScoreRest.AddHeader("player", score.getPlayer());
-		highScoreRest.AddHeader("score", String.valueOf(score.getHighScore()));
-		highScoreRest.AddHeader("during", String.valueOf(score.getDuring()));
-		highScoreRest.AddHeader("location", score.getLocation());
-		highScoreRest.AddHeader("comment", score.getComment());
-		highScoreRest.AddHeader("date", String.valueOf(score.getDate()));
-		//highScoreRest.AddHeader("avatar", score.getAvatar()); Not support yet
+		highScoreRest.AddParam("requesttype", REQUEST_TYPE_SUBMIT);
+		highScoreRest.AddParam("userid", score.getUserID());
+		highScoreRest.AddParam("appid", String.valueOf(score.getGameID()));
+		highScoreRest.AddParam("subboard", score.getSubBoard());
+		highScoreRest.AddParam("player", score.getPlayer());
+		highScoreRest.AddParam("score", String.valueOf(score.getHighScore()));
+		highScoreRest.AddParam("during", String.valueOf(score.getDuring()));
+		highScoreRest.AddParam("location", score.getLocation());
+		highScoreRest.AddParam("comment", score.getComment());
+		highScoreRest.AddParam("date", String.valueOf(score.getDate()));
+		//highScoreRest.AddParam("avatar", score.getAvatar()); Not support yet
 		/*
 		long now = System.currentTimeMillis();
-		highScoreRest.AddHeader("Date", String.valueOf(now));
+		highScoreRest.AddParam("Date", String.valueOf(now));
 		*/
 
 		try {
@@ -64,9 +65,9 @@ public class HighscoreFactory {
 		String date;
 
 		highScoreRest.ClearParams();
-		highScoreRest.AddHeader("requesttype", REQUEST_TYPE_GET);
-		highScoreRest.AddHeader("userid", userId_);
-		highScoreRest.AddHeader("appid", String.valueOf(appId_));
+		highScoreRest.AddParam("requesttype", REQUEST_TYPE_GET);
+		highScoreRest.AddParam("userid", userId_);
+		highScoreRest.AddParam("appid", String.valueOf(appId_));
 
 		try {
 			highScoreRest.Execute(RequestMethod.POST);

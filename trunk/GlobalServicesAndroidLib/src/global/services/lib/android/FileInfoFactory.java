@@ -33,10 +33,10 @@ public class FileInfoFactory {
 		
 
 		fileRest.ClearParams();
-		fileRest.AddHeader("requesttype", "fileinfo");
-		fileRest.AddHeader("userid", userId_);
+		fileRest.AddParam("requesttype", "fileinfo");
+		fileRest.AddParam("userid", userId_);
 		if (fileId != null)
-			fileRest.AddHeader("fileid", String.valueOf(fileId));
+			fileRest.AddParam("fileid", String.valueOf(fileId));
 
 		try {
 			fileRest.Execute(RequestMethod.POST);
