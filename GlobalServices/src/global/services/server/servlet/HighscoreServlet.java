@@ -1,34 +1,32 @@
 package global.services.server.servlet;
 import global.services.server.database.ScoreDataBase;
 import global.services.shared.HighScore;
-
 import java.io.IOException;
 import java.util.List;
-
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.*;
-
-import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 @SuppressWarnings("serial")
 public class HighscoreServlet extends HttpServlet {
-	 private static Logger logger = Logger.getLogger("HighscoreServlet");
+	 private static Logger logger = Logger.getLogger(HighscoreServlet.class.getName());
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		// super.doPost(req, resp);
-		log("Do Post method.");
-		String reqType = req.getHeader("requesttype");
+		logger.warning("Do post method of HighscoreServlet.");
+		
+		//String reqType = req.getParameter("requesttype");
+		String reqType = req.getParameter("requesttype");
+		logger.warning("reqType :" + reqType);
 		if ((reqType != null) && (reqType == "submitscore")) {
-			logger.log(Level.SEVERE, "requesttype = submitscore");
+			logger.warning("requesttype = submitscore");
 			SubmitScore(req, resp);
 		}
 		if ((reqType != null) && (reqType == "getscore")) {
-			logger.log(Level.SEVERE, "requesttype = getscore");
+			logger.warning("requesttype = getscore");
 			GetScore(req, resp);
 		}
 	}
@@ -37,18 +35,18 @@ public class HighscoreServlet extends HttpServlet {
 		resp.setContentType("text/plain");
 		// UserService userService = UserServiceFactory.getUserService();
 		// User user = userService.getCurrentUser();
-		String userID = req.getHeader("userid");
-		logger.log(Level.SEVERE, "userid = " + userID);
-		Long gameID = Long.parseLong(req.getHeader("appid"));
-		logger.log(Level.SEVERE, "appid = " + gameID);
-		String subBoard = req.getHeader("subboard");
-		String player = req.getHeader("player");
-		Integer highScore = Integer.parseInt(req.getHeader("score"));
-		Long during = Long.parseLong(req.getHeader("during"));
-		String location = req.getHeader("location");
-		String comment = req.getHeader("comment");
-		Long date = Long.parseLong(req.getHeader("date"));
-		//String avatar = req.getHeader("avatar"); not support yet
+		String userID = req.getParameter("userid");
+		logger.warning("userid = " + userID);
+		Long gameID = Long.parseLong(req.getParameter("appid"));
+		logger.warning("appid = " + gameID);
+		String subBoard = req.getParameter("subboard");
+		String player = req.getParameter("player");
+		Integer highScore = Integer.parseInt(req.getParameter("score"));
+		Long during = Long.parseLong(req.getParameter("during"));
+		String location = req.getParameter("location");
+		String comment = req.getParameter("comment");
+		Long date = Long.parseLong(req.getParameter("date"));
+		//String avatar = req.getParameter("avatar"); not support yet
 
 		if ((gameID != null) && (player != null)) {
 			HighScore highscore = new HighScore(userID, gameID);
@@ -77,8 +75,8 @@ public class HighscoreServlet extends HttpServlet {
 			throws IOException {
 		String userId = null;
 		Long appId = null;
-		userId = req.getHeader("userid");
-		appId = Long.parseLong(req.getHeader("appid"));
+		userId = req.getParameter("userid");
+		appId = Long.parseLong(req.getParameter("appid"));
 
 		ScoreDataBase scoreDB = new ScoreDataBase();
 		ServletOutputStream stream = null;

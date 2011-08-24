@@ -34,8 +34,8 @@ public class NotificationServlet extends HttpServlet {
 		// super.doPost(req, resp);
 		String userId = null;
 		Long appId = null;
-		userId = req.getHeader("userid");
-		appId = Long.parseLong(req.getHeader("appid"));
+		userId = req.getParameter("userid");
+		appId = Long.parseLong(req.getParameter("appid"));
 		GetNotification(userId, appId, resp);
 	}
 
