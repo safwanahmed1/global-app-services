@@ -34,7 +34,7 @@ public class SubmitScoreActivity extends Activity {
 				gScore.setPlayer(txtPlayer.getText().toString());
 
 				TextView txtLevel = (TextView) findViewById(R.id.editLevel);
-				gScore.setPlayer(txtLevel.getText().toString());
+				gScore.setSubBoard(txtLevel.getText().toString());
 
 				TextView txtScore = (TextView) findViewById(R.id.editScore);
 				gScore.setHighScore(Integer.parseInt(txtScore.getText()
