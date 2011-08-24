@@ -35,9 +35,9 @@ public class AdvertisementFactory {
 		String storeUrl;
 
 		advRest.ClearParams();
-		advRest.AddHeader("userid", userId_);
+		advRest.AddParam("userid", userId_);
 		if (appId != null)
-			advRest.AddHeader("appid", String.valueOf(appId));
+			advRest.AddParam("appid", String.valueOf(appId));
 
 		try {
 			advRest.Execute(RequestMethod.POST);

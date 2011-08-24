@@ -22,9 +22,9 @@ public class FileDownloader {
 	public File Download() {
 
 		downloadRest.ClearParams();
-		downloadRest.AddHeader("requesttype", "download");
-		downloadRest.AddHeader("userid", userId_);
-		downloadRest.AddHeader("fileid", String.valueOf(fileId_));
+		downloadRest.AddParam("requesttype", "download");
+		downloadRest.AddParam("userid", userId_);
+		downloadRest.AddParam("fileid", String.valueOf(fileId_));
 		File file = null;
 		try {
 			downloadRest.Execute(RequestMethod.POST);
