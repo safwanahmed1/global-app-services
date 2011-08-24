@@ -37,7 +37,7 @@ public class AdvertisementServlet extends HttpServlet {
 		//super.doPost(req, resp);
 		String userId = null;
 		//resp.setContentType("text/xml");
-		userId = req.getHeader("userid");
+		userId = req.getParameter("userid");
 		GetAdvertisement(userId, resp);
 
 	}

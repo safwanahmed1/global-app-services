@@ -35,9 +35,9 @@ public class FilesServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) {
-		String reqType = request.getHeader("requesttype");
-		String userId = request.getHeader("userid");
-		String fileId = request.getHeader("fileid");
+		String reqType = request.getParameter("requesttype");
+		String userId = request.getParameter("userid");
+		String fileId = request.getParameter("fileid");
 		if (reqType == "download") {
 			Download(userId, Long.parseLong(fileId), response);
 		}
