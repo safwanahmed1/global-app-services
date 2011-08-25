@@ -137,7 +137,6 @@ public class RestClient
             {
                 request.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
             }
- 
             resp = executeRequest(request, url);
             break;
         }

@@ -20,7 +20,6 @@ public class HighscoreFactory {
 		userId_ = userId;
 		appId_ = appId;
 		highScoreRest = new RestClient(HIGHSCORE_SERVLET);
-		highScoreRest.AddHeader("content_type", "text/plain; charset=\"UTF-8\"");
 		
 	}
 	
