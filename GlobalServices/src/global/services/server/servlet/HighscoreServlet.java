@@ -21,11 +21,11 @@ public class HighscoreServlet extends HttpServlet {
 		//String reqType = req.getParameter("requesttype");
 		String reqType = req.getParameter("requesttype");
 		logger.warning("reqType :" + reqType);
-		if ((reqType != null) && (reqType == "submitscore")) {
+		if ((reqType != null) && ("submitscore".equals(reqType))) {
 			logger.warning("requesttype = submitscore");
 			SubmitScore(req, resp);
 		}
-		if ((reqType != null) && (reqType == "getscore")) {
+		if ((reqType != null) && ("getscore".equals(reqType))) {
 			logger.warning("requesttype = getscore");
 			GetScore(req, resp);
 		}
@@ -52,6 +52,8 @@ public class HighscoreServlet extends HttpServlet {
 			HighScore highscore = new HighScore(userID, gameID);
 			if (subBoard != null)
 				highscore.setSubBoard(subBoard);
+			if (player != null)
+				highscore.setPlayer(player);
 			if (highScore != null)
 				highscore.setHighScore(highScore);
 			if (comment != null)
