@@ -1,4 +1,5 @@
 package global.services.server.servlet;
+
 import global.services.server.database.ScoreDataBase;
 import global.services.shared.HighScore;
 import java.io.IOException;
@@ -10,15 +11,17 @@ import java.util.logging.Logger;
 
 @SuppressWarnings("serial")
 public class HighscoreServlet extends HttpServlet {
-	 private static Logger logger = Logger.getLogger(HighscoreServlet.class.getName());
+	private static Logger logger = Logger.getLogger(HighscoreServlet.class
+			.getName());
+
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		// super.doPost(req, resp);
 		logger.warning("Do post method of HighscoreServlet.");
-		
-		//String reqType = req.getParameter("requesttype");
+
+		// String reqType = req.getParameter("requesttype");
 		String reqType = req.getParameter("requesttype");
 		logger.warning("reqType :" + reqType);
 		if ((reqType != null) && ("submitscore".equals(reqType))) {
@@ -46,7 +49,7 @@ public class HighscoreServlet extends HttpServlet {
 		String location = req.getParameter("location");
 		String comment = req.getParameter("comment");
 		Long date = Long.parseLong(req.getParameter("date"));
-		//String avatar = req.getParameter("avatar"); not support yet
+		// String avatar = req.getParameter("avatar"); not support yet
 
 		if ((gameID != null) && (player != null)) {
 			HighScore highscore = new HighScore(userID, gameID);
@@ -64,10 +67,9 @@ public class HighscoreServlet extends HttpServlet {
 				highscore.setDuring(during);
 			if (date != null)
 				highscore.setDate(date);
-			/* Not support yet
-			if (avatar != null) 
-				highscore.setAvatar(avatar);
-			*/
+			/*
+			 * Not support yet if (avatar != null) highscore.setAvatar(avatar);
+			 */
 			ScoreDataBase scoreDB = new ScoreDataBase();
 			scoreDB.InsertScore(highscore);
 		}
@@ -96,8 +98,15 @@ public class HighscoreServlet extends HttpServlet {
 
 				for (HighScore score : highscore) {
 					stream.print("<score ");
+					if (score.getId() != null)
+						stream.print(" id=\"" + score.getId() + "\"");
+					if (score.getUserID() != null)
+						stream.print(" userid=\"" + score.getUserID() + "\"");
 					if (score.getSubBoard() != null)
 						stream.print(" subboard=\"" + score.getSubBoard()
+								+ "\"");
+					if (score.getGameID() != null)
+						stream.print(" appid=\"" + score.getGameID()
 								+ "\"");
 					if (score.getPlayer() != null)
 						stream.print(" player=\"" + score.getPlayer() + "\"");
@@ -114,8 +123,7 @@ public class HighscoreServlet extends HttpServlet {
 						stream.print(" location=\"" + score.getLocation()
 								+ "\"");
 					/*
-					 * Not support yet 
-					 * if (score.getAvatar() != null)
+					 * Not support yet if (score.getAvatar() != null)
 					 * stream.print(" avatar=\"" + score.getAvatar() + "\"");
 					 */
 					stream.println("/>");
