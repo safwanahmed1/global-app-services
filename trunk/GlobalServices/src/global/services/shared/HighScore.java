@@ -39,9 +39,9 @@ public class HighScore implements Serializable{
     @Persistent
     private String location_;
     @Persistent
-    private long during_;
+    private Long during_;
     @Persistent
-    private long date_;
+    private Long date_;
     @Persistent
     private String avatar_;
     
@@ -70,7 +70,7 @@ public class HighScore implements Serializable{
 	public void setUserID(String userId) {
 		this.userId_ = userId;
 	}
-	public long getGameID() {
+	public Long getGameID() {
 		return appId_;
 	}
 	public void setGameID(long gameID) {
@@ -100,16 +100,16 @@ public class HighScore implements Serializable{
 	public void setLocation(String location) {
 		this.location_ = location;
 	}
-	public long getDuring() {
+	public Long getDuring() {
 		return during_;
 	}
-	public void setDuring(long during) {
+	public void setDuring(Long during) {
 		this.during_ = during;
 	}
-	public long getDate() {
+	public Long getDate() {
 		return date_;
 	}
-	public void setDate(long date) {
+	public void setDate(Long date) {
 		this.date_ = date;
 	}
 	public String getAvatar() {
