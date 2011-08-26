@@ -8,6 +8,8 @@
     <string name="app_name_file">GlobalServicesSample - File</string>
     <string name="userid">quanpn82@gmail.com</string>
     <string name="appid">54001</string>
+    <string name="refresh_score">Refresh</string>
+    
      <string-array name="menus_array">
         <item>Highscore</item>
         <item>Advertisement</item>
