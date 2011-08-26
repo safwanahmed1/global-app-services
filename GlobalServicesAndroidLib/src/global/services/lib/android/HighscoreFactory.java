@@ -47,6 +47,20 @@ public class HighscoreFactory {
 			// textView.setText(e.getMessage());
 		}
 	}
+	public String GetScoresXMLContent() {
+		highScoreRest.ClearParams();
+		highScoreRest.AddParam("requesttype", REQUEST_TYPE_GET);
+		highScoreRest.AddParam("userid", userId_);
+		highScoreRest.AddParam("appid", String.valueOf(appId_));
+
+		try {
+			highScoreRest.Execute(RequestMethod.POST);
+		} catch (Exception e) {
+			// textView.setText(e.getMessage());
+		}
+		String strResponse = highScoreRest.getResponse();
+		return strResponse;
+	}
 
 	public List<Highscore> GetScores() {
 		List<Highscore> scoreList = new ArrayList<Highscore>();
@@ -63,17 +77,7 @@ public class HighscoreFactory {
 		//String avatar; Not support yet
 		String date;
 
-		highScoreRest.ClearParams();
-		highScoreRest.AddParam("requesttype", REQUEST_TYPE_GET);
-		highScoreRest.AddParam("userid", userId_);
-		highScoreRest.AddParam("appid", String.valueOf(appId_));
-
-		try {
-			highScoreRest.Execute(RequestMethod.POST);
-		} catch (Exception e) {
-			// textView.setText(e.getMessage());
-		}
-		String strResponse = highScoreRest.getResponse();
+		String strResponse = GetScoresXMLContent();
 		strResponse = strResponse.replace("\n", "");
 		XmlPullParser scores;
 		try {
