@@ -33,12 +33,12 @@ public class GetScoreActivity extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.get_score);
+		setContentView(R.layout.score_list);
 
 		scoreList = LoadScoreFromFileToListView();
 		if (scoreList != null) {
 			adapter = new ScoreArrayAdapter(getApplicationContext(),
-					R.layout.get_score, (ArrayList<Highscore>) scoreList);
+					R.layout.score_list, (ArrayList<Highscore>) scoreList);
 
 			setListAdapter(adapter);
 

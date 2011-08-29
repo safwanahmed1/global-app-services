@@ -4,15 +4,15 @@ public class Notification {
 	
 	private Long id;
 	private String userId_;
-	private String appId_;
-	private String tittle_;
+	private Long appId_;
+	private String title_;
 	private String content_;
 	private Long fromDate_;
 	private Long toDate_;
 
 	public Notification(){}
 	
-	public Notification(String appId){
+	public Notification(Long appId){
 		appId_ = appId;
 	}
 	
@@ -28,11 +28,11 @@ public class Notification {
 	public void setUserId(String userId) {
 		userId_ = userId;
 	}
-	public String getTittle() {
-		return tittle_;
+	public String getTitle() {
+		return title_;
 	}
-	public void setTittle(String tittle) {
-		tittle_ = tittle;
+	public void setTitle(String title) {
+		title_ = title;
 	}
 	public String getContent() {
 		return content_;
@@ -52,10 +52,10 @@ public class Notification {
 	public void setToDate(Long toDate) {
 		toDate_ = toDate;
 	}
-	public void setAppId(String appId) {
+	public void setAppId(Long appId) {
 		this.appId_ = appId;
 	}
-	public String getAppId() {
+	public Long getAppId() {
 		return appId_;
 	}
 	

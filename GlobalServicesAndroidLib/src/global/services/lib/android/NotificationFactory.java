@@ -12,15 +12,31 @@ import org.xmlpull.v1.XmlPullParserFactory;
 public class NotificationFactory {
 	private static final String NOTIFICATION_SERVLET = "http://global-app-services.appspot.com/globalservices/notificaitionservlet";
 	private String userId_;
-	private String appId_;
+	private Long appId_;
 	private RestClient noteRest;
 
-	public NotificationFactory(String userId, String appId) {
+	public NotificationFactory(String userId, Long appId) {
 		userId_ = userId;
 		appId_ = appId;
 		noteRest = new RestClient(NOTIFICATION_SERVLET);
 	}
 
+	public String GetNotesXMLContent() {
+		noteRest.ClearParams();
+		noteRest.AddParam("userid", userId_);
+		noteRest.AddParam("appid", String.valueOf(appId_));
+
+		try {
+			noteRest.Execute(RequestMethod.POST);
+		} catch (Exception e) {
+			// textView.setText(e.getMessage());
+		}
+		String strResponse = noteRest.getResponse();
+		return strResponse;
+	}
+	
+	
+	
 	public List<Notification> GetNotifications() {
 		List<Notification> noteList = new ArrayList<Notification>();
 		String strElemName;
@@ -32,16 +48,7 @@ public class NotificationFactory {
 		String fromDate;
 		String toDate;
 
-		noteRest.ClearParams();
-		noteRest.AddParam("userid", userId_);
-		noteRest.AddParam("appid", String.valueOf(appId_));
-
-		try {
-			noteRest.Execute(RequestMethod.POST);
-		} catch (Exception e) {
-			// textView.setText(e.getMessage());
-		}
-		String strResponse = noteRest.getResponse();
+		String strResponse = GetNotesXMLContent();
 		strResponse = strResponse.replace("\n", "");
 		XmlPullParser notes;
 		try {
@@ -62,7 +69,7 @@ public class NotificationFactory {
 					// Get the name of the tag (eg scores or score)
 					strElemName = notes.getName();
 
-					if (strElemName.equals("notification")) {
+					if (strElemName.equals("note")) {
 						// bFoundScores = true;
 						Notification noteObj = new Notification();
 						id = notes.getAttributeValue(null, "id");
@@ -71,10 +78,10 @@ public class NotificationFactory {
 						noteObj.setUserId(userId);
 
 						appId = notes.getAttributeValue(null, "appid");
-						noteObj.setAppId(appId);
+						noteObj.setAppId(Long.parseLong(appId));
 
 						tittle = notes.getAttributeValue(null, "tittle");
-						noteObj.setTittle(tittle);
+						noteObj.setTitle(tittle);
 
 						content = notes.getAttributeValue(null, "content");
 						noteObj.setContent(content);

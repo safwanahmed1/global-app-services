@@ -14,6 +14,7 @@ public class Advertisement {
 	private String tittle_;
 	private String content_;
 	private String type_;
+	private Long iconFileId_;
 	private File iconFile_;
 	private String storeUrl_;
 	
@@ -70,5 +71,11 @@ public class Advertisement {
 	}
 	public void setStoreUrl(String storeUrl) {
 		storeUrl_ = storeUrl;
+	}
+	public void setIconFileId(Long iconFileId_) {
+		this.iconFileId_ = iconFileId_;
+	}
+	public Long getIconFileId() {
+		return iconFileId_;
 	}
 }

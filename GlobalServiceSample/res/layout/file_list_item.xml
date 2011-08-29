@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="horizontal" android:layout_width="fill_parent"
+	android:layout_height="wrap_content">
+	<ImageView android:layout_width="50px" android:src="@drawable/icon"
+		android:layout_height="50px" android:id="@+id/file_icon"
+		android:layout_gravity="center"></ImageView>
+	<LinearLayout android:layout_height="wrap_content"
+		android:id="@+id/linearLayout1" android:layout_width="fill_parent"
+		android:orientation="vertical">
+		
+			<TextView android:text="File name" android:layout_height="wrap_content"
+				android:layout_width="wrap_content" android:id="@+id/file_name"
+				android:singleLine="true" android:textSize="6pt" android:textStyle="bold"></TextView>
+			
+			<TextView android:text="3456 bytes" android:layout_width="wrap_content"
+				android:id="@+id/file_size" android:layout_height="wrap_content"
+				android:singleLine="true" android:textSize="5pt"></TextView>
+		
+		
+
+	</LinearLayout>
+
+
+
+
+
+</LinearLayout>

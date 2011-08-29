@@ -19,7 +19,7 @@ public class FileDownloader {
 
 	}
 
-	public File Download() {
+	public File Download(String fileName) {
 
 		downloadRest.ClearParams();
 		downloadRest.AddParam("requesttype", "download");
@@ -30,8 +30,12 @@ public class FileDownloader {
 			downloadRest.Execute(RequestMethod.POST);
 
 			String strResponse = downloadRest.getResponse();
-			fileName_ = (String) downloadRest.getHttpResponse().getFirstHeader("filename").getValue();
-			file = new File(fileName_);
+			fileName_ = (String) downloadRest.getHttpResponse()
+					.getFirstHeader("filename").getValue();
+			if (fileName == null)
+				file = new File(fileName_);
+			else
+				file = new File(fileName);
 
 			/* Convert the Bytes read to a String. */
 			FileOutputStream fos = new FileOutputStream(file);

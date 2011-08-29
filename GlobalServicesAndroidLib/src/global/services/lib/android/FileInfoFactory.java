@@ -20,6 +20,22 @@ public class FileInfoFactory {
 		fileRest = new RestClient(FILEINFO_SERVLET);
 
 	}
+	
+	
+	
+	
+	public String GetFilesXMLContent() {
+		fileRest.ClearParams();
+		fileRest.AddParam("userid", userId_);
+
+		try {
+			fileRest.Execute(RequestMethod.POST);
+		} catch (Exception e) {
+			// textView.setText(e.getMessage());
+		}
+		String strResponse = fileRest.getResponse();
+		return strResponse;
+	}
 	public List<FileInfo> GetFileInfos(Long fileId) {
 		List<FileInfo> fileList = new ArrayList<FileInfo>();
 		
@@ -32,18 +48,8 @@ public class FileInfoFactory {
 		
 		
 
-		fileRest.ClearParams();
-		fileRest.AddParam("requesttype", "fileinfo");
-		fileRest.AddParam("userid", userId_);
-		if (fileId != null)
-			fileRest.AddParam("fileid", String.valueOf(fileId));
-
-		try {
-			fileRest.Execute(RequestMethod.POST);
-		} catch (Exception e) {
-			// textView.setText(e.getMessage());
-		}
-		String strResponse = fileRest.getResponse();
+		
+		String strResponse = GetFilesXMLContent();
 		strResponse = strResponse.replace("\n", "");
 		XmlPullParser files;
 		try {
@@ -102,7 +108,7 @@ public class FileInfoFactory {
 	}
 	public File Download(Long fileId) {
 		FileDownloader downloader = new FileDownloader(userId_, fileId);
-		File retFile = downloader.Download();
+		File retFile = downloader.Download(null);
 		return retFile;
 	}
 }

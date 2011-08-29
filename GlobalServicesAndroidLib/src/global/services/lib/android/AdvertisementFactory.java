@@ -20,7 +20,18 @@ public class AdvertisementFactory {
 		advRest = new RestClient(ADVERTISEMENT_SERVLET);
 
 	}
+	public String GetAdvsXMLContent() {
+		advRest.ClearParams();
+		advRest.AddParam("userid", userId_);
 
+		try {
+			advRest.Execute(RequestMethod.POST);
+		} catch (Exception e) {
+			// textView.setText(e.getMessage());
+		}
+		String strResponse = advRest.getResponse();
+		return strResponse;
+	}
 	public List<Advertisement> GetAdvertisements(Long appId) {
 		List<Advertisement> advList = new ArrayList<Advertisement>();
 		String strElemName;
@@ -73,7 +84,7 @@ public class AdvertisementFactory {
 						userId = advs.getAttributeValue(null, "useid");
 						advObj.setUserId(userId);
 
-						appName = advs.getAttributeValue(null, "appname");
+						appName = advs.getAttributeValue(null, "name");
 						advObj.setAppName(appName);
 
 						tittle = advs.getAttributeValue(null, "tittle");
@@ -86,7 +97,8 @@ public class AdvertisementFactory {
 						advObj.setType(type);
 
 						iconFileId = advs.getAttributeValue(null, "iconid");
-						iconFile = new FileDownloader(userId, Long.parseLong(iconFileId)).Download();
+						advObj.setIconFileId(Long.parseLong(iconFileId));
+						iconFile = new FileDownloader(userId, Long.parseLong(iconFileId)).Download(iconFileId);
 						advObj.setIconFile(iconFile);
 
 						storeUrl = advs.getAttributeValue(null, "storeurl");
