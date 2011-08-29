@@ -62,7 +62,7 @@ public class NotificationServlet extends HttpServlet {
 				if (note.getAppId() != null)
 					stream.print(" appid=\"" + note.getAppId() + "\"");
 				if (note.getTittle() != null)
-					stream.print(" titlte=\"" + note.getTittle() + "\"");
+					stream.print(" title=\"" + note.getTittle() + "\"");
 				if (note.getContent() != null)
 					stream.print(" content=\"" + note.getContent() + "\"");
 				if (note.getFromDate() != null)

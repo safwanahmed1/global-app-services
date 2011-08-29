@@ -67,7 +67,7 @@ public class AdvertisementServlet extends HttpServlet {
 					if (adv.getAppName() != null)
 						stream.print(" name=\"" + adv.getAppName() + "\"");
 					if (adv.getTittle() != null)
-						stream.print(" titlte=\"" + adv.getTittle() + "\"");
+						stream.print(" title=\"" + adv.getTittle() + "\"");
 					if (adv.getContent() != null)
 						stream.print(" content=\"" +  adv.getContent() + "\"");
 					if (adv.getType() != null)
