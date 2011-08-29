@@ -38,10 +38,10 @@ public class FilesServlet extends HttpServlet {
 		String reqType = request.getParameter("requesttype");
 		String userId = request.getParameter("userid");
 		String fileId = request.getParameter("fileid");
-		if (reqType == "download") {
+		if ((reqType != null) && ("download".equals(reqType))) {
 			Download(userId, Long.parseLong(fileId), response);
 		}
-		if (reqType == "getinfo") {
+		if ((reqType != null) && ("getinfo".equals(reqType))) {
 			GetFileInfos(userId, response);
 		}
 	}
@@ -67,7 +67,7 @@ public class FilesServlet extends HttpServlet {
 	private void GetFileInfos(String userId, HttpServletResponse response) {
 		FileDataBase fileDB = new FileDataBase();
 		List<FileDataBase> fileList = fileDB.SelectFiles(userId);
-		
+
 		response.setContentType("text/xml; charset=UTF-8");
 		try {
 			ServletOutputStream outStream = response.getOutputStream();
@@ -86,8 +86,9 @@ public class FilesServlet extends HttpServlet {
 				if (file.getFileType() != null)
 					outStream.print(" type=\"" + file.getFileType() + "\"");
 				if (file.getContent() != null)
-					outStream.print(" size=\"" + file.getContent().toString() + "\"");
-				
+					outStream.print(" size=\"" + file.getContent().toString()
+							+ "\"");
+
 				outStream.println("/>");
 
 			}
