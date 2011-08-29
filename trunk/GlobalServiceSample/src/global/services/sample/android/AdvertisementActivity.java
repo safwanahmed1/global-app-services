@@ -57,7 +57,7 @@ public class AdvertisementActivity extends ListActivity {
 		case R.id.refresh_adv:
 			GetAdvToLocalFile();
 			advList = LoadAdvFromFileToListView();
-			adapter.notifyDataSetChanged();
+			//adapter.notifyDataSetChanged();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

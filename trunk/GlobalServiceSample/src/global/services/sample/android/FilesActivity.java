@@ -54,10 +54,10 @@ public class FilesActivity extends ListActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection
 		switch (item.getItemId()) {
-		case R.id.refresh_adv:
+		case R.id.refresh_file:
 			GetFileInfiToLocalFile();
 			fileList = LoadFileInfoFromFileToListView();
-			adapter.notifyDataSetChanged();
+			//adapter.notifyDataSetChanged();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -69,12 +69,12 @@ public class FilesActivity extends ListActivity {
 	private void GetFileInfiToLocalFile() {
 		FileInfoFactory fileFactory = new FileInfoFactory(getResources()
 				.getString(R.string.userid));
-		String advsXML = fileFactory.GetFilesXMLContent();
+		String filesXML = fileFactory.GetFilesXMLContent();
 		FileOutputStream fos;
 
 		try {
 			fos = openFileOutput(FILEINFO_FILE, Context.MODE_PRIVATE);
-			fos.write(advsXML.getBytes());
+			fos.write(filesXML.getBytes());
 			fos.close();
 
 		} catch (FileNotFoundException e) {
