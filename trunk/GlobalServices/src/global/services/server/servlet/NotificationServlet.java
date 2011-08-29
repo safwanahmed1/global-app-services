@@ -55,6 +55,12 @@ public class NotificationServlet extends HttpServlet {
 			for (Notification note : noteList) {
 
 				stream.print("<note ");
+				if (note.getId() != null)
+					stream.print(" id=\"" + note.getId() + "\"");
+				if (note.getUserId() != null)
+					stream.print(" userid=\"" + note.getUserId() + "\"");
+				if (note.getAppId() != null)
+					stream.print(" appid=\"" + note.getAppId() + "\"");
 				if (note.getTittle() != null)
 					stream.print(" titlte=\"" + note.getTittle() + "\"");
 				if (note.getContent() != null)

@@ -79,12 +79,15 @@ public class FilesServlet extends HttpServlet {
 				outStream.print("<file ");
 				if (file.getId() != null)
 					outStream.print(" id=\"" + file.getId() + "\"");
+				if (file.getUserId() != null)
+					outStream.print(" user=\"" + file.getUserId() + "\"");
 				if (file.getName() != null)
 					outStream.print(" name=\"" + file.getName() + "\"");
 				if (file.getFileType() != null)
 					outStream.print(" type=\"" + file.getFileType() + "\"");
-				if (file.getUserId() != null)
-					outStream.print(" user=\"" + file.getUserId() + "\"");
+				if (file.getContent() != null)
+					outStream.print(" size=\"" + file.getContent().toString() + "\"");
+				
 				outStream.println("/>");
 
 			}
