@@ -57,7 +57,7 @@ public class NotificationActivity extends ListActivity {
 		case R.id.refresh_note:
 			GetNoteToLocalFile();
 			noteList = LoadNoteFromFileToListView();
-			adapter.notifyDataSetChanged();
+			//adapter.notifyDataSetChanged();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

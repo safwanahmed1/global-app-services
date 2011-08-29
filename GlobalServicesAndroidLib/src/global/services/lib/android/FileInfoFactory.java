@@ -12,6 +12,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 public class FileInfoFactory {
 	private static final String FILEINFO_SERVLET = "http://global-app-services.appspot.com/globalservices/fileservlet";
+	private static final String REQUEST_TYPE_GET_INFO = "getinfo";
 	private String userId_;
 	private RestClient fileRest;
 
@@ -26,6 +27,8 @@ public class FileInfoFactory {
 	
 	public String GetFilesXMLContent() {
 		fileRest.ClearParams();
+		
+		fileRest.AddParam("requesttype", REQUEST_TYPE_GET_INFO);
 		fileRest.AddParam("userid", userId_);
 
 		try {

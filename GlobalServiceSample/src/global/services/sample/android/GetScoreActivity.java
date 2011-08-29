@@ -35,6 +35,16 @@ public class GetScoreActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.score_list);
 
+		
+
+	}
+
+	
+	
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
 		scoreList = LoadScoreFromFileToListView();
 		if (scoreList != null) {
 			adapter = new ScoreArrayAdapter(getApplicationContext(),
@@ -43,8 +53,9 @@ public class GetScoreActivity extends ListActivity {
 			setListAdapter(adapter);
 
 		}
-
 	}
+
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
