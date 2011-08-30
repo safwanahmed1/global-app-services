@@ -120,7 +120,7 @@ public class FilesActivity extends ListActivity {
 		String userId;
 		String name;
 		String size;
-		
+		String type;
 		
 
 		filesXMLContent = filesXMLContent.replace("\n", "");
@@ -159,6 +159,9 @@ public class FilesActivity extends ListActivity {
 						size = files.getAttributeValue(null, "size");
 						if (size != null)
 							fileObj.setFileSize(size);
+						type = files.getAttributeValue(null, "type");
+						if (size != null)
+							fileObj.setFileType(type);
 						
 
 						fileList.add(fileObj);

@@ -1,24 +1,13 @@
 package global.services.sample.android;
 
-import java.io.File;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Date;
-
-import global.services.lib.android.Advertisement;
-import global.services.lib.android.FileDownloader;
 import global.services.lib.android.FileInfo;
-import global.services.lib.android.Highscore;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 public class FileArrayAdapter extends ArrayAdapter<FileInfo> {
@@ -51,16 +40,32 @@ public class FileArrayAdapter extends ArrayAdapter<FileInfo> {
 
 			ImageView iconApp = (ImageView) convertView
 					.findViewById(R.id.file_icon);
-			if (objFile.getFileType().equals("excel")) {
+			if (objFile.getFileType().contains("excel")) {
 				iconApp.setImageResource(R.drawable.ic_excel_file);
-			} else if (objFile.getFileType().equals("word")) {
+			} else if (objFile.getFileType().contains("word")) {
 				iconApp.setImageResource(R.drawable.ic_word_file);
+			}else if (objFile.getFileType().contains("text")) {
+				iconApp.setImageResource(R.drawable.ic_text_file);
+			}else if (objFile.getFileType().contains("pdf")) {
+				iconApp.setImageResource(R.drawable.ic_pdf_file);
+			}else if (objFile.getFileType().contains("flash")) {
+				iconApp.setImageResource(R.drawable.ic_flash_file);
+			}else if (objFile.getFileType().contains("zip")) {
+				iconApp.setImageResource(R.drawable.ic_zip_file);
+			}else if (objFile.getFileType().contains("image")) {
+				iconApp.setImageResource(R.drawable.ic_image_file);
+			}else if (objFile.getFileType().contains("media")) {
+				iconApp.setImageResource(R.drawable.ic_music_file);
 			}
+			
+
 
 			TextView txtName = (TextView) convertView
 					.findViewById(R.id.file_name);
+			txtName.setText(objFile.getFileName());
 			TextView txtSize = (TextView) convertView
 					.findViewById(R.id.file_size);
+			txtSize.setText(objFile.getFileSize());
 		}
 		return convertView;
 
