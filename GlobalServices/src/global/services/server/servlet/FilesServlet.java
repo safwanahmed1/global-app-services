@@ -64,6 +64,7 @@ public class FilesServlet extends HttpServlet {
 		fileDownload.SelectFile(userId, fileId);
 		response.reset();
 		response.setContentType(fileDownload.getFileType());
+		response.setHeader("Content-Disposition","attachment; filename=\"" + fileDownload.getName() + "\"");
 		response.setHeader("filename", fileDownload.getName());
 		ServletOutputStream outStream;
 		try {
@@ -83,7 +84,7 @@ public class FilesServlet extends HttpServlet {
 			{
 				out.write(outputByte, 0, 1024);
 			}
-			//in.close();
+			in.close();
 			out.flush();
 			out.close();
 			
