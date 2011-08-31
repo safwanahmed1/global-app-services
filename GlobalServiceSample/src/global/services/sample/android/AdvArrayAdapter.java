@@ -1,12 +1,19 @@
 package global.services.sample.android;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.apache.http.util.ByteArrayBuffer;
+
 import global.services.lib.android.Advertisement;
-import global.services.lib.android.FileDownloader;
+import global.services.lib.android.FileInfoFactory;
 import global.services.lib.android.Highscore;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -50,9 +57,45 @@ public class AdvArrayAdapter extends ArrayAdapter<Advertisement> {
 
 			File imgFile = new File(String.valueOf(objAdv.getIconFileId()));
 			if (!imgFile.exists()) {
-				imgFile = new FileDownloader(objAdv.getUserId(),
-						objAdv.getIconFileId()).Download(String.valueOf(objAdv
-						.getIconFileId()));
+				InputStream is = new FileInfoFactory(objAdv.getUserId())
+						.Download(objAdv.getIconFileId());
+				BufferedInputStream bis = new BufferedInputStream(is);
+
+				/*
+				 * Read bytes to the Buffer until there is nothing more to
+				 * read(-1).
+				 */
+				FileOutputStream fos = null;
+				try {
+					fos = getContext().openFileOutput(imgFile.getName(), Context.MODE_PRIVATE);
+					//fos = new FileOutputStream(imgFile);
+
+					ByteArrayBuffer baf = new ByteArrayBuffer(1024);
+					byte[] buffer = new byte[1024];
+
+					int current = 0;
+					while ((current = is.read(buffer)) != -1) {
+						fos.write(buffer);
+					}
+					
+					/*
+					while ((current = bis.read()) != -1) {
+						baf.append((byte) current);
+						fos.write(baf.toByteArray());
+						baf.clear();
+					}
+					*/
+					fos.close();
+
+					is.close();
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 			}
 
 			Bitmap myBitmap = BitmapFactory.decodeFile(String.valueOf(objAdv

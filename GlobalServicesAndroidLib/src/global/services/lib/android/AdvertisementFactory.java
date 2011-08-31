@@ -2,6 +2,7 @@ package global.services.lib.android;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +43,7 @@ public class AdvertisementFactory {
 		String content;
 		String type;
 		String iconFileId;
-		File iconFile;
+		InputStream iconFile;
 		String storeUrl;
 
 		advRest.ClearParams();
@@ -98,7 +99,7 @@ public class AdvertisementFactory {
 
 						iconFileId = advs.getAttributeValue(null, "iconid");
 						advObj.setIconFileId(Long.parseLong(iconFileId));
-						iconFile = new FileDownloader(userId, Long.parseLong(iconFileId)).Download(iconFileId);
+						iconFile = new FileInfoFactory(userId).Download(Long.parseLong(iconFileId));
 						advObj.setIconFile(iconFile);
 
 						storeUrl = advs.getAttributeValue(null, "storeurl");

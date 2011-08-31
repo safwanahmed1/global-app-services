@@ -2,6 +2,7 @@ package global.services.lib.android;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,13 +22,10 @@ public class FileInfoFactory {
 		fileRest = new RestClient(FILEINFO_SERVLET);
 
 	}
-	
-	
-	
-	
+
 	public String GetFilesXMLContent() {
 		fileRest.ClearParams();
-		
+
 		fileRest.AddParam("requesttype", REQUEST_TYPE_GET_INFO);
 		fileRest.AddParam("userid", userId_);
 
@@ -39,19 +37,17 @@ public class FileInfoFactory {
 		String strResponse = fileRest.getResponse();
 		return strResponse;
 	}
+
 	public List<FileInfo> GetFileInfos(Long fileId) {
 		List<FileInfo> fileList = new ArrayList<FileInfo>();
-		
+
 		String strElemName;
 		String id;
 		String userId;
 		String fileName;
 		String fileType;
 		String fileSize;
-		
-		
 
-		
 		String strResponse = GetFilesXMLContent();
 		strResponse = strResponse.replace("\n", "");
 		XmlPullParser files;
@@ -109,9 +105,22 @@ public class FileInfoFactory {
 		return fileList;
 
 	}
-	public File Download(Long fileId) {
-		FileDownloader downloader = new FileDownloader(userId_, fileId);
-		File retFile = downloader.Download(null);
-		return retFile;
+
+	public InputStream Download(Long fileId) {
+		InputStream is = null;
+		fileRest.ClearParams();
+		fileRest.AddParam("requesttype", "download");
+		fileRest.AddParam("userid", userId_);
+		fileRest.AddParam("fileid", String.valueOf(fileId));
+		File file = null;
+		try {
+			fileRest.Execute(RequestMethod.POST);
+			is = fileRest.getInstream();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return is;
+		
 	}
 }
