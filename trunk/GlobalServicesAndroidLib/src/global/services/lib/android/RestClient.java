@@ -202,6 +202,7 @@ public class RestClient
         }
         finally
         {
+        	/*
             try
             {
                 is.close();
@@ -209,7 +210,7 @@ public class RestClient
             catch (IOException e)
             {
                 e.printStackTrace();
-            }
+            }*/
         }
         return sb.toString();
     }
