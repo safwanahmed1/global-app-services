@@ -1,7 +1,10 @@
 package global.services.sample.android;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -55,7 +58,9 @@ public class AdvArrayAdapter extends ArrayAdapter<Advertisement> {
 		Advertisement objAdv = items_.get(position);
 		if (objAdv != null) {
 
-			File imgFile = new File(String.valueOf(objAdv.getIconFileId()));
+			File imgFile = new File(getContext().getFilesDir() + "/"
+					+ String.valueOf(objAdv.getIconFileId()));
+
 			if (!imgFile.exists()) {
 				InputStream is = new FileInfoFactory(objAdv.getUserId())
 						.Download(objAdv.getIconFileId());
@@ -66,9 +71,13 @@ public class AdvArrayAdapter extends ArrayAdapter<Advertisement> {
 				 * read(-1).
 				 */
 				FileOutputStream fos = null;
+
 				try {
-					fos = getContext().openFileOutput(imgFile.getName(), Context.MODE_PRIVATE);
-					//fos = new FileOutputStream(imgFile);
+					fos = getContext().openFileOutput(
+							String.valueOf(objAdv.getIconFileId()),
+							Context.MODE_PRIVATE);
+
+					// fos = new FileOutputStream(imgFile);
 
 					ByteArrayBuffer baf = new ByteArrayBuffer(1024);
 					byte[] buffer = new byte[1024];
@@ -77,14 +86,11 @@ public class AdvArrayAdapter extends ArrayAdapter<Advertisement> {
 					while ((current = is.read(buffer)) != -1) {
 						fos.write(buffer);
 					}
-					
+
 					/*
-					while ((current = bis.read()) != -1) {
-						baf.append((byte) current);
-						fos.write(baf.toByteArray());
-						baf.clear();
-					}
-					*/
+					 * while ((current = bis.read()) != -1) { baf.append((byte)
+					 * current); fos.write(baf.toByteArray()); baf.clear(); }
+					 */
 					fos.close();
 
 					is.close();
@@ -97,14 +103,43 @@ public class AdvArrayAdapter extends ArrayAdapter<Advertisement> {
 				}
 
 			}
+			try {
+				FileInputStream fis = getContext().openFileInput(
+						String.valueOf(objAdv.getIconFileId()));
 
-			Bitmap myBitmap = BitmapFactory.decodeFile(String.valueOf(objAdv
-					.getIconFileId()));
+				final ByteArrayOutputStream dataStream = new ByteArrayOutputStream();
+				BufferedOutputStream out = new BufferedOutputStream(dataStream,
+						4096);
+				byte[] buffer = new byte[1024];
+				while (fis.read(buffer) != -1) {
+					out.write(buffer);
+				}
+				out.flush();
 
-			ImageView iconApp = (ImageView) convertView
-					.findViewById(R.id.adv_app_icon);
-			iconApp.setImageBitmap(myBitmap);
+				final byte[] data = dataStream.toByteArray();
+				BitmapFactory.Options options = new BitmapFactory.Options();
+				// options.inSampleSize = 1;
 
+				
+
+				if (fis != null) {
+					// Bitmap myBitmap = BitmapFactory.decodeStream(fis);
+					Bitmap myBitmap = BitmapFactory.decodeByteArray(data, 0,
+							data.length, options);
+					ImageView iconApp = (ImageView) convertView
+							.findViewById(R.id.adv_app_icon);
+					iconApp.setImageBitmap(myBitmap);
+
+				}
+				fis.close();
+				out.close();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
 			TextView txtName = (TextView) convertView
 					.findViewById(R.id.adv_app_name);
 			TextView txtTitle = (TextView) convertView
