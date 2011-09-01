@@ -162,7 +162,7 @@ public class RestClient
             {
  
                 instream = entity.getContent();
-                response = convertStreamToString(instream);
+                //response = convertStreamToString(instream);
                
         		
                 // Closing the input stream will trigger connection release
