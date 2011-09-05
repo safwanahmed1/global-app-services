@@ -97,7 +97,7 @@ public class FilesActivity extends ListActivity {
 
 			int length;
 			while ((length = fis.read(buffer)) != -1) {
-				fileContent.append(new String(buffer));
+				fileContent.append(new String(buffer), 0 ,length);
 			}
 			fileList = GetFileListFromXML(fileContent.toString());
 

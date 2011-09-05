@@ -97,7 +97,7 @@ public class NotificationActivity extends ListActivity {
 
 			int length;
 			while ((length = fis.read(buffer)) != -1) {
-				fileContent.append(new String(buffer));
+				fileContent.append(new String(buffer), 0, length);
 			}
 			scoreList = GetNoteListFromXML(fileContent.toString());
 

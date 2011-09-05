@@ -34,17 +34,6 @@ public class GetScoreActivity extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.score_list);
-
-		
-
-	}
-
-	
-	
-	@Override
-	protected void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
 		scoreList = LoadScoreFromFileToListView();
 		if (scoreList != null) {
 			adapter = new ScoreArrayAdapter(getApplicationContext(),
@@ -53,9 +42,15 @@ public class GetScoreActivity extends ListActivity {
 			setListAdapter(adapter);
 
 		}
+
 	}
 
-
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -84,19 +79,20 @@ public class GetScoreActivity extends ListActivity {
 				.getString(R.string.userid), Long.parseLong(getResources()
 				.getString(R.string.appid)));
 		String scoresXML = scoreFactory.GetScoresXMLContent();
-		FileOutputStream fos;
+		FileOutputStream fos = null;
+		if (scoresXML != null) {
+			try {
+				fos = openFileOutput(SCORE_FILE, Context.MODE_PRIVATE);
+				fos.write(scoresXML.getBytes());
+				fos.close();
 
-		try {
-			fos = openFileOutput(SCORE_FILE, Context.MODE_PRIVATE);
-			fos.write(scoresXML.getBytes());
-			fos.close();
-
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -112,7 +108,7 @@ public class GetScoreActivity extends ListActivity {
 
 			int length;
 			while ((length = fis.read(buffer)) != -1) {
-				fileContent.append(new String(buffer));
+				fileContent.append(new String(buffer),0, length);
 			}
 			scoreList = GetScoreListFromXML(fileContent.toString());
 
