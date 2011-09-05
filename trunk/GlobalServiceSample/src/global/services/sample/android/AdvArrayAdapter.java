@@ -48,6 +48,12 @@ public class AdvArrayAdapter extends ArrayAdapter<Advertisement> {
 	}
 
 	@Override
+	public void notifyDataSetChanged() {
+		// TODO Auto-generated method stub
+		super.notifyDataSetChanged();
+	}
+
+	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
 		if (convertView == null) {

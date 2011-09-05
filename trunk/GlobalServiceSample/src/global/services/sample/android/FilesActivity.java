@@ -1,4 +1,5 @@
 package global.services.sample.android;
+
 import global.services.lib.android.FileInfo;
 import global.services.lib.android.FileInfoFactory;
 
@@ -21,9 +22,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-
 public class FilesActivity extends ListActivity {
-	private List<FileInfo> fileList ;
+	private List<FileInfo> fileList;
 	private FileArrayAdapter adapter;
 	private String FILEINFO_FILE = "fileinfo.xml";
 
@@ -57,14 +57,19 @@ public class FilesActivity extends ListActivity {
 		case R.id.refresh_file:
 			GetFileInfiToLocalFile();
 			fileList = LoadFileInfoFromFileToListView();
-			//adapter.notifyDataSetChanged();
+			if (adapter == null) {
+				adapter = new FileArrayAdapter(getApplicationContext(),
+						R.layout.file_list, (ArrayList<FileInfo>) fileList);
+
+				setListAdapter(adapter);
+			}
+			adapter.notifyDataSetChanged();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
-	
+
 	/* Download score from server and save to XML find in internal memory */
 	private void GetFileInfiToLocalFile() {
 		FileInfoFactory fileFactory = new FileInfoFactory(getResources()
@@ -85,6 +90,7 @@ public class FilesActivity extends ListActivity {
 			e.printStackTrace();
 		}
 	}
+
 	private List<FileInfo> LoadFileInfoFromFileToListView() {
 		// TODO Auto-generated method stub
 		List<FileInfo> fileList = null;
@@ -97,7 +103,7 @@ public class FilesActivity extends ListActivity {
 
 			int length;
 			while ((length = fis.read(buffer)) != -1) {
-				fileContent.append(new String(buffer), 0 ,length);
+				fileContent.append(new String(buffer), 0, length);
 			}
 			fileList = GetFileListFromXML(fileContent.toString());
 
@@ -121,7 +127,6 @@ public class FilesActivity extends ListActivity {
 		String name;
 		String size;
 		String type;
-		
 
 		filesXMLContent = filesXMLContent.replace("\n", "");
 		XmlPullParser files;
@@ -155,14 +160,13 @@ public class FilesActivity extends ListActivity {
 						name = files.getAttributeValue(null, "name");
 						if (name != null)
 							fileObj.setFileName(name);
-						
+
 						size = files.getAttributeValue(null, "size");
 						if (size != null)
 							fileObj.setFileSize(size);
 						type = files.getAttributeValue(null, "type");
 						if (size != null)
 							fileObj.setFileType(type);
-						
 
 						fileList.add(fileObj);
 
@@ -182,6 +186,5 @@ public class FilesActivity extends ListActivity {
 		}
 		return fileList;
 	}
-
 
 }

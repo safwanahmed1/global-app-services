@@ -57,17 +57,24 @@ public class NotificationActivity extends ListActivity {
 		case R.id.refresh_note:
 			GetNoteToLocalFile();
 			noteList = LoadNoteFromFileToListView();
-			//adapter.notifyDataSetChanged();
+			if (adapter == null) {
+				adapter = new NoteArrayAdapter(getApplicationContext(),
+						R.layout.note_list, (ArrayList<Notification>) noteList);
+
+				setListAdapter(adapter);
+			}
+			adapter.notifyDataSetChanged();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
+
 	/* Download score from server and save to XML find in internal memory */
 	private void GetNoteToLocalFile() {
-		NotificationFactory noteFactory = new NotificationFactory(getResources()
-				.getString(R.string.userid), Long.parseLong(getResources()
-				.getString(R.string.appid)));
+		NotificationFactory noteFactory = new NotificationFactory(
+				getResources().getString(R.string.userid), Long
+						.parseLong(getResources().getString(R.string.appid)));
 		String notesXML = noteFactory.GetNotesXMLContent();
 		FileOutputStream fos;
 
@@ -120,7 +127,6 @@ public class NotificationActivity extends ListActivity {
 		String appId;
 		String title;
 		String content;
-	
 
 		notesXMLContent = notesXMLContent.replace("\n", "");
 		XmlPullParser notes;
@@ -154,14 +160,13 @@ public class NotificationActivity extends ListActivity {
 						appId = notes.getAttributeValue(null, "appid");
 						if (appId != null)
 							noteObj.setAppId(Long.parseLong(appId));
-						
+
 						title = notes.getAttributeValue(null, "title");
 						if (title != null)
 							noteObj.setTitle(title);
 						content = notes.getAttributeValue(null, "content");
 						if (content != null)
 							noteObj.setContent(content);
-						
 
 						noteList.add(noteObj);
 
