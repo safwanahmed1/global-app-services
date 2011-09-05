@@ -97,7 +97,7 @@ public class AdvertisementActivity extends ListActivity {
 
 			int length;
 			while ((length = fis.read(buffer)) != -1) {
-				fileContent.append(new String(buffer));
+				fileContent.append(new String(buffer), 0, length);
 			}
 			advList = GetAdvListFromXML(fileContent.toString());
 

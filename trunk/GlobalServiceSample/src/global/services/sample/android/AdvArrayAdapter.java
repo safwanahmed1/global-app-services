@@ -21,6 +21,7 @@ import global.services.lib.android.Highscore;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,8 +59,8 @@ public class AdvArrayAdapter extends ArrayAdapter<Advertisement> {
 		Advertisement objAdv = items_.get(position);
 		if (objAdv != null) {
 
-			File imgFile = new File(getContext().getFilesDir() + "/"
-					+ String.valueOf(objAdv.getIconFileId()));
+			File imgFile = new File(getContext().getFilesDir(),
+					String.valueOf(objAdv.getIconFileId()));
 
 			if (!imgFile.exists()) {
 				InputStream is = new FileInfoFactory(objAdv.getUserId())
@@ -84,7 +85,7 @@ public class AdvArrayAdapter extends ArrayAdapter<Advertisement> {
 
 					int current = 0;
 					while ((current = is.read(buffer)) != -1) {
-						fos.write(buffer);
+						fos.write(buffer, 0, current);
 					}
 
 					/*
@@ -103,6 +104,7 @@ public class AdvArrayAdapter extends ArrayAdapter<Advertisement> {
 				}
 
 			}
+			/*
 			try {
 				FileInputStream fis = getContext().openFileInput(
 						String.valueOf(objAdv.getIconFileId()));
@@ -111,21 +113,20 @@ public class AdvArrayAdapter extends ArrayAdapter<Advertisement> {
 				BufferedOutputStream out = new BufferedOutputStream(dataStream,
 						4096);
 				byte[] buffer = new byte[1024];
-				while (fis.read(buffer) != -1) {
-					out.write(buffer);
+				int length;
+				while ((length = fis.read(buffer)) != -1) {
+					out.write(buffer, 0, length);
 				}
 				out.flush();
 
 				final byte[] data = dataStream.toByteArray();
-				BitmapFactory.Options options = new BitmapFactory.Options();
+				//BitmapFactory.Options options = new BitmapFactory.Options();
 				// options.inSampleSize = 1;
-
-				
 
 				if (fis != null) {
 					// Bitmap myBitmap = BitmapFactory.decodeStream(fis);
 					Bitmap myBitmap = BitmapFactory.decodeByteArray(data, 0,
-							data.length, options);
+							data.length);
 					ImageView iconApp = (ImageView) convertView
 							.findViewById(R.id.adv_app_icon);
 					iconApp.setImageBitmap(myBitmap);
@@ -139,7 +140,22 @@ public class AdvArrayAdapter extends ArrayAdapter<Advertisement> {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} 
+			}
+			*/
+			// int resID = getContext().getResources().getIdentifier(icon,
+			// "drawable", "testing.Image_Demo");
+			// imageView.setImageResource(resID);
+
+			// String pathName = getContext().getFilesDir() + "/"
+			// + String.valueOf(objAdv.getIconFileId());
+			
+			
+			String pathName = imgFile.getAbsolutePath();
+			Bitmap myBitmap = BitmapFactory.decodeFile(pathName);
+			ImageView iconApp = (ImageView) convertView
+					.findViewById(R.id.adv_app_icon);
+			iconApp.setImageBitmap(myBitmap);
+
 			TextView txtName = (TextView) convertView
 					.findViewById(R.id.adv_app_name);
 			TextView txtTitle = (TextView) convertView
