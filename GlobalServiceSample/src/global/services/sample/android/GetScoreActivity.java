@@ -42,9 +42,11 @@ public class GetScoreActivity extends ListActivity {
 			setListAdapter(adapter);
 
 		}
+		
 
 	}
 
+	
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
