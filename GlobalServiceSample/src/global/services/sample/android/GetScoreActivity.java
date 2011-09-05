@@ -42,16 +42,14 @@ public class GetScoreActivity extends ListActivity {
 			setListAdapter(adapter);
 
 		}
-		
 
 	}
 
-	
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		
+
 	}
 
 	@Override
@@ -68,7 +66,15 @@ public class GetScoreActivity extends ListActivity {
 		case R.id.refresh_score:
 			GetScoreToLocalFile();
 			scoreList = LoadScoreFromFileToListView();
+			if (adapter == null) {
+				adapter = new ScoreArrayAdapter(getApplicationContext(),
+						R.layout.score_list, (ArrayList<Highscore>) scoreList);
+
+				setListAdapter(adapter);
+
+			}
 			adapter.notifyDataSetChanged();
+			// setListAdapter(adapter);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -110,7 +116,7 @@ public class GetScoreActivity extends ListActivity {
 
 			int length;
 			while ((length = fis.read(buffer)) != -1) {
-				fileContent.append(new String(buffer),0, length);
+				fileContent.append(new String(buffer), 0, length);
 			}
 			scoreList = GetScoreListFromXML(fileContent.toString());
 

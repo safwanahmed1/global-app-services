@@ -23,7 +23,7 @@ import android.view.MenuItem;
 
 public class AdvertisementActivity extends ListActivity {
 
-	private List<Advertisement> advList ;
+	private List<Advertisement> advList;
 	private AdvArrayAdapter adapter;
 	private String ADVERTISEMENT_FILE = "advertisement.xml";
 
@@ -57,18 +57,23 @@ public class AdvertisementActivity extends ListActivity {
 		case R.id.refresh_adv:
 			GetAdvToLocalFile();
 			advList = LoadAdvFromFileToListView();
-			//adapter.notifyDataSetChanged();
+			if (adapter == null) {
+				adapter = new AdvArrayAdapter(getApplicationContext(),
+						R.layout.adv_list, (ArrayList<Advertisement>) advList);
+
+				setListAdapter(adapter);
+			}
+			adapter.notifyDataSetChanged();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
-	
+
 	/* Download score from server and save to XML find in internal memory */
 	private void GetAdvToLocalFile() {
-		AdvertisementFactory advFactory = new AdvertisementFactory(getResources()
-				.getString(R.string.userid));
+		AdvertisementFactory advFactory = new AdvertisementFactory(
+				getResources().getString(R.string.userid));
 		String advsXML = advFactory.GetAdvsXMLContent();
 		FileOutputStream fos;
 
@@ -85,6 +90,7 @@ public class AdvertisementActivity extends ListActivity {
 			e.printStackTrace();
 		}
 	}
+
 	private List<Advertisement> LoadAdvFromFileToListView() {
 		// TODO Auto-generated method stub
 		List<Advertisement> advList = null;
@@ -93,7 +99,7 @@ public class AdvertisementActivity extends ListActivity {
 		try {
 
 			byte[] buffer = new byte[1024];
-			fis = openFileInput(ADVERTISEMENT_FILE );
+			fis = openFileInput(ADVERTISEMENT_FILE);
 
 			int length;
 			while ((length = fis.read(buffer)) != -1) {
@@ -124,7 +130,6 @@ public class AdvertisementActivity extends ListActivity {
 		String iconId;
 		String url;
 		String type;
-		
 
 		advsXMLContent = advsXMLContent.replace("\n", "");
 		XmlPullParser advs;
@@ -173,7 +178,6 @@ public class AdvertisementActivity extends ListActivity {
 						url = advs.getAttributeValue(null, "store");
 						if (url != null)
 							advObj.setStoreUrl(url);
-						
 
 						advList.add(advObj);
 

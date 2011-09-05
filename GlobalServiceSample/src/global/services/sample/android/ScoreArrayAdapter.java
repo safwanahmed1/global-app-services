@@ -24,6 +24,13 @@ public class ScoreArrayAdapter extends ArrayAdapter<Highscore> {
 
 
 	@Override
+	public void notifyDataSetChanged() {
+		// TODO Auto-generated method stub
+		super.notifyDataSetChanged();
+	}
+
+
+	@Override
 	public void setNotifyOnChange(boolean notifyOnChange) {
 		// TODO Auto-generated method stub
 		super.setNotifyOnChange(notifyOnChange);
