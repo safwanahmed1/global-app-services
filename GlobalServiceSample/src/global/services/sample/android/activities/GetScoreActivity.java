@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -15,11 +14,9 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import global.services.lib.android.factories.HighscoreFactory;
 import global.services.lib.android.objects.Highscore;
 import global.services.sample.android.R;
-import global.services.sample.android.R.id;
-import global.services.sample.android.R.layout;
-import global.services.sample.android.R.menu;
-import global.services.sample.android.R.string;
 import global.services.sample.android.adapters.ScoreArrayAdapter;
+import global.services.sample.android.tasks.DownLoadScoreToLocal;
+import global.services.sample.android.tasks.DownLoadScoreToLocal.OnTaskFinishedListener;
 import android.app.ListActivity;
 import android.content.Context;
 import android.os.Bundle;
@@ -69,16 +66,13 @@ public class GetScoreActivity extends ListActivity {
 		// Handle item selection
 		switch (item.getItemId()) {
 		case R.id.refresh_score:
-			GetScoreToLocalFile();
-			scoreList = LoadScoreFromFileToListView();
-			if (adapter == null) {
-				adapter = new ScoreArrayAdapter(getApplicationContext(),
-						R.layout.score_list, (ArrayList<Highscore>) scoreList);
-
-				setListAdapter(adapter);
-
-			}
-			adapter.notifyDataSetChanged();
+			//GetScoreToLocalFile();
+			DownLoadScoreToLocal downScore = new DownLoadScoreToLocal(this);
+			downScore.setOnTaskFinishedListener(mOnTaskFinishedListener);
+			downScore.execute(getResources()
+				.getString(R.string.userid), getResources()
+				.getString(R.string.appid));
+			
 			// setListAdapter(adapter);
 			return true;
 		default:
@@ -225,4 +219,23 @@ public class GetScoreActivity extends ListActivity {
 		}
 		return scoreList;
 	}
+	private OnTaskFinishedListener mOnTaskFinishedListener = new OnTaskFinishedListener() {
+
+		@Override
+		public void onTaskFinished(boolean successful) {
+			if (successful) {
+				scoreList = LoadScoreFromFileToListView();
+				if (adapter == null) {
+					adapter = new ScoreArrayAdapter(getApplicationContext(),
+							R.layout.score_list, (ArrayList<Highscore>) scoreList);
+
+					GetScoreActivity.this.setListAdapter(adapter);
+
+				}
+				adapter.notifyDataSetChanged();				
+			}
+			
+		}
+	};
+
 }
