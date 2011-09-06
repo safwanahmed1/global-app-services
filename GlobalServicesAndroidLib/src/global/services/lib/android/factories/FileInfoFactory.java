@@ -1,4 +1,8 @@
-package global.services.lib.android;
+package global.services.lib.android.factories;
+
+import global.services.lib.android.httpclient.RequestMethod;
+import global.services.lib.android.httpclient.RestClient;
+import global.services.lib.android.objects.FileInfo;
 
 import java.io.File;
 import java.io.IOException;

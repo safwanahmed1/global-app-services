@@ -1,4 +1,4 @@
-package global.services.lib.android;
+package global.services.lib.android.httpclient;
 
 import java.io.BufferedReader;
 import java.io.IOException;
