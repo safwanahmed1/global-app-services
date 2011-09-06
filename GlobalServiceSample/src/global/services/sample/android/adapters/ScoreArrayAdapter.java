@@ -1,9 +1,12 @@
-package global.services.sample.android;
+package global.services.sample.android.adapters;
 
 import java.util.ArrayList;
 import java.util.Date;
 
-import global.services.lib.android.Highscore;
+import global.services.lib.android.objects.Highscore;
+import global.services.sample.android.R;
+import global.services.sample.android.R.id;
+import global.services.sample.android.R.layout;
 import android.content.Context;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;

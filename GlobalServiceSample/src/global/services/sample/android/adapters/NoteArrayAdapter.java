@@ -1,10 +1,13 @@
-package global.services.sample.android;
+package global.services.sample.android.adapters;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 
-import global.services.lib.android.Notification;
+import global.services.lib.android.objects.Notification;
+import global.services.sample.android.R;
+import global.services.sample.android.R.id;
+import global.services.sample.android.R.layout;
 import android.content.Context;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;

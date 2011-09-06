@@ -1,7 +1,14 @@
-package global.services.sample.android;
+package global.services.sample.android.activities;
 
-import global.services.lib.android.Advertisement;
-import global.services.lib.android.AdvertisementFactory;
+import global.services.lib.android.factories.AdvertisementFactory;
+import global.services.lib.android.objects.Advertisement;
+import global.services.sample.android.R;
+import global.services.sample.android.R.id;
+import global.services.sample.android.R.layout;
+import global.services.sample.android.R.menu;
+import global.services.sample.android.R.string;
+import global.services.sample.android.adapters.AdvArrayAdapter;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;

@@ -1,4 +1,4 @@
-package global.services.sample.android;
+package global.services.sample.android.adapters;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -15,9 +15,12 @@ import java.util.Date;
 
 import org.apache.http.util.ByteArrayBuffer;
 
-import global.services.lib.android.Advertisement;
-import global.services.lib.android.FileInfoFactory;
-import global.services.lib.android.Highscore;
+import global.services.lib.android.factories.FileInfoFactory;
+import global.services.lib.android.objects.Advertisement;
+import global.services.lib.android.objects.Highscore;
+import global.services.sample.android.R;
+import global.services.sample.android.R.id;
+import global.services.sample.android.R.layout;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
