@@ -1,6 +1,9 @@
-package global.services.sample.android;
+package global.services.sample.android.activities;
 
 import global.services.sample.android.R;
+import global.services.sample.android.R.drawable;
+import global.services.sample.android.R.id;
+import global.services.sample.android.R.layout;
 import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;

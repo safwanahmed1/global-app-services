@@ -1,6 +1,13 @@
 package global.services.sample.android;
 
 import global.services.sample.android.R;
+import global.services.sample.android.R.array;
+import global.services.sample.android.R.id;
+import global.services.sample.android.R.layout;
+import global.services.sample.android.activities.AdvertisementActivity;
+import global.services.sample.android.activities.FilesActivity;
+import global.services.sample.android.activities.HighscoreActivity;
+import global.services.sample.android.activities.NotificationActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;

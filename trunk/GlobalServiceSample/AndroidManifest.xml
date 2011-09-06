@@ -12,18 +12,17 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name=".HighscoreActivity" android:label="@string/app_name_highscore">
+		<activity android:name="activities.HighscoreActivityoreActivity" android:label="@string/app_name_highscore">
 		</activity>
-		<activity android:name=".GetScoreActivity" android:label="@string/app_name">
+		<activity android:name=".activities.GetScoreActivity" android:label="@string/app_name">
 		</activity>
-		<activity android:name=".SubmitScoreActivity" android:label="@string/app_name">
+		<activity android:name=".activities.SubmitScoreActivity" android:label="@string/app_name">
 		</activity>
-		<activity android:name=".AdvertisementActivity"
-			android:label="@string/app_name_adv">
+		<activity android:name=".activities.AdvertisementActivity" android:label="@string/app_name_adv">
 		</activity>
-		<activity android:name=".NotificationActivity" android:label="@string/app_name_note">
+		<activity android:name=".activities.NotificationActivityionActivity" android:label="@string/app_name_note">
 		</activity>
-		<activity android:name=".FilesActivity" android:label="@string/app_name_file">
+		<activity android:name=".activities.FilesActivitylesActivity" android:label="@string/app_name_file">
 		</activity>
 
 	</application>

@@ -1,4 +1,4 @@
-package global.services.sample.android;
+package global.services.sample.android.activities;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -12,9 +12,14 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
-import global.services.lib.android.Highscore;
-import global.services.lib.android.HighscoreFactory;
+import global.services.lib.android.factories.HighscoreFactory;
+import global.services.lib.android.objects.Highscore;
 import global.services.sample.android.R;
+import global.services.sample.android.R.id;
+import global.services.sample.android.R.layout;
+import global.services.sample.android.R.menu;
+import global.services.sample.android.R.string;
+import global.services.sample.android.adapters.ScoreArrayAdapter;
 import android.app.ListActivity;
 import android.content.Context;
 import android.os.Bundle;
