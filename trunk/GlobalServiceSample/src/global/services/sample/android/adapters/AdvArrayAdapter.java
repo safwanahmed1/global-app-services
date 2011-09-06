@@ -113,50 +113,7 @@ public class AdvArrayAdapter extends ArrayAdapter<Advertisement> {
 				}
 
 			}
-			/*
-			try {
-				FileInputStream fis = getContext().openFileInput(
-						String.valueOf(objAdv.getIconFileId()));
-
-				final ByteArrayOutputStream dataStream = new ByteArrayOutputStream();
-				BufferedOutputStream out = new BufferedOutputStream(dataStream,
-						4096);
-				byte[] buffer = new byte[1024];
-				int length;
-				while ((length = fis.read(buffer)) != -1) {
-					out.write(buffer, 0, length);
-				}
-				out.flush();
-
-				final byte[] data = dataStream.toByteArray();
-				//BitmapFactory.Options options = new BitmapFactory.Options();
-				// options.inSampleSize = 1;
-
-				if (fis != null) {
-					// Bitmap myBitmap = BitmapFactory.decodeStream(fis);
-					Bitmap myBitmap = BitmapFactory.decodeByteArray(data, 0,
-							data.length);
-					ImageView iconApp = (ImageView) convertView
-							.findViewById(R.id.adv_app_icon);
-					iconApp.setImageBitmap(myBitmap);
-
-				}
-				fis.close();
-				out.close();
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			*/
-			// int resID = getContext().getResources().getIdentifier(icon,
-			// "drawable", "testing.Image_Demo");
-			// imageView.setImageResource(resID);
-
-			// String pathName = getContext().getFilesDir() + "/"
-			// + String.valueOf(objAdv.getIconFileId());
+			
 			
 			
 			String pathName = imgFile.getAbsolutePath();
