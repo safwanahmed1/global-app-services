@@ -3,7 +3,7 @@
 	android:orientation="horizontal" android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
     
-        <TextView android:text="Rank" android:layout_width="60dp" android:id="@+id/score_rank" android:layout_height="wrap_content" android:textSize="8pt" android:textStyle="bold" android:gravity="center"></TextView>
+        <TextView android:text="Level" android:layout_width="60dp" android:id="@+id/score_level" android:layout_height="wrap_content" android:textSize="8pt" android:textStyle="bold" android:gravity="center"></TextView>
         <LinearLayout android:layout_height="wrap_content" android:id="@+id/linearLayout1" android:layout_width="340dp" android:orientation="vertical">
         <TextView android:text="Pham Ngoc Quan" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/score_player" android:singleLine="true" android:textSize="8pt" android:textStyle="bold"></TextView>
         <TextView android:text="Hard" android:layout_width="wrap_content" android:id="@+id/score_level" android:layout_height="wrap_content" android:singleLine="true" android:textSize="6pt"></TextView>
