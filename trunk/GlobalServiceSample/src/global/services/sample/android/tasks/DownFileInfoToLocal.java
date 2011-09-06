@@ -14,20 +14,14 @@ import android.content.Context;
 import android.net.MailTo;
 import android.os.AsyncTask;
 
-public class DownLoadAdvToLocal extends AsyncTask<String, Integer, Void> {
+public class DownFileInfoToLocal extends AsyncTask<String, Integer, Void> {
 	private String ADVERTISEMENT_FILE = "advertisement.xml";
 	private Context context;
 	private ProgressDialog dialog;
 
-	public DownLoadAdvToLocal(Context ctx) {
+	public DownFileInfoToLocal(Context ctx) {
 		context = ctx;
 		dialog = new ProgressDialog(context);
-	}
-
-	@Override
-	protected void onProgressUpdate(Integer... values) {
-		// TODO Auto-generated method stub
-		super.onProgressUpdate(values);
 	}
 	@Override
 	protected void onPostExecute(Void result) {
@@ -45,6 +39,12 @@ public class DownLoadAdvToLocal extends AsyncTask<String, Integer, Void> {
 		dialog.setMessage("Downloading data...");
         dialog.show();
 	}
+	@Override
+	protected void onProgressUpdate(Integer... values) {
+		// TODO Auto-generated method stub
+		super.onProgressUpdate(values);
+	}
+
 	@Override
 	protected Void doInBackground(String... params) {
 		// TODO Auto-generated method stub
