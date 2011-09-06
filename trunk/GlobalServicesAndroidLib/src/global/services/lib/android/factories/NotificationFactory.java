@@ -1,4 +1,8 @@
-package global.services.lib.android;
+package global.services.lib.android.factories;
+
+import global.services.lib.android.httpclient.RequestMethod;
+import global.services.lib.android.httpclient.RestClient;
+import global.services.lib.android.objects.Notification;
 
 import java.io.IOException;
 import java.io.StringReader;

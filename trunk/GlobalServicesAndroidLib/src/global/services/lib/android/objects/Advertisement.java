@@ -1,4 +1,4 @@
-package global.services.lib.android;
+package global.services.lib.android.objects;
 
 import java.io.File;
 import java.io.InputStream;

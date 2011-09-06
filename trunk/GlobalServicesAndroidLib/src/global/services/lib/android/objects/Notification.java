@@ -1,4 +1,4 @@
-package global.services.lib.android;
+package global.services.lib.android.objects;
 
 public class Notification {
 	
