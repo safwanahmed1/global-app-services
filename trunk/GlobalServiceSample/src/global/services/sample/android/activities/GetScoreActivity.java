@@ -15,8 +15,8 @@ import global.services.lib.android.factories.HighscoreFactory;
 import global.services.lib.android.objects.Highscore;
 import global.services.sample.android.R;
 import global.services.sample.android.adapters.ScoreArrayAdapter;
-import global.services.sample.android.tasks.DownLoadScoreToLocal;
-import global.services.sample.android.tasks.DownLoadScoreToLocal.OnTaskFinishedListener;
+import global.services.sample.android.tasks.DownloadScoreToLocal;
+import global.services.sample.android.tasks.DownloadScoreToLocal.OnTaskFinishedListener;
 import android.app.ListActivity;
 import android.content.Context;
 import android.os.Bundle;
@@ -30,7 +30,8 @@ import android.widget.ListView;
 public class GetScoreActivity extends ListActivity {
 	private static final String SCORE_FILE = "highscore.xml";
 	private ScoreArrayAdapter adapter;
-	List<Highscore> scoreList;
+	private List<Highscore> scoreList;
+	private boolean refreshList = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -46,10 +47,24 @@ public class GetScoreActivity extends ListActivity {
 		}
 
 	}
-
+	
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
+		if (refreshList) {
+			refreshList = false;
+			scoreList = LoadScoreFromFileToListView();
+			if (adapter == null) {
+				adapter = new ScoreArrayAdapter(getApplicationContext(),
+						R.layout.score_list,
+						(ArrayList<Highscore>) scoreList);
+
+				setListAdapter(adapter);
+
+			} else
+				adapter.notifyDataSetChanged();
+		}
+		
 		super.onResume();
 
 	}
@@ -66,13 +81,12 @@ public class GetScoreActivity extends ListActivity {
 		// Handle item selection
 		switch (item.getItemId()) {
 		case R.id.refresh_score:
-			//GetScoreToLocalFile();
-			DownLoadScoreToLocal downScore = new DownLoadScoreToLocal(this);
-			downScore.setOnTaskFinishedListener(mOnTaskFinishedListener);
-			downScore.execute(getResources()
-				.getString(R.string.userid), getResources()
-				.getString(R.string.appid));
-			
+			// GetScoreToLocalFile();
+			DownloadScoreToLocal downScore = new DownloadScoreToLocal(this);
+			//downScore.setOnTaskFinishedListener(mOnTaskFinishedListener);
+			downScore.execute(getResources().getString(R.string.userid),
+					getResources().getString(R.string.appid));
+
 			// setListAdapter(adapter);
 			return true;
 		default:
@@ -104,7 +118,7 @@ public class GetScoreActivity extends ListActivity {
 	}
 
 	/* Refresh score from xml file to listview */
-	private List<Highscore> LoadScoreFromFileToListView() {
+	public List<Highscore> LoadScoreFromFileToListView() {
 		List<Highscore> scoreList = null;
 		FileInputStream fis;
 		StringBuffer fileContent = new StringBuffer("");
@@ -219,22 +233,15 @@ public class GetScoreActivity extends ListActivity {
 		}
 		return scoreList;
 	}
+
 	private OnTaskFinishedListener mOnTaskFinishedListener = new OnTaskFinishedListener() {
 
 		@Override
 		public void onTaskFinished(boolean successful) {
-			if (successful) {
-				scoreList = LoadScoreFromFileToListView();
-				if (adapter == null) {
-					adapter = new ScoreArrayAdapter(getApplicationContext(),
-							R.layout.score_list, (ArrayList<Highscore>) scoreList);
-
-					GetScoreActivity.this.setListAdapter(adapter);
-
-				}
-				adapter.notifyDataSetChanged();				
-			}
+			refreshList = successful;
 			
+			
+
 		}
 	};
 
