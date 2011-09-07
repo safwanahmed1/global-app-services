@@ -1,23 +1,32 @@
 package global.services.sample.android.tasks;
 
 import global.services.lib.android.factories.HighscoreFactory;
+import global.services.lib.android.objects.Highscore;
+import global.services.sample.android.R;
+import global.services.sample.android.activities.GetScoreActivity;
+import global.services.sample.android.adapters.ScoreArrayAdapter;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 
-public class DownLoadScoreToLocal extends AsyncTask<String, Integer, Void> {
+public class DownloadScoreToLocal extends AsyncTask<String, Integer, Void> {
 	private static final String SCORE_FILE = "highscore.xml";
 	private Context context;
 	private ProgressDialog dialog;
 	private OnTaskFinishedListener mOnTaskFinishedListener;
 
-	public DownLoadScoreToLocal(Context ctx) {
+
+	public DownloadScoreToLocal(Context ctx) {
 		context = ctx;
 		dialog = new ProgressDialog(context);
+		
 	}
 
 	public void setOnTaskFinishedListener(OnTaskFinishedListener listener) {
@@ -49,8 +58,8 @@ public class DownLoadScoreToLocal extends AsyncTask<String, Integer, Void> {
 
 	@Override
 	protected Void doInBackground(String... params) {
-		HighscoreFactory scoreFactory = new HighscoreFactory(params[0], Long
-				.parseLong(params[1]));
+		HighscoreFactory scoreFactory = new HighscoreFactory(params[0],
+				Long.parseLong(params[1]));
 		String scoresXML = scoreFactory.GetScoresXMLContent();
 		FileOutputStream fos = null;
 		if (scoresXML != null) {
@@ -71,6 +80,15 @@ public class DownLoadScoreToLocal extends AsyncTask<String, Integer, Void> {
 
 			mOnTaskFinishedListener.onTaskFinished(true);
 		}
+		/*
+		scoreList = activity.LoadScoreFromFileToListView();
+		if (scoreList != null) {
+			adapter = new ScoreArrayAdapter(context, R.layout.score_list,
+					(ArrayList<Highscore>) scoreList);
+
+			activity.setListAdapter(adapter);
+
+		} */
 		return null;
 	}
 

@@ -14,12 +14,12 @@ import android.content.Context;
 import android.net.MailTo;
 import android.os.AsyncTask;
 
-public class DownFileInfoToLocal extends AsyncTask<String, Integer, Void> {
+public class DownloadFileInfoToLocal extends AsyncTask<String, Integer, Void> {
 	private String ADVERTISEMENT_FILE = "advertisement.xml";
 	private Context context;
 	private ProgressDialog dialog;
 
-	public DownFileInfoToLocal(Context ctx) {
+	public DownloadFileInfoToLocal(Context ctx) {
 		context = ctx;
 		dialog = new ProgressDialog(context);
 	}
