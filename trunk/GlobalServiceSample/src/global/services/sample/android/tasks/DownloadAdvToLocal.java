@@ -20,7 +20,9 @@ public class DownloadAdvToLocal extends AsyncTask<String, Integer, Boolean> {
 		context = ctx;
 		dialog = new ProgressDialog(context);
 	}
-
+	public void setOnTaskFinishedListener(OnTaskFinishedListener listener) {
+		mOnTaskFinishedListener = listener;
+	}
 	@Override
 	protected void onProgressUpdate(Integer... values) {
 		// TODO Auto-generated method stub

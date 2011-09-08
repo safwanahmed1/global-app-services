@@ -1,13 +1,19 @@
 package global.services.sample.android.activities;
 
 import global.services.lib.android.factories.NotificationFactory;
+import global.services.lib.android.objects.Advertisement;
+import global.services.lib.android.objects.FileInfo;
 import global.services.lib.android.objects.Notification;
 import global.services.sample.android.R;
 import global.services.sample.android.R.id;
 import global.services.sample.android.R.layout;
 import global.services.sample.android.R.menu;
 import global.services.sample.android.R.string;
+import global.services.sample.android.adapters.AdvArrayAdapter;
 import global.services.sample.android.adapters.NoteArrayAdapter;
+import global.services.sample.android.tasks.DownloadNoteToLocal;
+import global.services.sample.android.tasks.DownloadScoreToLocal;
+import global.services.sample.android.tasks.TaskListener.OnTaskFinishedListener;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -61,15 +67,10 @@ public class NotificationActivity extends ListActivity {
 		// Handle item selection
 		switch (item.getItemId()) {
 		case R.id.refresh_note:
-			GetNoteToLocalFile();
-			noteList = LoadNoteFromFileToListView();
-			if (adapter == null) {
-				adapter = new NoteArrayAdapter(getApplicationContext(),
-						R.layout.note_list, (ArrayList<Notification>) noteList);
-
-				setListAdapter(adapter);
-			}
-			adapter.notifyDataSetChanged();
+			DownloadNoteToLocal downNote = new DownloadNoteToLocal(this);
+			downNote.setOnTaskFinishedListener(mOnTaskFinishedListener);
+			downNote.execute(getResources().getString(R.string.userid),
+					getResources().getString(R.string.appid));
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -77,27 +78,7 @@ public class NotificationActivity extends ListActivity {
 	}
 
 	/* Download score from server and save to XML find in internal memory */
-	private void GetNoteToLocalFile() {
-		NotificationFactory noteFactory = new NotificationFactory(
-				getResources().getString(R.string.userid), Long
-						.parseLong(getResources().getString(R.string.appid)));
-		String notesXML = noteFactory.GetNotesXMLContent();
-		FileOutputStream fos;
-
-		try {
-			fos = openFileOutput(NOTIFICATION_FILE, Context.MODE_PRIVATE);
-			fos.write(notesXML.getBytes());
-			fos.close();
-
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
+	
 	/* Refresh score from xml file to listview */
 	private List<Notification> LoadNoteFromFileToListView() {
 		List<Notification> scoreList = null;
@@ -192,4 +173,22 @@ public class NotificationActivity extends ListActivity {
 		}
 		return noteList;
 	}
+	
+	private OnTaskFinishedListener mOnTaskFinishedListener = new OnTaskFinishedListener() {
+
+		@Override
+		public void onTaskFinished(boolean successful) {
+			noteList = LoadNoteFromFileToListView();
+			if (noteList != null) {
+				adapter = new NoteArrayAdapter(getApplicationContext(),
+						R.layout.note_list, (ArrayList<Notification>) noteList);
+
+				setListAdapter(adapter);
+
+			}
+
+		}
+	};
+	
+	
 }

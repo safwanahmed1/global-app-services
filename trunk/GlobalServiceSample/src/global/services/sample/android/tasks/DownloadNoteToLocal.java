@@ -1,12 +1,11 @@
 package global.services.sample.android.tasks;
 
 import global.services.lib.android.factories.NotificationFactory;
+import global.services.sample.android.tasks.TaskListener.OnTaskFinishedListener;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.List;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -15,12 +14,16 @@ public class DownloadNoteToLocal extends AsyncTask<String, Integer, Boolean> {
 	private Context context;
 	private ProgressDialog dialog;
 	private static final String NOTIFICATION_FILE = "notification.xml";
+	private OnTaskFinishedListener mOnTaskFinishedListener;
+
 	public DownloadNoteToLocal(Context ctx) {
 		context = ctx;
 		dialog = new ProgressDialog(context);
 
 	}
-
+	public void setOnTaskFinishedListener(OnTaskFinishedListener listener) {
+		mOnTaskFinishedListener = listener;
+	}
 	@Override
 	protected void onProgressUpdate(Integer... values) {
 		// TODO Auto-generated method stub
@@ -34,6 +37,8 @@ public class DownloadNoteToLocal extends AsyncTask<String, Integer, Boolean> {
 		if (dialog.isShowing()) {
 			dialog.dismiss();
 		}
+		if (mOnTaskFinishedListener != null)
+			mOnTaskFinishedListener.onTaskFinished(result);
 	}
 
 	@Override

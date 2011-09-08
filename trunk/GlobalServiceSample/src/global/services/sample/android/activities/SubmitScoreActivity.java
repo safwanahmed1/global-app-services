@@ -1,14 +1,10 @@
 package global.services.sample.android.activities;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import global.services.lib.android.factories.HighscoreFactory;
 import global.services.lib.android.objects.Highscore;
 import global.services.sample.android.R;
-import global.services.sample.android.R.id;
-import global.services.sample.android.R.layout;
-import global.services.sample.android.R.string;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
