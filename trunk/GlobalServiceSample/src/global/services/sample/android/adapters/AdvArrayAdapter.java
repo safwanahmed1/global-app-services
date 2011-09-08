@@ -21,6 +21,8 @@ import global.services.lib.android.objects.Highscore;
 import global.services.sample.android.R;
 import global.services.sample.android.R.id;
 import global.services.sample.android.R.layout;
+import global.services.sample.android.tasks.DownloadAdvToLocal;
+import global.services.sample.android.tasks.DownloadFileToLocal;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -72,14 +74,12 @@ public class AdvArrayAdapter extends ArrayAdapter<Advertisement> {
 					String.valueOf(objAdv.getIconFileId()));
 
 			if (!imgFile.exists()) {
+				
+				 
 				InputStream is = new FileInfoFactory(objAdv.getUserId())
 						.Download(objAdv.getIconFileId());
 				BufferedInputStream bis = new BufferedInputStream(is);
 
-				/*
-				 * Read bytes to the Buffer until there is nothing more to
-				 * read(-1).
-				 */
 				FileOutputStream fos = null;
 
 				try {
@@ -97,10 +97,6 @@ public class AdvArrayAdapter extends ArrayAdapter<Advertisement> {
 						fos.write(buffer, 0, current);
 					}
 
-					/*
-					 * while ((current = bis.read()) != -1) { baf.append((byte)
-					 * current); fos.write(baf.toByteArray()); baf.clear(); }
-					 */
 					fos.close();
 
 					is.close();
@@ -111,17 +107,20 @@ public class AdvArrayAdapter extends ArrayAdapter<Advertisement> {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				
 
+			} else {
+				String pathName = imgFile.getAbsolutePath();
+				Bitmap myBitmap = BitmapFactory.decodeFile(pathName);
+				ImageView iconApp = (ImageView) convertView
+						.findViewById(R.id.adv_app_icon);
+				iconApp.setImageBitmap(myBitmap);
+	
 			}
 			
 			
 			
-			String pathName = imgFile.getAbsolutePath();
-			Bitmap myBitmap = BitmapFactory.decodeFile(pathName);
-			ImageView iconApp = (ImageView) convertView
-					.findViewById(R.id.adv_app_icon);
-			iconApp.setImageBitmap(myBitmap);
-
+			
 			TextView txtName = (TextView) convertView
 					.findViewById(R.id.adv_app_name);
 			TextView txtTitle = (TextView) convertView

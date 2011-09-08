@@ -18,10 +18,15 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import android.app.ListActivity;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ListView;
 
 public class AdvertisementActivity extends ListActivity {
 
@@ -50,6 +55,21 @@ public class AdvertisementActivity extends ListActivity {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.get_adv_menu, menu);
 		return true;
+	}
+	
+	
+	
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		// TODO Auto-generated method stub
+		super.onListItemClick(l, v, position, id);
+		Advertisement advItem = (Advertisement) this.getListAdapter().getItem(position);
+		
+         Uri uri = Uri.parse(advItem.getStoreUrl()); 
+         Intent intent = new Intent(Intent.ACTION_VIEW, uri); 
+         startActivity(intent); 
+
+         
 	}
 
 	@Override
