@@ -1,17 +1,13 @@
 package global.services.sample.android.activities;
 
-import global.services.lib.android.factories.AdvertisementFactory;
 import global.services.lib.android.objects.Advertisement;
 import global.services.sample.android.R;
-import global.services.sample.android.R.id;
-import global.services.sample.android.R.layout;
-import global.services.sample.android.R.menu;
-import global.services.sample.android.R.string;
 import global.services.sample.android.adapters.AdvArrayAdapter;
+import global.services.sample.android.tasks.DownloadAdvToLocal;
+import global.services.sample.android.tasks.TaskListener.OnTaskFinishedListener;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -22,7 +18,6 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import android.app.ListActivity;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -62,41 +57,17 @@ public class AdvertisementActivity extends ListActivity {
 		// Handle item selection
 		switch (item.getItemId()) {
 		case R.id.refresh_adv:
-			GetAdvToLocalFile();
-			advList = LoadAdvFromFileToListView();
-			if (adapter == null) {
-				adapter = new AdvArrayAdapter(getApplicationContext(),
-						R.layout.adv_list, (ArrayList<Advertisement>) advList);
+			DownloadAdvToLocal downAdv = new DownloadAdvToLocal(this);
+			downAdv.setOnTaskFinishedListener(mOnTaskFinishedListener);
+			downAdv.execute(getResources().getString(R.string.userid));
 
-				setListAdapter(adapter);
-			}
-			adapter.notifyDataSetChanged();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
 
-	/* Download score from server and save to XML find in internal memory */
-	private void GetAdvToLocalFile() {
-		AdvertisementFactory advFactory = new AdvertisementFactory(
-				getResources().getString(R.string.userid));
-		String advsXML = advFactory.GetAdvsXMLContent();
-		FileOutputStream fos;
-
-		try {
-			fos = openFileOutput(ADVERTISEMENT_FILE, Context.MODE_PRIVATE);
-			fos.write(advsXML.getBytes());
-			fos.close();
-
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+	
 
 	private List<Advertisement> LoadAdvFromFileToListView() {
 		// TODO Auto-generated method stub
@@ -204,5 +175,20 @@ public class AdvertisementActivity extends ListActivity {
 		}
 		return advList;
 	}
+	private OnTaskFinishedListener mOnTaskFinishedListener = new OnTaskFinishedListener() {
+
+		@Override
+		public void onTaskFinished(boolean successful) {
+			advList = LoadAdvFromFileToListView();
+			if (advList != null) {
+				adapter = new AdvArrayAdapter(getApplicationContext(),
+						R.layout.adv_list, (ArrayList<Advertisement>) advList);
+
+				setListAdapter(adapter);
+
+			}
+
+		}
+	};
 
 }

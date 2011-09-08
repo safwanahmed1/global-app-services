@@ -1,13 +1,18 @@
 package global.services.sample.android.activities;
 
 import global.services.lib.android.factories.FileInfoFactory;
+import global.services.lib.android.objects.Advertisement;
 import global.services.lib.android.objects.FileInfo;
 import global.services.sample.android.R;
 import global.services.sample.android.R.id;
 import global.services.sample.android.R.layout;
 import global.services.sample.android.R.menu;
 import global.services.sample.android.R.string;
+import global.services.sample.android.adapters.AdvArrayAdapter;
 import global.services.sample.android.adapters.FileArrayAdapter;
+import global.services.sample.android.tasks.DownloadAdvToLocal;
+import global.services.sample.android.tasks.DownloadFileInfoToLocal;
+import global.services.sample.android.tasks.TaskListener.OnTaskFinishedListener;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -61,41 +66,17 @@ public class FilesActivity extends ListActivity {
 		// Handle item selection
 		switch (item.getItemId()) {
 		case R.id.refresh_file:
-			GetFileInfiToLocalFile();
-			fileList = LoadFileInfoFromFileToListView();
-			if (adapter == null) {
-				adapter = new FileArrayAdapter(getApplicationContext(),
-						R.layout.file_list, (ArrayList<FileInfo>) fileList);
+			DownloadFileInfoToLocal downFileInfo = new DownloadFileInfoToLocal(this);
+			downFileInfo.setOnTaskFinishedListener(mOnTaskFinishedListener);
+			downFileInfo.execute(getResources().getString(R.string.userid));
 
-				setListAdapter(adapter);
-			}
-			adapter.notifyDataSetChanged();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
 
-	/* Download score from server and save to XML find in internal memory */
-	private void GetFileInfiToLocalFile() {
-		FileInfoFactory fileFactory = new FileInfoFactory(getResources()
-				.getString(R.string.userid));
-		String filesXML = fileFactory.GetFilesXMLContent();
-		FileOutputStream fos;
-
-		try {
-			fos = openFileOutput(FILEINFO_FILE, Context.MODE_PRIVATE);
-			fos.write(filesXML.getBytes());
-			fos.close();
-
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+	
 
 	private List<FileInfo> LoadFileInfoFromFileToListView() {
 		// TODO Auto-generated method stub
@@ -192,5 +173,19 @@ public class FilesActivity extends ListActivity {
 		}
 		return fileList;
 	}
+	private OnTaskFinishedListener mOnTaskFinishedListener = new OnTaskFinishedListener() {
 
+		@Override
+		public void onTaskFinished(boolean successful) {
+			fileList = LoadFileInfoFromFileToListView();
+			if (fileList != null) {
+				adapter = new FileArrayAdapter(getApplicationContext(),
+						R.layout.file_list, (ArrayList<FileInfo>) fileList);
+
+				setListAdapter(adapter);
+
+			}
+
+		}
+	};
 }
