@@ -1,32 +1,25 @@
 package global.services.sample.android.tasks;
 
 import global.services.lib.android.factories.HighscoreFactory;
-import global.services.lib.android.objects.Highscore;
-import global.services.sample.android.R;
-import global.services.sample.android.activities.GetScoreActivity;
-import global.services.sample.android.adapters.ScoreArrayAdapter;
+import global.services.sample.android.tasks.TaskListener.OnTaskFinishedListener;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 
-public class DownloadScoreToLocal extends AsyncTask<String, Integer, Void> {
+public class DownloadScoreToLocal extends AsyncTask<String, Integer, Boolean> {
 	private static final String SCORE_FILE = "highscore.xml";
 	private Context context;
 	private ProgressDialog dialog;
 	private OnTaskFinishedListener mOnTaskFinishedListener;
 
-
 	public DownloadScoreToLocal(Context ctx) {
 		context = ctx;
 		dialog = new ProgressDialog(context);
-		
+
 	}
 
 	public void setOnTaskFinishedListener(OnTaskFinishedListener listener) {
@@ -40,12 +33,14 @@ public class DownloadScoreToLocal extends AsyncTask<String, Integer, Void> {
 	}
 
 	@Override
-	protected void onPostExecute(Void result) {
+	protected void onPostExecute(Boolean result) {
 		// TODO Auto-generated method stub
 		super.onPostExecute(result);
-		if (dialog.isShowing()) {
+		if (dialog.isShowing())
 			dialog.dismiss();
-		}
+		if (mOnTaskFinishedListener != null)
+			mOnTaskFinishedListener.onTaskFinished(result);
+
 	}
 
 	@Override
@@ -57,7 +52,7 @@ public class DownloadScoreToLocal extends AsyncTask<String, Integer, Void> {
 	}
 
 	@Override
-	protected Void doInBackground(String... params) {
+	protected Boolean doInBackground(String... params) {
 		HighscoreFactory scoreFactory = new HighscoreFactory(params[0],
 				Long.parseLong(params[1]));
 		String scoresXML = scoreFactory.GetScoresXMLContent();
@@ -71,38 +66,17 @@ public class DownloadScoreToLocal extends AsyncTask<String, Integer, Void> {
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				return false;
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				return false;
 			}
 		}
-		if (mOnTaskFinishedListener != null) {
 
-			mOnTaskFinishedListener.onTaskFinished(true);
-		}
-		/*
-		scoreList = activity.LoadScoreFromFileToListView();
-		if (scoreList != null) {
-			adapter = new ScoreArrayAdapter(context, R.layout.score_list,
-					(ArrayList<Highscore>) scoreList);
-
-			activity.setListAdapter(adapter);
-
-		} */
-		return null;
+		return true;
 	}
 
-	public interface OnTaskFinishedListener {
-		/**
-		 * Occurs when import is finished.
-		 * 
-		 * @param importSuccessful
-		 *            Indicates whether import was successful.
-		 * @param folderId
-		 *            Contains id of imported folder, or -1 if multiple folders
-		 *            were imported.
-		 */
-		void onTaskFinished(boolean success);
-	}
+	
 
 }
