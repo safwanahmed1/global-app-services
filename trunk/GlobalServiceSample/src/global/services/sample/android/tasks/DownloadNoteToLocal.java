@@ -1,9 +1,6 @@
 package global.services.sample.android.tasks;
 
-import global.services.lib.android.factories.AdvertisementFactory;
-import global.services.lib.android.objects.Highscore;
-import global.services.sample.android.activities.GetScoreActivity;
-import global.services.sample.android.adapters.ScoreArrayAdapter;
+import global.services.lib.android.factories.NotificationFactory;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -14,11 +11,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 
-public class DownloadNoteToLocal extends AsyncTask<String, Integer, Void> {
-	private String ADVERTISEMENT_FILE = "advertisement.xml";
+public class DownloadNoteToLocal extends AsyncTask<String, Integer, Boolean> {
 	private Context context;
 	private ProgressDialog dialog;
-
+	private static final String NOTIFICATION_FILE = "notification.xml";
 	public DownloadNoteToLocal(Context ctx) {
 		context = ctx;
 		dialog = new ProgressDialog(context);
@@ -32,7 +28,7 @@ public class DownloadNoteToLocal extends AsyncTask<String, Integer, Void> {
 	}
 
 	@Override
-	protected void onPostExecute(Void result) {
+	protected void onPostExecute(Boolean result) {
 		// TODO Auto-generated method stub
 		super.onPostExecute(result);
 		if (dialog.isShowing()) {
@@ -49,28 +45,30 @@ public class DownloadNoteToLocal extends AsyncTask<String, Integer, Void> {
 	}
 
 	@Override
-	protected Void doInBackground(String... params) {
+	protected Boolean doInBackground(String... params) {
 		// TODO Auto-generated method stub
-		AdvertisementFactory advFactory = new AdvertisementFactory(params[0]);
-		String advsXML = advFactory.GetAdvsXMLContent();
+		NotificationFactory noteFactory = new NotificationFactory(params[0], Long.parseLong(params[1]));
+		String notesXML = noteFactory.GetNotesXMLContent();
 		FileOutputStream fos;
 		try {
 			if (context != null) {
-				fos = context.openFileOutput(ADVERTISEMENT_FILE,
+				fos = context.openFileOutput(NOTIFICATION_FILE,
 						Context.MODE_PRIVATE);
-				fos.write(advsXML.getBytes());
+				fos.write(notesXML.getBytes());
 				fos.close();
 			}
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return false;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return false;
 		}
 
-		return null;
+		return true;
 	}
 
 }

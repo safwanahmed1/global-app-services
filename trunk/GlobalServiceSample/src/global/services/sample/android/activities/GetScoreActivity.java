@@ -16,16 +16,13 @@ import global.services.lib.android.objects.Highscore;
 import global.services.sample.android.R;
 import global.services.sample.android.adapters.ScoreArrayAdapter;
 import global.services.sample.android.tasks.DownloadScoreToLocal;
-import global.services.sample.android.tasks.DownloadScoreToLocal.OnTaskFinishedListener;
+import global.services.sample.android.tasks.TaskListener.OnTaskFinishedListener;
 import android.app.ListActivity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 public class GetScoreActivity extends ListActivity {
 	private static final String SCORE_FILE = "highscore.xml";
@@ -47,24 +44,11 @@ public class GetScoreActivity extends ListActivity {
 		}
 
 	}
-	
+
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
-		if (refreshList) {
-			refreshList = false;
-			scoreList = LoadScoreFromFileToListView();
-			if (adapter == null) {
-				adapter = new ScoreArrayAdapter(getApplicationContext(),
-						R.layout.score_list,
-						(ArrayList<Highscore>) scoreList);
 
-				setListAdapter(adapter);
-
-			} else
-				adapter.notifyDataSetChanged();
-		}
-		
 		super.onResume();
 
 	}
@@ -83,7 +67,7 @@ public class GetScoreActivity extends ListActivity {
 		case R.id.refresh_score:
 			// GetScoreToLocalFile();
 			DownloadScoreToLocal downScore = new DownloadScoreToLocal(this);
-			//downScore.setOnTaskFinishedListener(mOnTaskFinishedListener);
+			downScore.setOnTaskFinishedListener(mOnTaskFinishedListener);
 			downScore.execute(getResources().getString(R.string.userid),
 					getResources().getString(R.string.appid));
 
@@ -238,9 +222,14 @@ public class GetScoreActivity extends ListActivity {
 
 		@Override
 		public void onTaskFinished(boolean successful) {
-			refreshList = successful;
-			
-			
+			scoreList = LoadScoreFromFileToListView();
+			if (scoreList != null) {
+				adapter = new ScoreArrayAdapter(getApplicationContext(),
+						R.layout.score_list, (ArrayList<Highscore>) scoreList);
+
+				setListAdapter(adapter);
+
+			}
 
 		}
 	};
