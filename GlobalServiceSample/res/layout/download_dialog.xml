@@ -1,0 +1,14 @@
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="fill_parent" android:id="@+id/linearLayout1" android:layout_width="fill_parent" android:orientation="vertical">
+        <TextView android:text="Location:" android:id="@+id/textView1" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+        <EditText android:layout_width="fill_parent" android:id="@+id/editLocation" android:layout_height="wrap_content">
+            <requestFocus></requestFocus>
+        </EditText>
+        <TextView android:text="File name:" android:id="@+id/textView1" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+        <EditText android:layout_width="fill_parent" android:id="@+id/editFileName" android:layout_height="wrap_content" ></EditText>
+    
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/linearLayout1" android:layout_width="fill_parent" android:orientation="horizontal" android:layout_gravity="center|clip_vertical" android:gravity="center" android:layout_height="wrap_content" android:layout_margin="5px">
+          <Button android:text="Download" android:id="@+id/btnDownload" android:layout_margin="5px" android:layout_height="wrap_content" android:layout_width="100dp"></Button>
+          <Button android:text="Cancel" android:id="@+id/btnCancel" android:layout_height="wrap_content" android:layout_margin="5px" android:layout_width="100dp"></Button>
+    </LinearLayout>
+    </LinearLayout>
