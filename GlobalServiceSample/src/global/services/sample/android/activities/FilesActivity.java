@@ -1,22 +1,13 @@
 package global.services.sample.android.activities;
 
-import global.services.lib.android.factories.FileInfoFactory;
-import global.services.lib.android.objects.Advertisement;
 import global.services.lib.android.objects.FileInfo;
 import global.services.sample.android.R;
-import global.services.sample.android.R.id;
-import global.services.sample.android.R.layout;
-import global.services.sample.android.R.menu;
-import global.services.sample.android.R.string;
-import global.services.sample.android.adapters.AdvArrayAdapter;
 import global.services.sample.android.adapters.FileArrayAdapter;
-import global.services.sample.android.tasks.DownloadAdvToLocal;
 import global.services.sample.android.tasks.DownloadFileInfoToLocal;
 import global.services.sample.android.tasks.TaskListener.OnTaskFinishedListener;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -27,11 +18,15 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import android.app.ListActivity;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
 
 public class FilesActivity extends ListActivity {
 	private List<FileInfo> fileList;
@@ -66,7 +61,8 @@ public class FilesActivity extends ListActivity {
 		// Handle item selection
 		switch (item.getItemId()) {
 		case R.id.refresh_file:
-			DownloadFileInfoToLocal downFileInfo = new DownloadFileInfoToLocal(this);
+			DownloadFileInfoToLocal downFileInfo = new DownloadFileInfoToLocal(
+					this);
 			downFileInfo.setOnTaskFinishedListener(mOnTaskFinishedListener);
 			downFileInfo.execute(getResources().getString(R.string.userid));
 
@@ -76,7 +72,36 @@ public class FilesActivity extends ListActivity {
 		}
 	}
 
-	
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		// TODO Auto-generated method stub
+		super.onListItemClick(l, v, position, id);
+		FileInfo fileItem = (FileInfo) this.getListAdapter().getItem(position);
+		final DownloadDialog dial = new DownloadDialog(this, fileItem.getFileName());
+
+		EditText txtLocation = (EditText) dial.findViewById(R.id.editLocation);
+		EditText txtFileName = (EditText) dial.findViewById(R.id.editFileName);
+		Button btnDownload = (Button) dial.findViewById(R.id.btnDownload);
+		Button btnCancel = (Button) dial.findViewById(R.id.btnCancel);
+		btnCancel.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dial.dismiss();
+			}
+		});
+		btnDownload.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dial.dismiss();
+				DownloadFileInfoToLocal downFileInfo = new DownloadFileInfoToLocal();
+				downFileInfo.setOnTaskFinishedListener(mOnTaskFinishedListener);
+				downFileInfo.execute(getResources().getString(R.string.userid));
+				
+			}
+		});
+		dial.show();
+
+	}
 
 	private List<FileInfo> LoadFileInfoFromFileToListView() {
 		// TODO Auto-generated method stub
@@ -173,6 +198,7 @@ public class FilesActivity extends ListActivity {
 		}
 		return fileList;
 	}
+
 	private OnTaskFinishedListener mOnTaskFinishedListener = new OnTaskFinishedListener() {
 
 		@Override
