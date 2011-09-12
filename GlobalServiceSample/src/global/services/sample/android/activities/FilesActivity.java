@@ -4,8 +4,10 @@ import global.services.lib.android.objects.FileInfo;
 import global.services.sample.android.R;
 import global.services.sample.android.adapters.FileArrayAdapter;
 import global.services.sample.android.tasks.DownloadFileInfoToLocal;
+import global.services.sample.android.tasks.DownloadFileToLocal;
 import global.services.sample.android.tasks.TaskListener.OnTaskFinishedListener;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -76,11 +78,11 @@ public class FilesActivity extends ListActivity {
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		// TODO Auto-generated method stub
 		super.onListItemClick(l, v, position, id);
-		FileInfo fileItem = (FileInfo) this.getListAdapter().getItem(position);
+		final FileInfo fileItem = (FileInfo) this.getListAdapter().getItem(position);
 		final DownloadDialog dial = new DownloadDialog(this, fileItem.getFileName());
 
-		EditText txtLocation = (EditText) dial.findViewById(R.id.editLocation);
-		EditText txtFileName = (EditText) dial.findViewById(R.id.editFileName);
+		final EditText txtLocation = (EditText) dial.findViewById(R.id.editLocation);
+		final EditText txtFileName = (EditText) dial.findViewById(R.id.editFileName);
 		Button btnDownload = (Button) dial.findViewById(R.id.btnDownload);
 		Button btnCancel = (Button) dial.findViewById(R.id.btnCancel);
 		btnCancel.setOnClickListener(new OnClickListener() {
@@ -93,9 +95,13 @@ public class FilesActivity extends ListActivity {
 			@Override
 			public void onClick(View v) {
 				dial.dismiss();
-				DownloadFileInfoToLocal downFileInfo = new DownloadFileInfoToLocal();
-				downFileInfo.setOnTaskFinishedListener(mOnTaskFinishedListener);
-				downFileInfo.execute(getResources().getString(R.string.userid));
+				DownloadFileToLocal downFileTask = new DownloadFileToLocal(dial.getContext());
+				//downFileInfo.setOnTaskFinishedListener(mOnTaskFinishedListener);
+				if (!(new File(txtLocation.getText().toString()).exists()))
+					new File(txtLocation.getText().toString()).mkdirs();
+				String fileName = new File(txtLocation.getText().toString(),txtFileName.getText().toString()).getAbsolutePath();
+				
+				downFileTask.execute(getResources().getString(R.string.userid), String.valueOf(fileItem.getId()), fileName);
 				
 			}
 		});
