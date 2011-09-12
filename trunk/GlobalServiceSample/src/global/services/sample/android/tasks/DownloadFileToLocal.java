@@ -3,6 +3,7 @@ package global.services.sample.android.tasks;
 import global.services.lib.android.factories.FileInfoFactory;
 import global.services.sample.android.tasks.TaskListener.OnTaskFinishedListener;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -55,8 +56,10 @@ public class DownloadFileToLocal extends AsyncTask<String, Integer, Boolean> {
 		FileOutputStream fos;
 		try {
 			if (context != null) {
-				fos = context.openFileOutput(params[2],
-						Context.MODE_PRIVATE);
+//				fos = context.openFileOutput(params[2],
+//						Context.MODE_PRIVATE);
+				File file = new File(params[2]);
+				fos  = new FileOutputStream(file);
 				
 				byte[] buffer = new byte[1024];
 
