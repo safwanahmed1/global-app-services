@@ -2,4 +2,5 @@
 <resources>
     <string name="hello">Hello World, VandTVActivity!</string>
     <string name="app_name">VandTV</string>
+    <string name="channellist">Channel list</string>
 </resources>
