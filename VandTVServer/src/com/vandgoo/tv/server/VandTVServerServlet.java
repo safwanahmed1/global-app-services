@@ -47,15 +47,30 @@ public class VandTVServerServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		if (streamer != null && file != null) {
+			/**
 			String embed = "<embed allowfullscreen=\"true\" allowscriptaccess=\"never\" flashvars=\""
 					+ "streamer="
 					+ streamer
 					+ "&file="
 					+ file
-					+ "&autostart=true&controlbar=bottom&skinName=data/skin/modieus \" "
-					+ "height=\"600\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" src=\"data/player.swf\" type=\"application/x-shockwave-flash\" "
+					+ "&autostart=true&controlbar=bottom&skinName=/data/jwplayer/skin/norden/norden.zip \" "
+					+ "height=\"600\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" src=\"/data/jwplayer/player.swf\" type=\"application/x-shockwave-flash\" "
 					+ "width=\"800\" ></embed>";
-			resp.getWriter().println(embed);
+					**/
+			StringBuilder embedBuilder = new StringBuilder();
+			embedBuilder.append("<script type='text/javascript' src='/data/jwplayer/jwplayer.js'></script>");
+			embedBuilder.append("<div id='mediaspace'>This text will be replaced</div>");
+			embedBuilder.append("<script type='text/javascript'>");
+			embedBuilder.append("jwplayer('mediaspace').setup({");
+			embedBuilder.append("'flashplayer': '/data/jwplayer/player.swf',");
+			embedBuilder.append("'file': '"+file+"',");
+			embedBuilder.append("'skin': '/data/jwplayer/skin/norden/norden.zip',");
+			embedBuilder.append("'streamer': '"+streamer+"',");
+			embedBuilder.append("'controlbar': 'bottom',");
+			embedBuilder.append("'width': '470','height': '290'});</script>");
+			
+			
+			resp.getWriter().println(embedBuilder.toString());
 		}
 	}
 }
