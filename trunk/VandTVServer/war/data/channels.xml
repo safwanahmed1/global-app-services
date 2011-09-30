@@ -38,6 +38,7 @@
 <channel id ="037" code="VTV4" url="rtmp://117.103.232.4/live" file="vtv4" catalog="VTV"> </channel>
 
 <channel id ="022" code="VTC1" url="rtmp://66.160.142.198/live" file="vtc11" catalog="VTC"> </channel>
+<channel id ="046" code="VTC1" url="rtmp://117.103.225.16:1935/live" file="vtc11" catalog="VTC"> </channel>
 <channel id ="023" code="VTC2" url="rtmp://66.160.142.197/live" file="vtc21" catalog="VTC"> </channel>
 <channel id ="031" code="VTC1" url="rtmp://117.103.232.2/live" file="vtc11" catalog="VTC"> </channel>
 <channel id ="032" code="VTC2" url="rtmp://117.103.232.2/live" file="vtc21" catalog="VTC"> </channel>
