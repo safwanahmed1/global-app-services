@@ -36,7 +36,9 @@ public class RestClient {
 	public InputStream getInstream() {
 		return instream;
 	}
-
+	public void setUrl(String strUrl) {
+		this.url = strUrl;
+	}
 	public void setInstream(InputStream instream) {
 		this.instream = instream;
 	}
