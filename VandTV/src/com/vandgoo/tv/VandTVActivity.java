@@ -4,17 +4,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.List;
-
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,12 +22,15 @@ import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
+
 import com.vandgoo.tv.TaskListener.OnTaskFinishedListener;
 
 public class VandTVActivity extends Activity {
 	/** Called when the activity is first created. */
 	private final String CHANNEL_LIST_FILE = "channels.xml";
-	private final ArrayList<Catalog> channelCatalog = new ArrayList<Catalog>();
+	private ArrayList<Catalog> channelCatalog = new ArrayList<Catalog>();
+	private ArrayList<TVChannel> channelList = new ArrayList<TVChannel>();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -36,27 +39,18 @@ public class VandTVActivity extends Activity {
 
 		File channelFile = new File(this.getFilesDir(), CHANNEL_LIST_FILE);
 		if (!channelFile.exists()) {
-			UpdateChannelTask channelTask = new UpdateChannelTask(this);
-			channelTask.setOnTaskFinishedListener(mOnTaskFinishedListener);
-			channelTask.execute(null);
-
+			UpdataChannels();
 		} else {
-			ArrayList<TVChannel> allChannel = LoadChannelFromFile();
-			if (allChannel != null) {
-				ChannelAdapter channelAdapter = new ChannelAdapter(this,
-						allChannel);
 
-				GridView gridChannel = (GridView) findViewById(R.id.gridChannel);
-				gridChannel.setAdapter(channelAdapter);
-				gridChannel.setOnItemClickListener(channelClickListener);
-				CatalogAdapter catalogAdapter = new CatalogAdapter(this,
-						channelCatalog);
-				ListView listCatalog = (ListView) findViewById(R.id.catalog_list);
-				listCatalog.setAdapter(catalogAdapter);
-				listCatalog.setOnItemClickListener(catalogClickListener);
-
-			}
+			RefreshActivity();
 		}
+
+	}
+
+	private void UpdataChannels() {
+		UpdateChannelTask channelTask = new UpdateChannelTask(this);
+		channelTask.setOnTaskFinishedListener(mOnTaskFinishedListener);
+		channelTask.execute(null);
 
 	}
 
@@ -68,8 +62,7 @@ public class VandTVActivity extends Activity {
 		String url;
 		String file;
 		String catalog;
-		String iconId;
-		String type;
+		channelCatalog.clear();
 		channelCatalog.add(new Catalog("All", "All"));
 		channelCatalog.add(new Catalog("Favourite", "Favourite"));
 		XmlPullParser channels = null;
@@ -162,8 +155,9 @@ public class VandTVActivity extends Activity {
 		@Override
 		public void onItemClick(AdapterView parent, View v, int position,
 				long id) {
+			channelList = channelCatalog.get(position).getChannels();
 			ChannelAdapter channelAdapter = new ChannelAdapter(
-					VandTVActivity.this, channelCatalog.get(position).getChannels());
+					VandTVActivity.this, channelList);
 
 			GridView gridChannel = (GridView) findViewById(R.id.gridChannel);
 			gridChannel.setAdapter(channelAdapter);
@@ -174,31 +168,99 @@ public class VandTVActivity extends Activity {
 		@Override
 		public void onItemClick(AdapterView parent, View v, int position,
 				long id) {
-			Toast.makeText(VandTVActivity.this, "" + position,
-					Toast.LENGTH_SHORT).show();
+			PlayChannel(String.valueOf(id));
+
 		}
 
 	};
+
+	private void PlayChannel(String channelId) {
+		while (channelId.length() < 3) {
+			channelId = "0".concat(channelId);
+		}
+		Intent playerIntent = new Intent(VandTVActivity.this, PlayerActivity.class);
+		playerIntent.putExtra("channelid", channelId);
+		startActivity(playerIntent);
+	}
+
+	private OnItemLongClickListener channelLongClickListener = new OnItemLongClickListener() {
+		@Override
+		public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+				int arg2, long arg3) {
+			final TVChannel channel = channelList.get(arg2);
+			final CharSequence[] items = { "Play", "Add to favourite",
+					"View schedule", "Update channels", "Bad channel" };
+			AlertDialog.Builder builder = new AlertDialog.Builder(
+					VandTVActivity.this);
+			builder.setTitle(channel.getName());
+			builder.setItems(items, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int item) {
+					switch (item) {
+					case 0:
+						PlayChannel(channel.getId());
+						break;
+					case 1:
+						channelCatalog.get(1).getChannels().add(channel);
+						break;
+					case 2:
+						ViewChannelSchedule();
+						break;
+					case 3:
+						UpdataChannels();
+						break;
+					case 4:
+						Toast.makeText(getApplicationContext(), "Thank you!",
+								Toast.LENGTH_LONG).show();
+						ReportBadChannels();
+						break;
+					}
+				}
+
+			});
+			AlertDialog alert = builder.create();
+			alert.show();
+			return true;
+		}
+
+	};
+
+	private void ViewChannelSchedule() {
+		// TODO ViewChannelSchedule
+
+	}
+
+	private void ReportBadChannels() {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void RefreshActivity() {
+		channelList = LoadChannelFromFile();
+		if (channelList != null) {
+			ChannelAdapter channelAdapter = new ChannelAdapter(
+					VandTVActivity.this, channelList);
+
+			GridView gridChannel = (GridView) findViewById(R.id.gridChannel);
+			gridChannel.setAdapter(channelAdapter);
+			gridChannel.setOnItemClickListener(channelClickListener);
+			gridChannel.setOnItemLongClickListener(channelLongClickListener);
+
+			CatalogAdapter catalogAdapter = new CatalogAdapter(
+					VandTVActivity.this, channelCatalog);
+			ListView listCatalog = (ListView) findViewById(R.id.catalog_list);
+			listCatalog.setAdapter(catalogAdapter);
+			listCatalog.setOnItemClickListener(catalogClickListener);
+
+		}
+
+	}
+
 	private OnTaskFinishedListener mOnTaskFinishedListener = new OnTaskFinishedListener() {
 
 		@Override
 		public void onTaskFinished(boolean successful) {
 			if (successful) {
-				ArrayList<TVChannel> channelList = LoadChannelFromFile();
-				if (channelList != null) {
-					ChannelAdapter channelAdapter = new ChannelAdapter(
-							VandTVActivity.this, channelList);
-
-					GridView gridChannel = (GridView) findViewById(R.id.gridChannel);
-					gridChannel.setAdapter(channelAdapter);
-					gridChannel.setOnItemClickListener(channelClickListener);
-					CatalogAdapter catalogAdapter = new CatalogAdapter(
-							VandTVActivity.this, channelCatalog);
-					ListView listCatalog = (ListView) findViewById(R.id.catalog_list);
-					listCatalog.setAdapter(catalogAdapter);
-					listCatalog.setOnItemClickListener(catalogClickListener);
-
-				}
+				RefreshActivity();
 			}
 
 		}
