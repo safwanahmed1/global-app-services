@@ -19,6 +19,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Gallery;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -263,7 +264,13 @@ public class VandTVActivity extends Activity {
 			gridChannel.setAdapter(channelAdapter);
 			gridChannel.setOnItemClickListener(channelClickListener);
 			gridChannel.setOnItemLongClickListener(channelLongClickListener);
+			CatalogAdapter catalogAdapter = new CatalogAdapter(VandTVActivity.this,
+					channelCatalog);
+			Gallery galleryCatalog = (Gallery) findViewById(R.id.galleryCatalog);
+			galleryCatalog.setAdapter(catalogAdapter);
 
+			galleryCatalog.setOnItemClickListener(catalogClickListener);
+			
 			RefreshCatalogList();
 		}
 
