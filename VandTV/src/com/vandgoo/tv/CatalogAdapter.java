@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Gallery;
 import android.widget.TextView;
 
 public class CatalogAdapter extends BaseAdapter {
@@ -33,8 +34,9 @@ public class CatalogAdapter extends BaseAdapter {
 
 			TextView catalogItem = (TextView) convertView
 					.findViewById(R.id.catalog_item);
-			catalogItem.setText(objCatalog.getName() + "("
+			catalogItem.setText(objCatalog.getName() + " ("
 					+ objCatalog.GetCount() + ")");
+			catalogItem.setLayoutParams(new Gallery.LayoutParams(100,40));
 
 		}
 		return convertView;

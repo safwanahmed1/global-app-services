@@ -14,10 +14,11 @@
 		<ListView android:layout_height="wrap_content" android:id="@+id/catalog_list"
 			android:layout_width="match_parent"></ListView>
 	</LinearLayout>
+	
 	<GridView android:layout_height="match_parent" android:id="@+id/gridChannel"
 		android:layout_width="match_parent" android:numColumns="auto_fit"
 		android:verticalSpacing="5dp" android:horizontalSpacing="5dp"
-		android:columnWidth="65dp" android:stretchMode="columnWidth" 
+		android:columnWidth="65dp" android:stretchMode="columnWidth"
 		android:gravity="center"></GridView>
 
 </LinearLayout>
