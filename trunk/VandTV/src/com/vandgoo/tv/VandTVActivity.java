@@ -15,6 +15,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -31,12 +32,13 @@ public class VandTVActivity extends Activity {
 	private final String CHANNEL_LIST_FILE = "channels.xml";
 	private ArrayList<Catalog> channelCatalog = new ArrayList<Catalog>();
 	private ArrayList<TVChannel> channelList = new ArrayList<TVChannel>();
+	private SharedPreferences favourites = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-
+		favourites = getSharedPreferences("FavouriteChannels", 0);
 		File channelFile = new File(this.getFilesDir(), CHANNEL_LIST_FILE);
 		if (!channelFile.exists()) {
 			UpdataChannels();
@@ -117,6 +119,12 @@ public class VandTVActivity extends Activity {
 									break;
 								}
 							}
+							if (catalogItem.getId().equals("Favourite")) {
+								if (favourites.getString(channelObj.getId(),
+										null) != null)
+									catalogItem.AddCatalog(channelObj);
+
+							}
 
 							if ((catalog != null)
 									&& (catalogItem.getId().equals(catalog))) {
@@ -127,8 +135,9 @@ public class VandTVActivity extends Activity {
 
 						}
 						if (!isCatalogExist) {
-							Catalog newCatalog = new Catalog(channelObj
-									.getCatalog(), channelObj.getCatalog());
+							Catalog newCatalog = new Catalog(
+									channelObj.getCatalog(),
+									channelObj.getCatalog());
 							newCatalog.AddCatalog(channelObj);
 							channelCatalog.add(newCatalog);
 
@@ -178,7 +187,8 @@ public class VandTVActivity extends Activity {
 		while (channelId.length() < 3) {
 			channelId = "0".concat(channelId);
 		}
-		Intent playerIntent = new Intent(VandTVActivity.this, PlayerActivity.class);
+		Intent playerIntent = new Intent(VandTVActivity.this,
+				PlayerActivity.class);
 		playerIntent.putExtra("channelid", channelId);
 		startActivity(playerIntent);
 	}
@@ -200,7 +210,16 @@ public class VandTVActivity extends Activity {
 						PlayChannel(channel.getId());
 						break;
 					case 1:
-						channelCatalog.get(1).getChannels().add(channel);
+						if (favourites.getString(channel.getId(), null) == null) {
+							channelCatalog.get(1).getChannels().add(channel);
+							SharedPreferences.Editor favEditor = favourites
+									.edit();
+							favEditor.putString(channel.getId(),
+									channel.getName());
+							favEditor.commit();
+							RefreshCatalogList();
+						}
+
 						break;
 					case 2:
 						ViewChannelSchedule();
@@ -245,14 +264,17 @@ public class VandTVActivity extends Activity {
 			gridChannel.setOnItemClickListener(channelClickListener);
 			gridChannel.setOnItemLongClickListener(channelLongClickListener);
 
-			CatalogAdapter catalogAdapter = new CatalogAdapter(
-					VandTVActivity.this, channelCatalog);
-			ListView listCatalog = (ListView) findViewById(R.id.catalog_list);
-			listCatalog.setAdapter(catalogAdapter);
-			listCatalog.setOnItemClickListener(catalogClickListener);
-
+			RefreshCatalogList();
 		}
 
+	}
+
+	private void RefreshCatalogList() {
+		CatalogAdapter catalogAdapter = new CatalogAdapter(VandTVActivity.this,
+				channelCatalog);
+		ListView listCatalog = (ListView) findViewById(R.id.catalog_list);
+		listCatalog.setAdapter(catalogAdapter);
+		listCatalog.setOnItemClickListener(catalogClickListener);
 	}
 
 	private OnTaskFinishedListener mOnTaskFinishedListener = new OnTaskFinishedListener() {
