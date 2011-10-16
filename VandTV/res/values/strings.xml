@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, VandTVActivity!</string>
-    <string name="app_name">VandTV</string>
-    <string name="channellist">TV Channels</string>
+	<string name="hello">Hello World, VandTVActivity!</string>
+	<string name="app_name">VandTV</string>
+	<string name="channellist">TV Channels</string>
+	<color name="red">#ff0000</color>
+	<color name="green">#00ff00</color>
+	<color name="blue">#0000ff</color>
+	
 </resources>

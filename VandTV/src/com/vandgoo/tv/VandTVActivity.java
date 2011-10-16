@@ -264,20 +264,28 @@ public class VandTVActivity extends Activity {
 			gridChannel.setAdapter(channelAdapter);
 			gridChannel.setOnItemClickListener(channelClickListener);
 			gridChannel.setOnItemLongClickListener(channelLongClickListener);
-			CatalogAdapter catalogAdapter = new CatalogAdapter(VandTVActivity.this,
-					channelCatalog);
-			Gallery galleryCatalog = (Gallery) findViewById(R.id.galleryCatalog);
-			galleryCatalog.setAdapter(catalogAdapter);
-
-			galleryCatalog.setOnItemClickListener(catalogClickListener);
+			
+			RefreshCatalogGallery();
+			
 			
 			RefreshCatalogList();
 		}
 
 	}
 
+	private void RefreshCatalogGallery() {
+		// TODO Auto-generated method stub
+		CatalogGalleryAdapter catalogGalleryAdapter = new CatalogGalleryAdapter(VandTVActivity.this,
+				channelCatalog);
+		Gallery galleryCatalog = (Gallery) findViewById(R.id.galleryCatalog);
+		galleryCatalog.setAdapter(catalogGalleryAdapter);
+
+		galleryCatalog.setOnItemClickListener(catalogClickListener);
+		
+	}
+
 	private void RefreshCatalogList() {
-		CatalogAdapter catalogAdapter = new CatalogAdapter(VandTVActivity.this,
+		CatalogListAdapter catalogAdapter = new CatalogListAdapter(VandTVActivity.this,
 				channelCatalog);
 		ListView listCatalog = (ListView) findViewById(R.id.catalog_list);
 		listCatalog.setAdapter(catalogAdapter);
