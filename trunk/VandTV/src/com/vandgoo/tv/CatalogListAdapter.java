@@ -9,12 +9,12 @@ import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.TextView;
 
-public class CatalogAdapter extends BaseAdapter {
+public class CatalogListAdapter extends BaseAdapter {
 	private ArrayList<Catalog> catalogs_;
 	private Context mContext;
 
 	// Gets the context so it can be used later
-	public CatalogAdapter(Context c, ArrayList<Catalog> catalogList) {
+	public CatalogListAdapter(Context c, ArrayList<Catalog> catalogList) {
 		mContext = c;
 		catalogs_ = catalogList;
 	}
@@ -36,7 +36,6 @@ public class CatalogAdapter extends BaseAdapter {
 					.findViewById(R.id.catalog_item);
 			catalogItem.setText(objCatalog.getName() + " ("
 					+ objCatalog.GetCount() + ")");
-			catalogItem.setLayoutParams(new Gallery.LayoutParams(100,40));
 
 		}
 		return convertView;
