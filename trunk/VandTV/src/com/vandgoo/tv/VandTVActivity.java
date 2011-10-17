@@ -17,7 +17,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Gallery;
 import android.widget.GridView;
@@ -195,18 +199,39 @@ public class VandTVActivity extends Activity {
 	}
 
 	private OnItemLongClickListener channelLongClickListener = new OnItemLongClickListener() {
+		private AlertDialog alert;
+
 		@Override
 		public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
 				int arg2, long arg3) {
 			final TVChannel channel = channelList.get(arg2);
-			final CharSequence[] items = { "Play", "Add to favourite",
-					"View schedule", "Update channels", "Bad channel" };
+			
 			AlertDialog.Builder builder = new AlertDialog.Builder(
 					VandTVActivity.this);
 			builder.setTitle(channel.getName());
-			builder.setItems(items, new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int item) {
-					switch (item) {
+
+			Context mContext = getApplicationContext();
+			LayoutInflater inflater = LayoutInflater.from(mContext);
+			// (LayoutInflater)
+			// mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
+			View menuLayout = inflater.inflate(R.layout.channel_menu_list,
+					(ViewGroup) findViewById(R.id.channel_menu));
+			
+			ListView channelMenu = (ListView) menuLayout
+					.findViewById(R.id.channel_menu_list);
+
+			ChannelMenuAdapter menuAdapter = new ChannelMenuAdapter(
+					VandTVActivity.this);
+			// ListView listCatalog = (ListView)
+			// findViewById(R.id.channel_menu_list);
+			channelMenu.setAdapter(menuAdapter);
+			channelMenu.setOnItemClickListener(new OnItemClickListener() {
+
+				@Override
+				public void onItemClick(AdapterView<?> arg0, View arg1,
+						int arg2, long arg3) {
+					// TODO Auto-generated method stub
+					switch (arg2) {
 					case 0:
 						PlayChannel(channel.getId());
 						break;
@@ -218,7 +243,7 @@ public class VandTVActivity extends Activity {
 							favEditor.putString(channel.getId(),
 									channel.getName());
 							favEditor.commit();
-							RefreshCatalogList();
+							RefreshCatalog();
 						}
 
 						break;
@@ -234,11 +259,15 @@ public class VandTVActivity extends Activity {
 						ReportBadChannels();
 						break;
 					}
+					if (alert.isShowing())
+						alert.dismiss();
 				}
 
 			});
-			AlertDialog alert = builder.create();
+			builder.setView(menuLayout);
+			alert = builder.create();
 			alert.show();
+			
 			return true;
 		}
 
@@ -257,36 +286,47 @@ public class VandTVActivity extends Activity {
 	private void RefreshActivity() {
 		channelList = LoadChannelFromFile();
 		if (channelList != null) {
-			ChannelAdapter channelAdapter = new ChannelAdapter(
-					VandTVActivity.this, channelList);
-
-			GridView gridChannel = (GridView) findViewById(R.id.gridChannel);
-			gridChannel.setAdapter(channelAdapter);
-			gridChannel.setOnItemClickListener(channelClickListener);
-			gridChannel.setOnItemLongClickListener(channelLongClickListener);
-			
-			RefreshCatalogGallery();
-			
-			
-			RefreshCatalogList();
+			RefreshChannelGrid();
+			RefreshCatalog();
 		}
 
 	}
 
+	private void RefreshCatalog() {
+		// TODO Auto-generated method stub
+		int oriMode = getResources().getConfiguration().orientation;
+		if (oriMode == getResources().getConfiguration().ORIENTATION_LANDSCAPE) {
+			RefreshCatalogList();
+		} else {
+			RefreshCatalogGallery();
+		}
+
+	}
+
+	private void RefreshChannelGrid() {
+		ChannelAdapter channelAdapter = new ChannelAdapter(VandTVActivity.this,
+				channelList);
+
+		GridView gridChannel = (GridView) findViewById(R.id.gridChannel);
+		gridChannel.setAdapter(channelAdapter);
+		gridChannel.setOnItemClickListener(channelClickListener);
+		gridChannel.setOnItemLongClickListener(channelLongClickListener);
+	}
+
 	private void RefreshCatalogGallery() {
 		// TODO Auto-generated method stub
-		CatalogGalleryAdapter catalogGalleryAdapter = new CatalogGalleryAdapter(VandTVActivity.this,
-				channelCatalog);
+		CatalogGalleryAdapter catalogGalleryAdapter = new CatalogGalleryAdapter(
+				VandTVActivity.this, channelCatalog);
 		Gallery galleryCatalog = (Gallery) findViewById(R.id.galleryCatalog);
 		galleryCatalog.setAdapter(catalogGalleryAdapter);
 
 		galleryCatalog.setOnItemClickListener(catalogClickListener);
-		
+
 	}
 
 	private void RefreshCatalogList() {
-		CatalogListAdapter catalogAdapter = new CatalogListAdapter(VandTVActivity.this,
-				channelCatalog);
+		CatalogListAdapter catalogAdapter = new CatalogListAdapter(
+				VandTVActivity.this, channelCatalog);
 		ListView listCatalog = (ListView) findViewById(R.id.catalog_list);
 		listCatalog.setAdapter(catalogAdapter);
 		listCatalog.setOnItemClickListener(catalogClickListener);

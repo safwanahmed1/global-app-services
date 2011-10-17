@@ -4,5 +4,5 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     >
-    <WebView android:id="@+id/webViewTV" android:layout_width="match_parent" android:layout_height="match_parent"></WebView>
+    <WebView android:id="@+id/webViewTV" android:layout_width="fill_parent" android:layout_height="fill_parent"></WebView>
 </LinearLayout>

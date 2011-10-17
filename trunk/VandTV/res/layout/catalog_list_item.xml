@@ -4,6 +4,6 @@
 	android:layout_height="wrap_content" android:gravity="center">
 	<TextView android:layout_height="wrap_content" android:id="@+id/catalog_item"
 		android:layout_width="wrap_content" android:textAppearance="?android:attr/textAppearanceLarge"
-		android:textSize="24px" android:text="@string/channellist"></TextView>
+		android:textSize="18dp" android:text="@string/channellist"></TextView>
 
 </LinearLayout>
