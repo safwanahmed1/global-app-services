@@ -2,6 +2,7 @@ package com.vandgoo.tv;
 
 import java.util.ArrayList;
 import android.content.Context;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,8 +34,9 @@ public class CatalogGalleryAdapter extends BaseAdapter {
 		Gallery.LayoutParams layoutPara = new Gallery.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		//layoutPara.
 		catalogItem.setLayoutParams(layoutPara);
-		catalogItem.setBackgroundResource(android.R.drawable.btn_default);
-		catalogItem.setTextColor(R.color.green);
+		catalogItem.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22);
+		//catalogItem.setBackgroundResource(android.R.drawable.btn_default);
+		//catalogItem.setTextColor(R.color.green);
 		return catalogItem;
 
 	}

@@ -11,10 +11,11 @@
 		<CheckedTextView android:id="@+id/checkedTextView1"
 			android:layout_height="wrap_content" android:layout_width="wrap_content"
 			android:text="@string/channellist" android:textSize="32px"></CheckedTextView>
-		<ListView android:layout_height="wrap_content" android:id="@+id/catalog_list"
+		<ListView android:cacheColorHint="#00000000"
+			android:layout_height="wrap_content" android:id="@+id/catalog_list"
 			android:layout_width="fill_parent"></ListView>
 	</LinearLayout>
-	
+
 	<GridView android:layout_height="fill_parent" android:id="@+id/gridChannel"
 		android:layout_width="fill_parent" android:numColumns="auto_fit"
 		android:verticalSpacing="5dp" android:horizontalSpacing="5dp"
