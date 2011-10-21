@@ -12,6 +12,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,6 +21,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -29,14 +31,16 @@ import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 
+import com.vandgoo.tv.ChannelMenuDialog.OnMenuEventListener;
 import com.vandgoo.tv.TaskListener.OnTaskFinishedListener;
 
 public class VandTVActivity extends Activity {
 	/** Called when the activity is first created. */
 	private final String CHANNEL_LIST_FILE = "channels.xml";
 	private ArrayList<Catalog> channelCatalog = new ArrayList<Catalog>();
-	private ArrayList<TVChannel> channelList = new ArrayList<TVChannel>();
+	public static ArrayList<TVChannel> channelList = new ArrayList<TVChannel>();
 	private SharedPreferences favourites = null;
 
 	@Override
@@ -178,6 +182,42 @@ public class VandTVActivity extends Activity {
 		}
 
 	};
+	private OnItemSelectedListener catalogSelectedListener = new OnItemSelectedListener() {
+		
+		@Override
+		public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
+				long arg3) {
+			// TODO Auto-generated method stub
+			channelList = channelCatalog.get(arg2).getChannels();
+			ChannelAdapter channelAdapter = new ChannelAdapter(
+					VandTVActivity.this, channelList);
+
+			GridView gridChannel = (GridView) findViewById(R.id.gridChannel);
+			gridChannel.setAdapter(channelAdapter);
+		}
+
+		@Override
+		public void onNothingSelected(AdapterView<?> arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+	};
+	private OnFocusChangeListener catalogFocusListener = new OnFocusChangeListener() {
+		
+
+		@Override
+		public void onFocusChange(View v, boolean hasFocus) {
+			// TODO Auto-generated method stub
+			channelList = channelCatalog.get(0).getChannels();
+			ChannelAdapter channelAdapter = new ChannelAdapter(
+					VandTVActivity.this, channelList);
+
+			GridView gridChannel = (GridView) findViewById(R.id.gridChannel);
+			gridChannel.setAdapter(channelAdapter);
+		}
+
+	};
 	private OnItemClickListener channelClickListener = new OnItemClickListener() {
 		@Override
 		public void onItemClick(AdapterView parent, View v, int position,
@@ -204,7 +244,13 @@ public class VandTVActivity extends Activity {
 		@Override
 		public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
 				int arg2, long arg3) {
+			
 			final TVChannel channel = channelList.get(arg2);
+			//ChannelMenuDialog menuDialog = new ChannelMenuDialog(VandTVActivity.this, channel, onMenuEventListener);
+			//menuDialog.show();
+			
+			
+			
 			
 			AlertDialog.Builder builder = new AlertDialog.Builder(
 					VandTVActivity.this);
@@ -265,14 +311,151 @@ public class VandTVActivity extends Activity {
 
 			});
 			builder.setView(menuLayout);
+			builder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+
+                    // User clicked cancel so do some stuff 
+                	if (alert.isShowing())
+						alert.dismiss();
+                }
+            });
 			alert = builder.create();
+			alert.getWindow().setLayout(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 			alert.show();
 			
+		
 			return true;
 		}
 
 	};
+	
+	
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		// TODO Auto-generated method stub
+		switch (id) {
+		case 0:
+			
 
+			Context mContext = getApplicationContext();
+			LayoutInflater inflater = LayoutInflater.from(mContext);
+			// (LayoutInflater)
+			// mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
+			View menuLayout = inflater.inflate(R.layout.channel_menu_list,
+					(ViewGroup) findViewById(R.id.channel_menu));
+			
+			ListView channelMenu = (ListView) menuLayout
+					.findViewById(R.id.channel_menu_list);
+
+			ChannelMenuAdapter menuAdapter = new ChannelMenuAdapter(
+					VandTVActivity.this);
+			// ListView listCatalog = (ListView)
+			// findViewById(R.id.channel_menu_list);
+			channelMenu.setAdapter(menuAdapter);
+			channelMenu.setOnItemClickListener(new OnItemClickListener() {
+
+				@Override
+				public void onItemClick(AdapterView<?> arg0, View arg1,
+						int arg2, long arg3) {
+					// TODO Auto-generated method stub
+					switch (arg2) {
+					case 0:
+						PlayChannel("001");//channel.getId());
+						break;
+					case 1:
+						/*
+						if (favourites.getString(channel.getId(), null) == null) {
+							channelCatalog.get(1).getChannels().add(channel);
+							SharedPreferences.Editor favEditor = favourites
+									.edit();
+							favEditor.putString(channel.getId(),
+									channel.getName());
+							favEditor.commit();
+							RefreshCatalog();
+						}
+*/
+						break;
+					case 2:
+						ViewChannelSchedule();
+						break;
+					case 3:
+						UpdataChannels();
+						break;
+					case 4:
+						Toast.makeText(getApplicationContext(), "Thank you!",
+								Toast.LENGTH_LONG).show();
+						ReportBadChannels();
+						break;
+					}
+					/*
+					if (alert.isShowing())
+						alert.dismiss();
+						*/
+					dismissDialog(0);
+				}
+
+			});
+			return new AlertDialog.Builder(VandTVActivity.this)
+			.setTitle("Test")//channel.getName());
+			.setView(menuLayout)
+			.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+
+                    /* User clicked cancel so do some stuff */
+                	/*
+                	if (alert.isShowing())
+						alert.dismiss();
+						*/
+                	dismissDialog(0);
+                }
+            })
+            
+			.create();
+		}
+		
+		
+		
+		
+		return super.onCreateDialog(id);
+		
+		
+	}
+
+	private OnMenuEventListener onMenuEventListener = new OnMenuEventListener() {
+		
+		@Override
+		public void menuEvent(int menuItem, TVChannel channel) {
+			// TODO Auto-generated method stub
+			switch (menuItem) {
+			case 0:
+				PlayChannel(channel.getId());
+				break;
+			case 1:
+				if (favourites.getString(channel.getId(), null) == null) {
+					channelCatalog.get(1).getChannels().add(channel);
+					SharedPreferences.Editor favEditor = favourites
+							.edit();
+					favEditor.putString(channel.getId(),
+							channel.getName());
+					favEditor.commit();
+					RefreshCatalog();
+				}
+
+				break;
+			case 2:
+				ViewChannelSchedule();
+				break;
+			case 3:
+				UpdataChannels();
+				break;
+			case 4:
+				Toast.makeText(getApplicationContext(), "Thank you!",
+						Toast.LENGTH_LONG).show();
+				ReportBadChannels();
+				break;
+			}
+		}
+	};
 	private void ViewChannelSchedule() {
 		// TODO ViewChannelSchedule
 
@@ -320,8 +503,9 @@ public class VandTVActivity extends Activity {
 		Gallery galleryCatalog = (Gallery) findViewById(R.id.galleryCatalog);
 		galleryCatalog.setAdapter(catalogGalleryAdapter);
 
-		galleryCatalog.setOnItemClickListener(catalogClickListener);
-
+		//galleryCatalog.setOnItemClickListener(catalogClickListener);
+		//galleryCatalog.setOnFocusChangeListener(catalogFocusListener);
+		galleryCatalog.setOnItemSelectedListener(catalogSelectedListener);
 	}
 
 	private void RefreshCatalogList() {
