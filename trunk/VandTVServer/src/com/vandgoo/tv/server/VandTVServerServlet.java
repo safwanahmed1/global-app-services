@@ -61,9 +61,11 @@ public class VandTVServerServlet extends HttpServlet {
 			embedBuilder.append("jwplayer('mediaspace').setup({");
 			embedBuilder.append("'flashplayer': '/data/jwplayer/player.swf',");
 			embedBuilder.append("'file': '"+file+"',");
-			embedBuilder.append("'skin': '/data/jwplayer/skin/norden/norden.zip',");
+			embedBuilder.append("'skin': '/data/jwplayer/skin/simplicity/simplicity.zip',");
 			embedBuilder.append("'streamer': '"+streamer+"',");
 			embedBuilder.append("'controlbar': 'bottom',");
+			embedBuilder.append("'autostart': 'true',");
+			embedBuilder.append("'menu': 'false',");
 			embedBuilder.append("'width': '470','height': '290'});</script>");
 			
 			
