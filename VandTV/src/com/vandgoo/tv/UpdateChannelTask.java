@@ -164,7 +164,7 @@ public class UpdateChannelTask extends AsyncTask<String, Integer, Boolean> {
 						File channelLogo = new File(ctx.getFilesDir(), code);
 						if (!channelLogo.exists()) {
 							String strUrl = "http://vietandtv.appspot.com/data/images/"
-									+ code.toLowerCase() + ".jpg";
+									+ code.toLowerCase() + ".png";
 							RestClient channelLogoRest = new RestClient(strUrl);
 							try {
 								channelLogoRest.Execute(RequestMethod.GET);

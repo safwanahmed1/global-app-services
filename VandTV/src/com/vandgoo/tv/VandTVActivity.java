@@ -458,7 +458,9 @@ public class VandTVActivity extends Activity {
 	};
 	private void ViewChannelSchedule() {
 		// TODO ViewChannelSchedule
-
+		Intent scheduleIntent = new Intent(VandTVActivity.this,
+				ScheduleActivity.class);
+		startActivity(scheduleIntent);
 	}
 
 	private void ReportBadChannels() {
