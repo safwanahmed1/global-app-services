@@ -6,7 +6,8 @@
 <!ATTLIST channel code CDATA #REQUIRED>
 <!ATTLIST channel url CDATA #REQUIRED>
 <!ATTLIST channel file CDATA #REQUIRED>
-<!ATTLIST channel catalog CDATA #REQUIRED>
+<!ATTLIST channel catalog CDATA #IMPLIED>
+<!ATTLIST channel schedule CDATA #IMPLIED>
 ]>
 <channels>
 <channel id ="001" code="SCTV1" url="rtmp://112.197.2.11:1935/live" file="sctv1.stream" catalog="SCTV"> </channel>
@@ -28,7 +29,7 @@
 <channel id ="017" code="SCTV18" url="rtmp://112.197.2.11:1935/live" file="sctv18.stream" catalog="SCTV"> </channel>
 
 
-<channel id ="034" code="VTV1" url="rtmp://117.103.232.2/live" file="vtv11" catalog="VTV"> </channel>
+<channel id ="034" code="VTV1" url="rtmp://117.103.232.2/live" file="vtv11" catalog="VTV" schedule="s"> </channel>
 <channel id ="018" code="VTV1" url="rtmp://66.160.142.197/live" file="vtv11" catalog="VTV"> </channel>
 <channel id ="019" code="VTV2" url="rtmp://66.160.142.197/live" file="vtv2" catalog="VTV"> </channel>
 <channel id ="020" code="VTV3" url="rtmp://66.160.142.197/live" file="vtv31" catalog="VTV"> </channel>
