@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:weightSum="1">
-    <WebView android:id="@+id/webViewTV" android:layout_width="fill_parent" android:layout_height="306dp" android:layout_weight="1.07"></WebView>
-    <Gallery android:layout_width="fill_parent" android:spacing="20dp" android:id="@+id/gallery_channels" android:layout_height="67dp"></Gallery>
-    
-</LinearLayout>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="horizontal" android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:weightSum="1">
+	<WebView android:id="@+id/webViewTV" android:layout_height="fill_parent"
+		android:layout_width="fill_parent"></WebView>
+	<Gallery android:layout_width="fill_parent" android:spacing="10dp"
+		android:id="@+id/gallery_channels"
+		android:layout_height="55dp"  android:background="#AA000000"></Gallery>
+</FrameLayout>
+ 	

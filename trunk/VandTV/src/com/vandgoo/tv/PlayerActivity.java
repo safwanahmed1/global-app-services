@@ -6,40 +6,26 @@ import java.lang.reflect.Method;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager.LayoutParams;
+import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Gallery;
-import android.widget.GridView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ListView;
 
 public class PlayerActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.player);
-		Bundle bundle = getIntent().getExtras();
-		String channelId = bundle.getString("channelid");
-		if (channelId != null) {
-			WebView myWebView = (WebView) findViewById(R.id.webViewTV);
-			myWebView
-					.loadUrl("http://vietandtv.appspot.com/vandtvserver?channelid=022");
-			// + channelId);
-			WebSettings webSettings = myWebView.getSettings();
-			webSettings.setJavaScriptEnabled(true);
-			webSettings.setPluginsEnabled(true);
-			
-		}
-		//int oriMode = getResources().getConfiguration().orientation;
+		
+		// int oriMode = getResources().getConfiguration().orientation;
 		/*
 		 * if (oriMode ==
 		 * getResources().getConfiguration().ORIENTATION_LANDSCAPE) {
 		 * RefreshChannelList(); } else {
 		 */
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		RefreshChannelGallery();
 
 	}
@@ -57,15 +43,35 @@ public class PlayerActivity extends Activity {
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+		
 		/*
-		Gallery galleryChannel = (Gallery) findViewById(R.id.gallery_channels);
-		WebView myWebView = (WebView) findViewById(R.id.webViewTV);
-		int webViewHeigh = galleryChannel.getTop() - myWebView.getTop();
-		myWebView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, webViewHeigh));
+		Bundle bundle = getIntent().getExtras();
+		String channelId = bundle.getString("channelid");
+		if (channelId != null) {
+			WebView myWebView = (WebView) findViewById(R.id.webViewTV);
+			
+			StringBuffer url = new StringBuffer("http://vietandtv.appspot.com/vandtvserver?channelid=");
+			url.append(channelId);
+			if (myWebView.getMeasuredWidth() > 0) {
+				url.append("?width=" + myWebView.getMeasuredWidth());
+			}
+			if (myWebView.getMeasuredHeight() > 0) {
+				url.append("?height=" + myWebView.getMeasuredHeight());
+			}
+			
+			myWebView.loadUrl(url.toString());
+			WebSettings webSettings = myWebView.getSettings();
+			webSettings.setJavaScriptEnabled(true);
+			webSettings.setPluginsEnabled(true);
+
+		}
 		*/
+		
+		
 		callHiddenWebViewMethod("onResume");
 	}
 
+	
 	private void callHiddenWebViewMethod(String name) {
 		WebView myWebView = (WebView) findViewById(R.id.webViewTV);
 		// myWebView.resumeTimers();
@@ -125,6 +131,7 @@ public class PlayerActivity extends Activity {
 				long arg3) {
 			// TODO Auto-generated method stub
 			// TODO Auto-generated method stub
+			/*
 			String channelId = String.valueOf(arg3);
 			while (channelId.length() < 3) {
 				channelId = "0".concat(channelId);
@@ -134,6 +141,27 @@ public class PlayerActivity extends Activity {
 					.loadUrl("http://vietandtv.appspot.com/vandtvserver?channelid="
 							+ channelId);
 			myWebView.reload();
+			*/
+			Bundle bundle = getIntent().getExtras();
+			String channelId = bundle.getString("channelid");
+			if (channelId != null) {
+				WebView myWebView = (WebView) findViewById(R.id.webViewTV);
+				
+				StringBuffer url = new StringBuffer("http://vietandtv.appspot.com/vandtvserver?channelid=");
+				url.append(channelId);
+				if (myWebView.getMeasuredWidth() > 0) {
+					url.append("&width=" + myWebView.getMeasuredWidth());
+				}
+				if (myWebView.getMeasuredHeight() > 0) {
+					url.append("&height=" + myWebView.getMeasuredHeight());
+				}
+				
+				myWebView.loadUrl(url.toString());
+				WebSettings webSettings = myWebView.getSettings();
+				webSettings.setJavaScriptEnabled(true);
+				webSettings.setPluginsEnabled(true);
+
+			}
 		}
 
 	};
