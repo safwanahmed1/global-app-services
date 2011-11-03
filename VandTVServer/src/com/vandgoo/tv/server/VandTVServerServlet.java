@@ -1,4 +1,5 @@
 package com.vandgoo.tv.server;
+
 import java.io.IOException;
 import java.util.logging.Logger;
 import javax.servlet.http.*;
@@ -17,6 +18,8 @@ public class VandTVServerServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
 		String channelId = req.getParameter("channelid");
+		int width = Integer.parseInt(req.getParameter("width"));
+		int height = Integer.parseInt(req.getParameter("height"));
 		logger.warning("Channel ID: " + channelId);
 		String streamer = null;
 		String file = null;
@@ -45,30 +48,37 @@ public class VandTVServerServlet extends HttpServlet {
 		}
 		if (streamer != null && file != null) {
 			/**
-			String embed = "<embed allowfullscreen=\"true\" allowscriptaccess=\"never\" flashvars=\""
-					+ "streamer="
-					+ streamer
-					+ "&file="
-					+ file
-					+ "&autostart=true&controlbar=bottom&skinName=/data/jwplayer/skin/norden/norden.zip \" "
-					+ "height=\"600\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" src=\"/data/jwplayer/player.swf\" type=\"application/x-shockwave-flash\" "
-					+ "width=\"800\" ></embed>";
-					**/
+			 * String embed =
+			 * "<embed allowfullscreen=\"true\" allowscriptaccess=\"never\" flashvars=\""
+			 * + "streamer=" + streamer + "&file=" + file +
+			 * "&autostart=true&controlbar=bottom&skinName=/data/jwplayer/skin/norden/norden.zip \" "
+			 * +
+			 * "height=\"600\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\" src=\"/data/jwplayer/player.swf\" type=\"application/x-shockwave-flash\" "
+			 * + "width=\"800\" ></embed>";
+			 **/
 			StringBuilder embedBuilder = new StringBuilder();
-			embedBuilder.append("<script type='text/javascript' src='/data/jwplayer/jwplayer.js'></script>");
-			embedBuilder.append("<div id='mediaspace'>This text will be replaced</div>");
+
+			embedBuilder.append("<meta name='viewport' content='width=" + width
+					+ ",height=" + height + "' />");
+			embedBuilder
+					.append("<link type='text/css' rel='stylesheet' href='/stylesheets/main.css' />");
+			embedBuilder
+					.append("<script type='text/javascript' src='/data/jwplayer/jwplayer.js'></script>");
+			embedBuilder
+					.append("<div id='mediaspace'>This text will be replaced</div>");
 			embedBuilder.append("<script type='text/javascript'>");
 			embedBuilder.append("jwplayer('mediaspace').setup({");
 			embedBuilder.append("'flashplayer': '/data/jwplayer/player.swf',");
-			embedBuilder.append("'file': '"+file+"',");
-			embedBuilder.append("'skin': '/data/jwplayer/skin/simplicity/simplicity.zip',");
-			embedBuilder.append("'streamer': '"+streamer+"',");
+			embedBuilder.append("'file': '" + file + "',");
+			embedBuilder
+					.append("'skin': '/data/jwplayer/skin/simplicity/simplicity.zip',");
+			embedBuilder.append("'streamer': '" + streamer + "',");
 			embedBuilder.append("'controlbar': 'bottom',");
 			embedBuilder.append("'autostart': 'true',");
 			embedBuilder.append("'menu': 'false',");
-			embedBuilder.append("'width': '470','height': '290'});</script>");
-			
-			
+			embedBuilder.append("'width': '" + width + "','height': '" + height
+					+ "'});</script>");
+
 			resp.getWriter().println(embedBuilder.toString());
 		}
 	}
