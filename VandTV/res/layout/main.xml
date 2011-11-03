@@ -7,13 +7,13 @@
 		android:layout_height="wrap_content" android:src="@drawable/logo"></ImageView>
 	<TextView android:layout_height="wrap_content" android:id="@+id/textView1"
 		android:layout_width="wrap_content" android:textAppearance="?android:attr/textAppearanceLarge"
-		android:textSize="32px" android:text="@string/channellist"></TextView>
+		android:textSize="36px" android:text="@string/channellist"></TextView>
 	<Gallery android:id="@+id/galleryCatalog" android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:spacing="20dp" android:background="@drawable/gallery_bg"/>
+		android:layout_height="55dp" android:spacing="20dp" android:background="@drawable/gallery_bg"/>
 	<GridView android:layout_height="fill_parent" android:id="@+id/gridChannel"
 		android:layout_width="fill_parent" android:numColumns="auto_fit"
-		android:verticalSpacing="5dp" android:horizontalSpacing="5dp"
-		android:columnWidth="65dp" android:gravity="center"
+		android:verticalSpacing="10dp" android:horizontalSpacing="10dp"
+		android:columnWidth="85dp" android:gravity="center"
 		android:stretchMode="columnWidth"></GridView>
 
 

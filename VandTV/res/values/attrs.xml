@@ -3,4 +3,7 @@
     <declare-styleable name="ChannelGallery">
         <attr name="android:galleryItemBackground" />
     </declare-styleable>
+    <style name="TranferenceGallery" parent="android:@Theme.Translucent">
+           <item name="android:background">@drawable/gallery_bg</item>
+     </style>
 </resources>
