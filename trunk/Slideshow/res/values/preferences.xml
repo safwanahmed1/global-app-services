@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="preferencesActivityName">Android Slideshow: Preferences</string>
+
+    <string name="preferencesButtonText">Preferences</string>
+
+	<string name="preferencesMenuItemTitle">Preferences</string>
+
+	<string name="slideshowPreferenceCategoryTitle">Slideshow Preferences</string>
+
+	<string name="slideshowIntervalPreferenceTitle">Slideshow Interval</string>
+	<string name="slideshowIntervalPreferenceSummary">Interval between new photos</string>
+
+	<string-array name="slideshowIntervalPreferenceEntries">
+		<item>3 seconds</item>
+		<item>5 seconds</item>
+		<item>10 seconds</item>
+		<item>20 seconds</item>
+		<item>30 seconds</item>
+		<item>45 seconds</item>
+		<item>1 minute</item>
+	</string-array>
+
+	<string-array name="slideshowIntervalPreferenceValues">
+		<item>3000</item>
+		<item>5000</item>
+		<item>10000</item>
+		<item>20000</item>
+		<item>30000</item>
+		<item>45000</item>
+		<item>60000</item>
+	</string-array>
+
+	<string name="slideshowSizePreferenceTitle">Slideshow Size</string>
+	<string name="slideshowSizePreferenceSummary">Number of random photos to include in your slideshow</string>
+
+	<string-array name="slideshowSizePreferenceEntries">
+		<item>All</item>
+		<item>10</item>
+		<item>25</item>
+		<item>50</item>
+		<item>100</item>
+	</string-array>
+
+	<string-array name="slideshowSizePreferenceValues">
+		<item>0</item>
+		<item>10</item>
+		<item>25</item>
+		<item>50</item>
+		<item>100</item>
+	</string-array>
+
+	<string name="sourcePreferenceCategoryTitle">Image Source Preferences</string>
+	
+	<string name="sourceUpdateImagesIntervalPreferenceTitle">Source Update Interval</string>
+	<string name="sourceUpdateImagesIntervalPreferenceSummary">Determines how often to update list of photos from your sources</string>
+
+	<string-array name="sourceUpdateImagesIntervalPreferenceEntries">
+		<item>5 minutes</item>
+		<item>10 minutes</item>
+		<item>20 minutes</item>
+		<item>30 minutes</item>
+		<item>45 minutes</item>
+		<item>1 hour</item>
+		<item>12 hours</item>
+		<item>Daily</item>
+	</string-array>
+
+	<string-array name="sourceUpdateImagesIntervalPreferenceValues">
+		<item>300000</item>
+		<item>600000</item>
+		<item>1200000</item>
+		<item>1800000</item>
+		<item>2700000</item>
+		<item>3600000</item>
+		<item>43200000</item>
+		<item>86400000</item>
+	</string-array>
+
+	<string name="sourceLocalImagesPreferenceTitle">Display Local Images</string>
+	<string name="sourceLocalImagesPreferenceSummary">Choose this to display images from your device</string>
+
+	<string name="sourceFacebookPreferenceTitle">Display Facebook</string>
+	<string name="sourceFacebookPreferenceSummary">Choose this to display images from Facebook account</string>
+
+	<string name="sourceFacebookTypesPreferenceTitle">Facebook Image Types</string>
+	<string name="sourceFacebookTypesPreferenceSummary">Choose the types of Facebook images you wish to display</string>
+
+	<string name="sourceFacebookTypePersonalAlbumPreferenceTitle">Personal</string>
+	<string name="sourceFacebookTypePersonalAlbumPreferenceSummary">Display your personal photos.</string>
+
+	<string name="sourceFacebookTypePersonalTagPreferenceTitle">Personally Tagged</string>
+	<string name="sourceFacebookTypePersonalTagPreferenceSummary">Display photos you are tagged in.</string>
+
+	<string name="sourceFacebookTypeFriendAlbumPreferenceTitle">Friends</string>
+	<string name="sourceFacebookTypeFriendAlbumPreferenceSummary">Display your friends\' photos.</string>
+
+	<string name="sourceFacebookTypeFriendTagPreferenceTitle">Tagged Friends</string>
+	<string name="sourceFacebookTypeFriendTagPreferenceSummary">Display photos your friends are tagged in.</string>
+
+	<string name="musicPreferenceCategoryTitle">Background Music Preferences</string>
+
+	<string name="musicPlayPreferenceTitle">Play Music</string>
+	<string name="musicPlayPreferenceSummary">Play music during slideshow</string>
+
+	<string name="sourceUpdateAudioTracksIntervalPreferenceTitle">Music Update Interval</string>
+	<string name="sourceUpdateAudioTracksIntervalPreferenceSummary">Determines how often to update list of music from your device</string>
+
+	<string-array name="sourceUpdateAudioTracksIntervalPreferenceEntries">
+		<item>5 minutes</item>
+		<item>10 minutes</item>
+		<item>20 minutes</item>
+		<item>30 minutes</item>
+		<item>45 minutes</item>
+		<item>1 hour</item>
+		<item>12 hours</item>
+		<item>Daily</item>
+	</string-array>
+
+	<string-array name="sourceUpdateAudioTracksIntervalPreferenceValues">
+		<item>300000</item>
+		<item>600000</item>
+		<item>1200000</item>
+		<item>1800000</item>
+		<item>2700000</item>
+		<item>3600000</item>
+		<item>43200000</item>
+		<item>86400000</item>
+	</string-array>
+</resources>

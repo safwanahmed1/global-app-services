@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="databaseErrorDialogTitle">Error With Database!</string>
+	<string name="databaseErrorDialogMessage">Cannot initialize database.  Application will exit.</string>
+	<string name="databaseErrorDialogButton">OK</string>
+</resources>
