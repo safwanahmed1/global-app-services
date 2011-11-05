@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="aboutActivityName">Android Slideshow: About</string>
+
+    <string name="aboutButtonText">About</string>
+
+	<string name="aboutMenuItemTitle">About</string>
+
+	<string name="aboutText">
+		<![CDATA[
+			<html>
+
+				<body>
+					<h1>About Us!</h1>
+
+					We friggin rock!
+				</body>
+
+			</html>
+		]]>
+	</string>
+	
+</resources>

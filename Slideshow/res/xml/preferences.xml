@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<PreferenceScreen
+	xmlns:a="http://schemas.android.com/apk/res/android">
+
+	<!-- We need to have some basic setting around the slideshow itself -->
+	<PreferenceCategory
+		a:title="@string/slideshowPreferenceCategoryTitle">
+
+		<ListPreference
+			a:key="SLIDESHOW_INTERVAL"
+			a:title="@string/slideshowIntervalPreferenceTitle"
+			a:summary="@string/slideshowIntervalPreferenceSummary"
+			a:entries="@array/slideshowIntervalPreferenceEntries"
+			a:entryValues="@array/slideshowIntervalPreferenceValues"
+			a:defaultValue="5000"/>
+
+		<ListPreference
+			a:key="SLIDESHOW_SIZE"
+			a:title="@string/slideshowSizePreferenceTitle"
+			a:summary="@string/slideshowSizePreferenceSummary"
+			a:entries="@array/slideshowSizePreferenceEntries"
+			a:entryValues="@array/slideshowSizePreferenceValues"
+			a:defaultValue="0"/>
+	</PreferenceCategory>
+	
+	<PreferenceScreen
+		a:title="@string/sourcePreferenceCategoryTitle">
+
+		<ListPreference
+			a:key="SOURCE_UPDATE_IMAGES_INTERVAL"
+			a:title="@string/sourceUpdateImagesIntervalPreferenceTitle"
+			a:summary="@string/sourceUpdateImagesIntervalPreferenceSummary"
+			a:entries="@array/sourceUpdateImagesIntervalPreferenceEntries"
+			a:entryValues="@array/sourceUpdateImagesIntervalPreferenceValues"
+			a:defaultValue="1800000"/>
+
+		<CheckBoxPreference
+			a:key="SOURCE_LOCAL_IMAGES"
+			a:title="@string/sourceLocalImagesPreferenceTitle"
+			a:summary="@string/sourceLocalImagesPreferenceSummary"
+			a:defaultValue="true"/>
+
+		<CheckBoxPreference
+			a:key="SOURCE_FACEBOOK_IMAGES"
+			a:title="@string/sourceFacebookPreferenceTitle"
+			a:summary="@string/sourceFacebookPreferenceSummary"
+			a:defaultValue="true"/>
+
+		<PreferenceScreen
+			a:title="@string/sourceFacebookTypesPreferenceTitle"
+			a:summary="@string/sourceFacebookTypesPreferenceSummary"
+			a:dependency="SOURCE_FACEBOOK_IMAGES">
+
+			<CheckBoxPreference
+				a:key="SOURCE_FACEBOOK_TYPE_PERSONAL_ALBUM"
+				a:title="@string/sourceFacebookTypePersonalAlbumPreferenceTitle"
+				a:summary="@string/sourceFacebookTypePersonalAlbumPreferenceSummary"
+				a:defaultValue="true"/>
+
+			<CheckBoxPreference
+				a:key="SOURCE_FACEBOOK_TYPE_PERSONAL_TAG"
+				a:title="@string/sourceFacebookTypePersonalTagPreferenceTitle"
+				a:summary="@string/sourceFacebookTypePersonalTagPreferenceSummary"
+				a:defaultValue="true"/>
+
+			<CheckBoxPreference
+				a:key="SOURCE_FACEBOOK_TYPE_FRIEND_ALBUM"
+				a:title="@string/sourceFacebookTypeFriendAlbumPreferenceTitle"
+				a:summary="@string/sourceFacebookTypeFriendAlbumPreferenceSummary"
+				a:defaultValue="true"/>
+
+			<CheckBoxPreference
+				a:key="SOURCE_FACEBOOK_TYPE_FRIEND_TAG"
+				a:title="@string/sourceFacebookTypeFriendTagPreferenceTitle"
+				a:summary="@string/sourceFacebookTypeFriendTagPreferenceSummary"
+				a:defaultValue="true"/>
+		</PreferenceScreen>
+	</PreferenceScreen>
+
+	<PreferenceScreen
+		a:title="@string/musicPreferenceCategoryTitle">
+
+
+		<CheckBoxPreference
+			a:key="MUSIC_PLAY"
+			a:title="@string/musicPlayPreferenceTitle"
+			a:summary="@string/musicPlayPreferenceSummary"
+			a:defaultValue="true"/>
+
+		<ListPreference
+			a:key="SOURCE_UPDATE_AUDIO_TRACKS_INTERVAL"
+			a:title="@string/sourceUpdateAudioTracksIntervalPreferenceTitle"
+			a:summary="@string/sourceUpdateAudioTracksIntervalPreferenceSummary"
+			a:entries="@array/sourceUpdateAudioTracksIntervalPreferenceEntries"
+			a:entryValues="@array/sourceUpdateAudioTracksIntervalPreferenceValues"
+			a:defaultValue="1800000"/>
+	</PreferenceScreen>
+</PreferenceScreen>

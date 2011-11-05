@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="applicationName">Android Slideshow</string>
+	
+    <string name="slideshowActivityName">Android Slideshow</string>
+
+    <string name="noAudioFound">No audio files found.</string>
+
+	<string name="audioInformationString">Now Playing: {artist} - {trackTitle}</string>
+	<string name="hello">Hello</string>
+</resources>

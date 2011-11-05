@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<RelativeLayout
+	xmlns:a="http://schemas.android.com/apk/res/android"
+	a:id="@+id/controlLayout"
+	a:layout_height="fill_parent"
+	a:layout_width="fill_parent"
+	a:gravity="bottom">
+
+	<LinearLayout
+		a:id="@+id/controlMainBar"
+		a:layout_width="fill_parent"
+		a:layout_height="wrap_content"
+		a:orientation="vertical"
+		a:paddingTop="10dp"
+		a:paddingLeft="110dp"
+		a:paddingRight="10dp"
+		a:layout_alignParentBottom="true"
+		a:background="@drawable/audio_playback_bar_theme">
+
+		<LinearLayout
+			a:id="@+id/controlButtonBar"
+			a:layout_width="fill_parent"
+			a:layout_height="wrap_content"
+			a:orientation="horizontal"
+			a:weightSum="2"
+			a:gravity="left">
+
+			<LinearLayout
+				a:id="@+id/musicButtons"
+				a:layout_width="wrap_content"
+				a:layout_height="wrap_content"
+				a:layout_weight="1"
+				a:orientation="horizontal">
+
+				<ImageButton
+					a:id="@+id/previousTrackButton"
+					a:layout_width="wrap_content"
+					a:layout_height="wrap_content"
+					a:padding="2dp"
+					a:background="@drawable/audio_playback_button_theme"
+					a:src="@drawable/previous"/>
+
+				<View
+					a:layout_width="15dp"
+					a:layout_height="15dp"/>
+
+				<ImageButton
+					a:id="@+id/playButton"
+					a:layout_width="wrap_content"
+					a:layout_height="wrap_content"
+					a:padding="2dp"
+					a:background="@drawable/audio_playback_button_theme"
+					a:src="@drawable/play"/>
+
+				<View
+					a:layout_width="15dp"
+					a:layout_height="15dp"/>
+
+				<ImageButton
+					a:id="@+id/pauseButton"
+					a:layout_width="wrap_content"
+					a:layout_height="wrap_content"
+					a:padding="2dp"
+					a:background="@drawable/audio_playback_button_theme"
+					a:src="@drawable/pause"/>
+
+				<View
+					a:layout_width="15dp"
+					a:layout_height="15dp"/>
+
+				<ImageButton
+					a:id="@+id/nextTrackButton"
+					a:layout_width="wrap_content"
+					a:layout_height="wrap_content"
+					a:padding="2dp"
+					a:background="@drawable/audio_playback_button_theme"
+					a:src="@drawable/next"/>
+			</LinearLayout>
+
+			<LinearLayout
+				a:id="@+id/otherButtons"
+				a:layout_width="wrap_content"
+				a:layout_height="wrap_content"
+				a:gravity="right"
+				a:orientation="horizontal"
+				a:layout_weight="1">
+
+				<Button
+					a:id="@+id/preferencesButton"
+					a:layout_width="wrap_content"
+					a:layout_height="wrap_content"
+					a:padding="2dp"
+					a:background="@drawable/audio_playback_button_theme"
+					a:drawableTop="@drawable/settings"
+					a:textColor="#FFFFFF"
+					a:text="@string/preferencesButtonText"/>
+
+				<View
+					a:layout_width="15dp"
+					a:layout_height="15dp"/>
+
+				<Button
+					a:id="@+id/aboutButton"
+					a:layout_width="wrap_content"
+					a:layout_height="wrap_content"
+					a:padding="2dp"
+					a:background="@drawable/audio_playback_button_theme"
+					a:drawableTop="@drawable/about"
+					a:textColor="#FFFFFF"
+					a:text="@string/aboutButtonText"/>
+			</LinearLayout>
+		</LinearLayout>
+
+		<TextView
+			a:id="@+id/currentlyPlayingLabel"
+			a:layout_height="wrap_content"
+			a:layout_width="wrap_content"
+			a:layout_alignParentLeft="true"
+			a:paddingTop="15dp"
+			a:paddingLeft="0dp"
+			a:paddingBottom="15dp"
+			a:paddingRight="0dp"/>
+	</LinearLayout>
+
+	<LinearLayout
+		a:id="@+id/albumArtControl"
+		a:layout_width="100dp"
+		a:layout_height="125dp"
+		a:paddingTop="0dp"
+		a:paddingLeft="10dp"
+		a:paddingBottom="35dp"
+		a:paddingRight="0dp"
+		a:layout_alignParentBottom="true"
+		a:layout_alignParentLeft="true">
+
+		<ImageView
+			a:id="@+id/albumArtView"
+			a:layout_width="90dp"
+			a:layout_height="90dp"
+			a:padding="1dp"
+			a:background="@drawable/album_art_theme"/>
+	</LinearLayout>
+</RelativeLayout>
