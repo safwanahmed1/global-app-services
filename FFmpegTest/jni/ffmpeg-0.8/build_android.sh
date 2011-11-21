@@ -53,7 +53,7 @@ function build_one
     --enable-parser=h264 \
     --disable-network \
     --enable-zlib \
-    --disable-avfilter \
+    --enable-avfilter \
     --disable-avdevice \
     $ADDITIONAL_CONFIGURE_FLAG
 
