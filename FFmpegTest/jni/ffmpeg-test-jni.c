@@ -4621,20 +4621,28 @@ JNIEXPORT jintArray JNICALL Java_roman10_ffmpegTest_VideoBrowser_naGetVideoResol
     (*pEnv)->SetIntArrayRegion(pEnv, lRes, 0, 2, lVideoRes);
     return lRes;
 }
-JNIEXPORT jint JNICALL Java_roman10_ffmpegTest_VideoBrowser_naMain(JNIEnv *env, jobject this) {
+JNIEXPORT jint JNICALL Java_roman10_ffmpegTest_VideoBrowser_naMain(JNIEnv *env, jobject this,
+		jstring pImageFileName, jstring pVideoFileName,
+		jstring pSpeedSlide) {
+	// /mnt/sdcard/
+	// -r 2 -i images/image%d.jpg -ar 22050 -s 320x240 -aspect 4:3 -f flv ' yourflvname.flv
+	// ffmpeg -f image2 -r 1 -i IMAGE_FILE_%d.JPG -r 25 video.mpg
 
-   int argc = 8;
+   int argc = 10;
+   char *inArgv[10];
+   inArgv[0] = "ffmpeg";
+   inArgv[1] = "-f";
+   inArgv[2] = ("image2");
+   inArgv[3] = ("-r");
+   inArgv[4] = (*env)->GetStringUTFChars(env, pSpeedSlide, 0);
+   inArgv[5] = ("-i");
+   inArgv[6] = (*env)->GetStringUTFChars(env, pImageFileName, 0);
+   inArgv[7] = ("-r");
+   inArgv[8] = ("25");
+   inArgv[9] = (*env)->GetStringUTFChars(env, pVideoFileName, 0);
+
    char **argv;
-   argv[0] = "lame";
-   argv[1] = "-V";
-   argv[2] = (*env)->GetStringUTFChars(env, "12", 0);
-   argv[3] = "-b";
-   argv[4] = (*env)->GetStringUTFChars(env, "12", 0);
-   argv[5] = "-f";
-   argv[6] = (*env)->GetStringUTFChars(env, "input.wav", 0);
-   argv[7] = (*env)->GetStringUTFChars(env, "output.mp3", 0);
-
-
+   argv = inArgv;
 	int64_t ti;
 
 	    av_log_set_flags(AV_LOG_SKIP_REPEATED);
@@ -4667,36 +4675,37 @@ JNIEXPORT jint JNICALL Java_roman10_ffmpegTest_VideoBrowser_naMain(JNIEnv *env, 
 	        show_banner();
 
 	    /* parse options */
-	    parse_options(argc, argv, options, opt_output_file);
+//	    parse_options(argc, argv, options, opt_output_file);
 
-	    if(nb_output_files <= 0 && nb_input_files == 0) {
-	        show_usage();
-	        fprintf(stderr, "Use -h to get full help or, even better, run 'man ffmpeg'\n");
-	        ffmpeg_exit(1);
-	    }
+//	    if(nb_output_files <= 0 && nb_input_files == 0) {
+//	        show_usage();
+//	        fprintf(stderr, "Use -h to get full help or, even better, run 'man ffmpeg'\n");
+//	        //ffmpeg_exit(1);
+//	    }
 
-	    /* file converter / grab */
-	    if (nb_output_files <= 0) {
-	        fprintf(stderr, "At least one output file must be specified\n");
-	        ffmpeg_exit(1);
-	    }
+//	    /* file converter / grab */
+//	    if (nb_output_files <= 0) {
+//	        fprintf(stderr, "At least one output file must be specified\n");
+//	        //ffmpeg_exit(1);
+//	    }
+//
+//	    if (nb_input_files == 0) {
+//	        fprintf(stderr, "At least one input file must be specified\n");
+//	        //ffmpeg_exit(1);
+//	    }
+//
+//	    ti = getutime();
+//	    if (transcode(output_files, nb_output_files, input_files, nb_input_files,
+//	                  stream_maps, nb_stream_maps) < 0)
+//	        //ffmpeg_exit(1);
+//	    ti = getutime() - ti;
+//	    if (do_benchmark) {
+//	        int maxrss = getmaxrss() / 1024;
+//	        printf("bench: utime=%0.3fs maxrss=%ikB\n", ti / 1000000.0, maxrss);
+//	    }
 
-	    if (nb_input_files == 0) {
-	        fprintf(stderr, "At least one input file must be specified\n");
-	        ffmpeg_exit(1);
-	    }
-
-	    ti = getutime();
-	    if (transcode(output_files, nb_output_files, input_files, nb_input_files,
-	                  stream_maps, nb_stream_maps) < 0)
-	        ffmpeg_exit(1);
-	    ti = getutime() - ti;
-	    if (do_benchmark) {
-	        int maxrss = getmaxrss() / 1024;
-	        printf("bench: utime=%0.3fs maxrss=%ikB\n", ti / 1000000.0, maxrss);
-	    }
-
-	    return ffmpeg_exit(0);
+	    //return ffmpeg_exit(0);
+	    return 1;
 }
 
 

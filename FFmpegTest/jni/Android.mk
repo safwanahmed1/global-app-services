@@ -10,10 +10,11 @@ include $(PREBUILT_SHARED_LIBRARY)
 
 #the andzop library
 include $(CLEAR_VARS)
+LOCAL_CFLAGS := -g
 LOCAL_ALLOW_UNDEFINED_SYMBOLS=false
 LOCAL_MODULE := ffmpeg-test-jni
 LOCAL_SRC_FILES := ffmpeg-test-jni.c
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/ffmpeg-0.8/android/armv7-a/include
 LOCAL_SHARED_LIBRARY := ffmpeg-prebuilt
-LOCAL_LDLIBS    := -llog -ljnigraphics -lz -lm $(LOCAL_PATH)/ffmpeg-0.8/android/armv7-a/libffmpeg.so
+LOCAL_LDLIBS    := -llog -ljnigraphics -lz -lm $(LOCAL_PATH)/ffmpeg-0.8/android/armv7-a/libffmpeg.so $(LOCAL_PATH)/ffmpeg-0.8/cmdutils.o
 include $(BUILD_SHARED_LIBRARY)
