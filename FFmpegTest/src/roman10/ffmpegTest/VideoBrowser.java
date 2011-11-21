@@ -43,7 +43,7 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 	private static native String naGetVideoCodecName();
 	private static native String naGetVideoFormatName();
 	private static native void naClose();
-	private static native void naMain(String wav, String mp3, String quality, String bitrate);
+	private static native void naMain(String pImageFile, String pVideoFile, String speedSlide);
 	
 	private void showVideoInfo(final File _file) {
 		String videoFilename = _file.getAbsolutePath();
@@ -57,7 +57,7 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 		displayText += "Video Codec: " + prVideoCodecName + "\n";
 		displayText += "Video Format: " + prVideoFormatName + "\n";
 		text_titlebar_text.setText(displayText);
-		naMain("in.wav", "out.mp3", "high", "128");
+		
 	}
 	
 	
@@ -542,7 +542,8 @@ public class VideoBrowser extends ListActivity implements ListView.OnScrollListe
 					last_list_view_pos = 0;
 					browseTo(l_clickedFile);
 				} else {
-					showVideoInfo(l_clickedFile);
+					//showVideoInfo(l_clickedFile);
+					naMain("mnt/sdcard/image/IMAGE_FILE_%d.JPG", "mnt/sdcard/image/video.mpg", "2");
 				}
 			}
 		}
