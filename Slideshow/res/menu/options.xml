@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<menu xmlns:a="http://schemas.android.com/apk/res/android">
+ 	<item a:id="@+id/shareMenuItem" a:title="@string/shareMenuItemTitle"
+ 		a:icon="@drawable/share">
+ 		 <!-- "file" submenu -->
+        <menu>
+            <item a:id="@+id/shareImageMenuItem"
+                  a:title="@string/shareImageMenuItemTitle"
+                  a:icon="@drawable/image" />
+            <item a:id="@+id/shareVideoMenuItem"
+                  a:title="@string/shareVideoMenuItemTitle"
+                  a:icon="@drawable/video" />
+        </menu>
+        </item>
+	<item a:id="@+id/preferencesMenuItem" a:title="@string/preferencesMenuItemTitle"
+		a:icon="@drawable/settings" />
+
+	<item a:id="@+id/aboutMenuItem" a:title="@string/aboutMenuItemTitle"
+		a:icon="@drawable/about" />
+
+</menu>

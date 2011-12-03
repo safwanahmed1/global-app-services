@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+	xmlns:a="http://schemas.android.com/apk/res/android"
+	a:id="@+id/splashscreenLayout"
+	a:layout_width="fill_parent"
+	a:layout_height="fill_parent"
+	a:orientation="vertical"
+	a:gravity="center">
+
+	<LinearLayout
+		a:id="@+id/splashscreenWidgetLayout"
+		a:layout_width="wrap_content"
+		a:layout_height="fill_parent"
+		a:orientation="vertical"
+		a:gravity="center">
+
+		<ImageView
+			a:id="@+id/splashscreenImage"
+			a:layout_width="wrap_content"
+			a:layout_height="wrap_content"
+			a:src="@drawable/splash"/>
+
+		
+	</LinearLayout>
+	<include layout="@layout/splashtext"/>
+</RelativeLayout>

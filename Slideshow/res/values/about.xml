@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="aboutActivityName">Slideshow Magic Maker: About</string>
+
+    <string name="aboutButtonText">About</string>
+
+	<string name="aboutMenuItemTitle">About</string>
+
+	<string name="aboutText">
+		<![CDATA[
+			<html>
+
+				<body>
+					<h1>Slideshow Magic Maker!</h1>
+
+					Slideshow Magic Maker allows you to make and share slideshows from pictures on your Facebook, phone, or tablet -  while playing music from your library in the background.
+				</body>
+
+			</html>
+		]]>
+	</string>
+	
+</resources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="slidescreenGettingFacebookImage">Getting Facebook images for Slideshow.</string>
+	<string name="slidescreenGettingLocalImage">Getting local images for Slideshow.</string>
+	<string name="slidescreenGettingImage">Getting images for Slideshow.</string>
+	<string name="slidescreenNoSourceImage">No source images for displaying.</string>
+	<string name="slidescreenShareImageSuccess">Share image to Facebook success.</string>
+	<string name="slidescreenShareImageFail">Share image to Facebook fail.</string>
+	<string name="slidescreenShareVideoSuccess">Share video to Facebook success.</string>
+	<string name="slidescreenShareVideoFail">Share video to Facebook fail.</string>
+</resources>

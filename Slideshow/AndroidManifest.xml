@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.sendme.android.slideshow"
+    android:versionCode="4"
+    android:versionName="1.6" >
+
+    <uses-sdk android:minSdkVersion="3" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true" />
+
+    <application
+        android:debuggable="true"
+        android:icon="@drawable/icon"
+        android:label="@string/applicationName"
+        android:name=".AndroidSlideshow" >
+        <activity
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/splashscreenActivityName"
+            android:name=".activity.SplashScreenActivity"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+            <intent-filter >
+                <category android:name="android.intent.category.LAUNCHER" />
+
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/slideshowActivityName"
+            android:name=".activity.MainActivity"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+        <activity
+            android:label="@string/preferencesActivityName"
+            android:name=".activity.SettingsActivity" />
+        <activity
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/aboutActivityName"
+            android:name=".activity.AboutActivity"
+            android:screenOrientation="landscape" />
+
+        <receiver
+            android:exported="true"
+            android:name="com.sendme.apps.android.util.SendMeBroadcastReceiver" >
+            <intent-filter >
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+    </application>
+
+</manifest>
