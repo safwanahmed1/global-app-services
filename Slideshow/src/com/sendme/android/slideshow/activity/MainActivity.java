@@ -219,7 +219,12 @@ public class MainActivity extends RoboActivity implements
 			if (resultCode == RESULT_OK) {
 				// currImageURI = data.getData();
 				Uri uri = data.getData();
-				String videoPath = getRealPathFromVideoURI(uri);
+				String videoPath = null;
+				if (uri.toString().startsWith("file://"))
+					videoPath = uri.toString().replaceFirst("file://", "");
+				else {
+					videoPath = getRealPathFromImageURI(uri);
+				}
 				if (videoPath != null)
 					shareVideo(videoPath);
 			}
@@ -228,7 +233,13 @@ public class MainActivity extends RoboActivity implements
 		}
 		case AndroidSlideshow.GALLERY_CHOSEN_IMAGE_RESULT_CODE: {
 			if (resultCode == RESULT_OK) {
-				String imagePath = getRealPathFromImageURI(data.getData());
+				Uri uri = data.getData();
+				String imagePath = null;
+				if (uri.toString().startsWith("file://"))
+					imagePath = uri.toString().replaceFirst("file://", "");
+				else {
+					imagePath = getRealPathFromImageURI(uri);
+				}
 				if (imagePath != null)
 					shareImage(imagePath);
 			}
