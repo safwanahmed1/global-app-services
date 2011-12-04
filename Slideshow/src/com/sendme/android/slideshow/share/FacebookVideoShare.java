@@ -48,7 +48,7 @@ public class FacebookVideoShare extends MediaSource {
 																	// NULL
 			Toast.makeText(context,
 					context.getString(R.string.slidescreenShareVideoSuccess),
-					Toast.LENGTH_LONG);
+					Toast.LENGTH_LONG).show();
 
 			/*
 			 * TextUpdater textUpdater = new TextUpdater();
@@ -73,7 +73,7 @@ public class FacebookVideoShare extends MediaSource {
 																// NULL
 			Toast.makeText(context,
 					context.getString(R.string.slidescreenShareVideoFail),
-					Toast.LENGTH_LONG);
+					Toast.LENGTH_LONG).show();
 		}
 
 	};
@@ -96,12 +96,7 @@ public class FacebookVideoShare extends MediaSource {
 
 	@SuppressWarnings("unused")
 	public void ShareVideo(String videoPath) throws MediaSourceException {
-		String filePath = "/mnt/sdcard/sample.3gp";
-		String dataMsg = "Your video description here.";
-		String dataName = "sample.3gpp";
-		String query = "me/videos";
-		JSONObject output = null;
-		RequestListener reqListener = new FacebookRequestListener();
+
 		Facebook facebookApplication = getFacebookApplication();
 		FacebookVideoShareTask videoShareTask = new FacebookVideoShareTask(
 				facebookApplication, videoPath);
@@ -110,24 +105,7 @@ public class FacebookVideoShare extends MediaSource {
 
 	}
 
-	public byte[] readBytes(InputStream inputStream) throws IOException {
-		// this dynamically extends to take the bytes you read
-		ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
-
-		// this is storage overwritten on each iteration with bytes
-		int bufferSize = 1024;
-		byte[] buffer = new byte[bufferSize];
-
-		// we need to know how may bytes were read to write them to the
-		// byteBuffer
-		int len = 0;
-		while ((len = inputStream.read(buffer)) != -1) {
-			byteBuffer.write(buffer, 0, len);
-		}
-
-		// and then we can return your byte array.
-		return byteBuffer.toByteArray();
-	}
+	
 
 	@Override
 	public void checkForUpdates(Long time, boolean notify)

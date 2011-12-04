@@ -219,11 +219,10 @@ public class MainActivity extends RoboActivity implements
 			if (resultCode == RESULT_OK) {
 				// currImageURI = data.getData();
 				Uri uri = data.getData();
-				String videoPath = null;
-				if (uri.toString().startsWith("file://"))
-					videoPath = uri.toString().replaceFirst("file://", "");
-				else {
-					videoPath = getRealPathFromImageURI(uri);
+				String videoPath = getRealPathFromImageURI(uri);
+				;
+				if (videoPath == null) {
+					videoPath = uri.getPath();
 				}
 				if (videoPath != null)
 					shareVideo(videoPath);
@@ -234,12 +233,12 @@ public class MainActivity extends RoboActivity implements
 		case AndroidSlideshow.GALLERY_CHOSEN_IMAGE_RESULT_CODE: {
 			if (resultCode == RESULT_OK) {
 				Uri uri = data.getData();
-				String imagePath = null;
-				if (uri.toString().startsWith("file://"))
-					imagePath = uri.toString().replaceFirst("file://", "");
-				else {
-					imagePath = getRealPathFromImageURI(uri);
+				String imagePath = getRealPathFromImageURI(uri);
+				;
+				if (imagePath == null) {
+					imagePath = uri.getPath();
 				}
+
 				if (imagePath != null)
 					shareImage(imagePath);
 			}
@@ -380,7 +379,7 @@ public class MainActivity extends RoboActivity implements
 
 	private void shareVideo(String videoPath) {
 		// TODO Auto-generated method stub
-		FacebookVideoShare shareVideo = new FacebookVideoShare(ass);
+		FacebookVideoShare shareVideo = new FacebookVideoShare(MainActivity.this);
 		shareVideo.setActive(true);
 		shareVideo.setSettingsManager(settingsManager);
 		try {
@@ -393,7 +392,7 @@ public class MainActivity extends RoboActivity implements
 
 	private void shareImage(String imagePath) {
 		// TODO Auto-generated method stub
-		FacebookImageShare shareImage = new FacebookImageShare();
+		FacebookImageShare shareImage = new FacebookImageShare(MainActivity.this);
 		shareImage.setActive(true);
 		shareImage.setSettingsManager(settingsManager);
 		shareImage.ShareImage(imagePath);

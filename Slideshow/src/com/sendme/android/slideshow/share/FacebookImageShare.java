@@ -1,6 +1,9 @@
 package com.sendme.android.slideshow.share;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.facebook.android.AsyncFacebookRunner;
 import com.facebook.android.AsyncFacebookRunner.RequestListener;
@@ -8,6 +11,7 @@ import com.facebook.android.Facebook;
 import com.google.inject.Singleton;
 import com.sendme.android.logging.AndroidLogger;
 import com.sendme.android.slideshow.AndroidSlideshow;
+import com.sendme.android.slideshow.R;
 import com.sendme.android.slideshow.source.MediaSource;
 import com.sendme.android.slideshow.source.MediaSourceException;
 
@@ -25,8 +29,9 @@ import java.io.InputStream;
 public class FacebookImageShare extends MediaSource {
 	private final static AndroidLogger log = AndroidLogger
 			.getAndroidLogger(AndroidSlideshow.LOG_TAG);
-
-	public FacebookImageShare() {
+	private Context context;
+	public FacebookImageShare(Context context) {
+		this.context = context;
 	}
 
 	public Facebook getFacebookApplication() {
@@ -40,12 +45,54 @@ public class FacebookImageShare extends MediaSource {
 
 		return output;
 	}
+	
+	FacebookShareTaskListener listener = new FacebookShareTaskListener() {
+
+		public void onFacebookeShareingSuccess() {
+			// TODO Auto-generated method stub
+			Log.d("Test listener", "Main - Upload image success"); // IT IS NOT
+																	// NULL
+			Toast.makeText(context,
+					context.getString(R.string.slidescreenShareImageSuccess),
+					Toast.LENGTH_LONG).show();
+
+			/*
+			 * TextUpdater textUpdater = new TextUpdater();
+			 * 
+			 * textUpdater.setTextView(slideMessage);
+			 * textUpdater.setText(slideMessage.getContext().getString(
+			 * R.string.slidescreenShareVideoSuccess));
+			 * slideMessage.post(textUpdater); AudioPlaybackUIAnimation anim =
+			 * new AudioPlaybackUIAnimation(); anim.setView(textLayout);
+			 * anim.setAnimation(AnimationUtils.loadAnimation(
+			 * textLayout.getContext(), R.anim.slide_menu_show));
+			 * anim.setFinalVisibility(View.VISIBLE); textLayout.post(anim);
+			 * anim.setAnimation(AnimationUtils.loadAnimation(
+			 * textLayout.getContext(), R.anim.slide_menu_hide));
+			 * anim.setFinalVisibility(View.GONE); textLayout.post(anim);
+			 */
+		}
+
+		public void onFacebookeShareingFail(String error) {
+			// TODO Auto-generated method stub
+			Log.d("Test listener", "Main - Upload image fail"); // IT IS NOT
+																// NULL
+			Toast.makeText(context,
+					context.getString(R.string.slidescreenShareImageFail),
+					Toast.LENGTH_LONG).show();
+		}
+
+	};
 
 	public void ShareImage(String imagePath) {
+		/*
 		String query = "me/photos";
+		
 		RequestListener reqListener = new FacebookRequestListener();
 		byte[] data = null;
+		
 		Facebook facebookApplication = getFacebookApplication();
+		
 		AsyncFacebookRunner mAsyncRunner = new AsyncFacebookRunner(
 				facebookApplication);
 		
@@ -68,6 +115,13 @@ public class FacebookImageShare extends MediaSource {
 		mAsyncRunner.request(query, params, "POST", reqListener, null);
 
 		// return output;
+		*/
+		Facebook facebookApplication = getFacebookApplication();
+		FacebookImageShareTask videoShareTask = new FacebookImageShareTask(
+				facebookApplication, imagePath);
+		videoShareTask.setListener(listener);
+		videoShareTask.execute();
+		 
 	}
 
 	public byte[] readBytes(InputStream inputStream) throws IOException {
