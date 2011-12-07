@@ -18,5 +18,9 @@
 
 	<item a:id="@+id/aboutMenuItem" a:title="@string/aboutMenuItemTitle"
 		a:icon="@drawable/about" />
+	
+	<item a:id="@+id/logoutMenuItem" a:title="@string/logoutMenuItemTitle"
+		a:icon="@drawable/logout" />
+	
 
 </menu>

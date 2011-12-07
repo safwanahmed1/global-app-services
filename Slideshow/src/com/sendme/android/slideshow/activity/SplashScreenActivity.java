@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.inject.Inject;
 import com.sendme.android.logging.AndroidLogger;
 import com.sendme.android.slideshow.AndroidSlideshow;
@@ -25,14 +27,14 @@ import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 
 /**
- *
+ * 
  * @author Todd Tidwell <ttidwell@sendme.com>
  */
-public class SplashScreenActivity
-extends RoboActivity
-implements InitializationTaskListener, DialogInterface.OnClickListener, AuthenticationListener
-{
-	private final static AndroidLogger log = AndroidLogger.getAndroidLogger(AndroidSlideshow.LOG_TAG);
+public class SplashScreenActivity extends RoboActivity implements
+		InitializationTaskListener, DialogInterface.OnClickListener,
+		AuthenticationListener {
+	private final static AndroidLogger log = AndroidLogger
+			.getAndroidLogger(AndroidSlideshow.LOG_TAG);
 
 	private final static String DOING_AUTHENTICATION_KEY = "DOING_AUTHENTICATION";
 
@@ -53,13 +55,11 @@ implements InitializationTaskListener, DialogInterface.OnClickListener, Authenti
 
 	private boolean doingAuthentication = false;
 
-	public SplashScreenActivity()
-	{
+	public SplashScreenActivity() {
 	}
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState) {
 		log.info("Splash onCreate..");
 
 		super.onCreate(savedInstanceState);
@@ -69,65 +69,57 @@ implements InitializationTaskListener, DialogInterface.OnClickListener, Authenti
 		facebookAuthenticator.setActivity(this);
 		facebookAuthenticator.setListener(this);
 
-		facebookAuthenticator.setRequestCode(AndroidSlideshow.FACEBOOK_AUTHENTICATION_RESULT_CODE);
+		facebookAuthenticator
+				.setRequestCode(AndroidSlideshow.FACEBOOK_AUTHENTICATION_RESULT_CODE);
 
-		if (savedInstanceState != null)
-		{
-			doingAuthentication = savedInstanceState.getBoolean(DOING_AUTHENTICATION_KEY, false);
-		}
-		else
-		{
+		if (savedInstanceState != null) {
+			doingAuthentication = savedInstanceState.getBoolean(
+					DOING_AUTHENTICATION_KEY, false);
+		} else {
 			doingAuthentication = false;
 		}
 	}
 
 	@Override
-	protected void onStart()
-	{
+	protected void onStart() {
 		log.info("Splash onStart..");
 
 		super.onStart();
 	}
 
 	@Override
-	protected void onPause()
-	{
+	protected void onPause() {
 		super.onPause();
 
 		log.info("Splash onPause..");
 	}
 
 	@Override
-	protected void onResume()
-	{
+	protected void onResume() {
 		super.onResume();
 
 		log.info("Splash onResume called..");
 
-		if (settingsManager.needsPreferences())
-		{
+		if (settingsManager.needsPreferences()) {
 			log.info("We need preferences??");
 
 			SplashScreenPause pause = new SplashScreenPause();
 
 			pause.setSplashScreenActivity(this);
 
-			splashText.postDelayed(pause, settingsManager.getSplashScreenPauseDuration());
-		}
-		else
-		{
+			splashText.postDelayed(pause,
+					settingsManager.getSplashScreenPauseDuration());
+		} else {
 			log.info("OnCreate Calling Initialize..");
 
-			if (!doingAuthentication)
-			{
+			if (!doingAuthentication) {
 				initialize(InitializationPhase.START);
 			}
 		}
 	}
 
 	@Override
-	protected void onSaveInstanceState(Bundle outState)
-	{
+	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 
 		log.info("OnSaveInstanceState called...");
@@ -136,361 +128,315 @@ implements InitializationTaskListener, DialogInterface.OnClickListener, Authenti
 	}
 
 	@Override
-	protected void onStop()
-	{
+	protected void onStop() {
 		super.onStop();
 
 		log.info("Splash onStop..");
 	}
 
 	@Override
-	protected void onDestroy()
-	{
+	protected void onDestroy() {
 		super.onDestroy();
 
 		log.info("Splash onDestroy..");
 	}
 
 	@Override
-	protected Dialog onCreateDialog(int id)
-	{
+	protected Dialog onCreateDialog(int id) {
 		Dialog output = null;
 
 		Builder builder = new Builder(this);
 
-		switch (id)
-		{
-			case AndroidSlideshow.DATABASE_ERROR_DIALOG:
-			{
-				builder.setTitle(R.string.databaseErrorDialogTitle);
+		switch (id) {
+		case AndroidSlideshow.DATABASE_ERROR_DIALOG: {
+			builder.setTitle(R.string.databaseErrorDialogTitle);
 
-				builder.setCancelable(false);
+			builder.setCancelable(false);
 
-				builder.setMessage(R.string.databaseErrorDialogMessage);
+			builder.setMessage(R.string.databaseErrorDialogMessage);
 
-				builder.setPositiveButton(R.string.databaseErrorDialogButton, this);
+			builder.setPositiveButton(R.string.databaseErrorDialogButton, this);
 
-				output = builder.create();
+			output = builder.create();
 
-				break;
-			}
+			break;
+		}
 
-			default:
-			{
-				output = super.onCreateDialog(id);
-			}
+		default: {
+			output = super.onCreateDialog(id);
+		}
 		}
 
 		return output;
 	}
 
-	public void onClick(DialogInterface di, int i)
-	{
+	public void onClick(DialogInterface di, int i) {
 		log.debug("Dialog Clicked: " + di + " -- " + i);
 
 		// For now, this is just the database error dialog, so we'll just exit
 		finish();
 	}
 
-	public void onInitializationStatusUpdate(InitializationEventType status)
-	{
+	public void onInitializationStatusUpdate(InitializationEventType status) {
 		log.debug("Status Update: " + status);
 
-		switch (status)
-		{
-			case INITIALIZING:
-			{
-				updateText(R.string.splashscreenInitializing);
+		switch (status) {
+		case INITIALIZING: {
+			updateText(R.string.splashscreenInitializing);
 
-				initialize(InitializationPhase.DATABASE);
+			initialize(InitializationPhase.DATABASE);
 
-				break;
-			}
+			break;
+		}
 
-			case DATABASE_INITIALIZING:
-			{
-				updateText(R.string.splashscreenDatabaseInitializing);
+		case DATABASE_INITIALIZING: {
+			updateText(R.string.splashscreenDatabaseInitializing);
 
-				break;
-			}
+			break;
+		}
 
-			case DATABASE_INITIALIZED:
-			{
-				updateText(R.string.splashscreenDatabaseInitialized);
+		case DATABASE_INITIALIZED: {
+			updateText(R.string.splashscreenDatabaseInitialized);
 
-				initialize(InitializationPhase.LOCAL_IMAGE_SOURCE);
+			initialize(InitializationPhase.LOCAL_IMAGE_SOURCE);
 
-				break;
-			}
+			break;
+		}
 
-			case DATABASE_ERROR:
-			{
-				updateText(R.string.splashscreenDatabaseError);
+		case DATABASE_ERROR: {
+			updateText(R.string.splashscreenDatabaseError);
 
-				showDialog(AndroidSlideshow.DATABASE_ERROR_DIALOG);
+			showDialog(AndroidSlideshow.DATABASE_ERROR_DIALOG);
 
-				break;
-			}
+			break;
+		}
 
-			case LOCAL_IMAGE_SOURCE_INITIALIZING:
-			{
-				updateText(R.string.splashscreenLocalImageSourceInitializing);
-				initialize(InitializationPhase.FACEBOOK_IMAGE_SOURCE); // QuanPN add new line
-				break;
-			}
+		case LOCAL_IMAGE_SOURCE_INITIALIZING: {
+			updateText(R.string.splashscreenLocalImageSourceInitializing);
+			initialize(InitializationPhase.FACEBOOK_IMAGE_SOURCE); // QuanPN add
+																	// new line
+			break;
+		}
 
-			case LOCAL_IMAGE_SOURCE_INITIALIZED:
-			{
-				updateText(R.string.splashscreenLocalImageSourceInitialized);
+		case LOCAL_IMAGE_SOURCE_INITIALIZED: {
+			updateText(R.string.splashscreenLocalImageSourceInitialized);
 
-				//initialize(InitializationPhase.FACEBOOK_IMAGE_SOURCE);
+			// initialize(InitializationPhase.FACEBOOK_IMAGE_SOURCE);
 
-				break;
-			}
+			break;
+		}
 
-			case LOCAL_IMAGE_SOURCE_ERROR:
-			{
-				updateText(R.string.splashscreenLocalImageSourceError);
+		case LOCAL_IMAGE_SOURCE_ERROR: {
+			updateText(R.string.splashscreenLocalImageSourceError);
 
-				//initialize(InitializationPhase.FACEBOOK_IMAGE_SOURCE);
+			// initialize(InitializationPhase.FACEBOOK_IMAGE_SOURCE);
 
-				break;
-			}
+			break;
+		}
 
-			case FACEBOOK_IMAGE_SOURCE_INITIALIZING:
-			{
-				updateText(R.string.splashscreenFacebookInitializing);
-				//initialize(InitializationPhase.LOCAL_AUDIO_TRACKS_SOURCE); // QuanPN add new line
-				break;
-			}
+		case FACEBOOK_IMAGE_SOURCE_INITIALIZING: {
+			updateText(R.string.splashscreenFacebookInitializing);
+			// initialize(InitializationPhase.LOCAL_AUDIO_TRACKS_SOURCE); //
+			// QuanPN add new line
+			break;
+		}
 
-			case FACEBOOK_IMAGE_SOURCE_INITIALIZED:
-			{
-				updateText(R.string.splashscreenFacebookInitializing);
+		case FACEBOOK_IMAGE_SOURCE_INITIALIZED: {
+			updateText(R.string.splashscreenFacebookInitializing);
 
-				initialize(InitializationPhase.LOCAL_AUDIO_TRACKS_SOURCE);
+			initialize(InitializationPhase.LOCAL_AUDIO_TRACKS_SOURCE);
 
-				break;
-			}
+			break;
+		}
 
-			case FACEBOOK_IMAGE_SOURCE_ERROR:
-			{
-				updateText(R.string.splashscreenFacebookError);
+		case FACEBOOK_IMAGE_SOURCE_ERROR: {
+			updateText(R.string.splashscreenFacebookError);
 
-				initialize(InitializationPhase.LOCAL_AUDIO_TRACKS_SOURCE);
+			initialize(InitializationPhase.LOCAL_AUDIO_TRACKS_SOURCE);
 
-				break;
-			}
+			break;
+		}
 
-			case FACEBOOK_IMAGE_SOURCE_AUTHORIZATION:
-			{
-				doingAuthentication = true;
+		case FACEBOOK_IMAGE_SOURCE_AUTHORIZATION: {
+			doingAuthentication = true;
 
-				try
-				{
-					updateText(R.string.splashscreenFacebookAuthorizing);
+			try {
+				updateText(R.string.splashscreenFacebookAuthorizing);
 
-					facebookAuthenticator.authenticate(AndroidSlideshow.FACEBOOK_AUTHENTICATION_RESULT_CODE);
-				}
-				catch (AuthenticationException e)
-				{
-					updateText(R.string.splashscreenFacebookError);
-
-					facebookImageSource.setActive(false);
-
-					initialize(InitializationPhase.LOCAL_AUDIO_TRACKS_SOURCE);
-				}
-
-				break;
-			}
-
-			case FACEBOOK_IMAGE_SOURCE_AUTHORIZATION_CANCELLED:
-			{
+				facebookAuthenticator
+						.authenticate(AndroidSlideshow.FACEBOOK_AUTHENTICATION_RESULT_CODE);
+			} catch (AuthenticationException e) {
 				updateText(R.string.splashscreenFacebookError);
 
 				facebookImageSource.setActive(false);
 
 				initialize(InitializationPhase.LOCAL_AUDIO_TRACKS_SOURCE);
-
-				break;
 			}
 
-			case FACEBOOK_IMAGE_SOURCE_AUTHORIZATION_ERROR:
-			{
-				updateText(R.string.splashscreenFacebookError);
+			break;
+		}
 
-				facebookImageSource.setActive(false);
+		case FACEBOOK_IMAGE_SOURCE_AUTHORIZATION_CANCELLED: {
+			updateText(R.string.splashscreenFacebookError);
 
-				initialize(InitializationPhase.LOCAL_AUDIO_TRACKS_SOURCE);
+			facebookImageSource.setActive(false);
 
-				break;
-			}
+			initialize(InitializationPhase.LOCAL_AUDIO_TRACKS_SOURCE);
 
-			case FACEBOOK_IMAGE_SOURCE_AUTHORIZED:
-			{
-				updateText(R.string.splashscreenFacebookAuthorized);
+			break;
+		}
 
-				initialize(InitializationPhase.FACEBOOK_IMAGE_SOURCE);
+		case FACEBOOK_IMAGE_SOURCE_AUTHORIZATION_ERROR: {
+			updateText(R.string.splashscreenFacebookError);
 
-				break;
-			}
+			facebookImageSource.setActive(false);
 
-			case LOCAL_AUDIO_TRACKS_SOURCE_INITIALIZING:
-			{
-				updateText(R.string.splashscreenLocalAudioTracksSourceInitializing);
-				initialize(InitializationPhase.SLIDESHOW); // QuanPN add new line
-				break;
-			}
+			initialize(InitializationPhase.LOCAL_AUDIO_TRACKS_SOURCE);
 
-			case LOCAL_AUDIO_TRACKS_SOURCE_INITIALIZED:
-			{
-				updateText(R.string.splashscreenLocalAudioTracksSourceInitialized);
+			break;
+		}
 
-				//initialize(InitializationPhase.SLIDESHOW);
+		case FACEBOOK_IMAGE_SOURCE_AUTHORIZED: {
+			updateText(R.string.splashscreenFacebookAuthorized);
 
-				break;
-			}
+			initialize(InitializationPhase.FACEBOOK_IMAGE_SOURCE);
 
-			case LOCAL_AUDIO_TRACKS_SOURCE_ERROR:
-			{
-				updateText(R.string.splashscreenLocalAudioTracksSourceError);
+			break;
+		}
 
-				//initialize(InitializationPhase.SLIDESHOW);
+		case LOCAL_AUDIO_TRACKS_SOURCE_INITIALIZING: {
+			updateText(R.string.splashscreenLocalAudioTracksSourceInitializing);
+			initialize(InitializationPhase.SLIDESHOW); // QuanPN add new line
+			break;
+		}
 
-				break;
-			}
+		case LOCAL_AUDIO_TRACKS_SOURCE_INITIALIZED: {
+			updateText(R.string.splashscreenLocalAudioTracksSourceInitialized);
 
-			case SLIDESHOW_INITIALIZING:
-			{
-				updateText(R.string.splashscreenSlideshowInitializing);
-				initialize(InitializationPhase.PLAYLIST); // QuanPN add new line
-				break;
-			}
+			// initialize(InitializationPhase.SLIDESHOW);
 
-			case SLIDESHOW_INITIALIZED:
-			{
-				updateText(R.string.splashscreenSlideshowInitialized);
+			break;
+		}
 
-				//initialize(InitializationPhase.PLAYLIST);
+		case LOCAL_AUDIO_TRACKS_SOURCE_ERROR: {
+			updateText(R.string.splashscreenLocalAudioTracksSourceError);
 
-				break;
-			}
+			// initialize(InitializationPhase.SLIDESHOW);
 
-			case PLAYLIST_INITIALIZING:
-			{
-				updateText(R.string.splashscreenPlaylistInitializing);
-				//initialize(InitializationPhase.COMPLETE);// QuanPN add new line
-				break;
-			}
+			break;
+		}
 
-			case PLAYLIST_INITIALIZED:
-			{
-				updateText(R.string.splashscreenPlaylistInitialized);
+		case SLIDESHOW_INITIALIZING: {
+			updateText(R.string.splashscreenSlideshowInitializing);
+			initialize(InitializationPhase.PLAYLIST); // QuanPN add new line
+			break;
+		}
 
-				initialize(InitializationPhase.COMPLETE);
+		case SLIDESHOW_INITIALIZED: {
+			updateText(R.string.splashscreenSlideshowInitialized);
 
-				break;
-			}
+			// initialize(InitializationPhase.PLAYLIST);
 
-			case INITIALIZED:
-			{
-				updateText(R.string.splashscreenInitialized);
+			break;
+		}
 
-				onInitializationComplete();
+		case PLAYLIST_INITIALIZING: {
+			updateText(R.string.splashscreenPlaylistInitializing);
+			// initialize(InitializationPhase.COMPLETE);// QuanPN add new line
+			break;
+		}
 
-				break;
-			}
+		case PLAYLIST_INITIALIZED: {
+			updateText(R.string.splashscreenPlaylistInitialized);
+
+			initialize(InitializationPhase.COMPLETE);
+
+			break;
+		}
+
+		case INITIALIZED: {
+			updateText(R.string.splashscreenInitialized);
+
+			onInitializationComplete();
+
+			break;
+		}
 		}
 	}
 
-	public void onInitializationComplete()
-	{
+	public void onInitializationComplete() {
 		showMain();
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
-	{
-		switch (requestCode)
-		{
-			case AndroidSlideshow.PREFERENCES_ACTIVITY_RESULT_CODE:
-			{
-				log.info("OnActivityResult Calling Initialize..");
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (requestCode) {
+		case AndroidSlideshow.PREFERENCES_ACTIVITY_RESULT_CODE: {
+			log.info("OnActivityResult Calling Initialize..");
 
-				break;
-			}
+			break;
+		}
 
-			case AndroidSlideshow.FACEBOOK_ACTIVITY_RESULT_CODE:
-			{
-				doingAuthentication = false;
+		case AndroidSlideshow.FACEBOOK_ACTIVITY_RESULT_CODE: {
+			doingAuthentication = false;
 
-				facebookAuthenticator.getFacebookApplication().authorizeCallback(requestCode, resultCode, data);
+			facebookAuthenticator.getFacebookApplication().authorizeCallback(
+					requestCode, resultCode, data);
 
-				break;
-			}
+			break;
+		}
 		}
 	}
 
 	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event)
-	{
-		if (keyCode == KeyEvent.KEYCODE_BACK)
-		{
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			return true;
-		}
-		else
-		{
+		} else {
 			return false;
 		}
 	}
 
-	public void onAuthenticationCancelled(int requestCode)
-	{
+	public void onAuthenticationCancelled(int requestCode) {
 		doingAuthentication = false;
 
-		switch (requestCode)
-		{
-			case AndroidSlideshow.FACEBOOK_AUTHENTICATION_RESULT_CODE:
-			{
-				onInitializationStatusUpdate(InitializationEventType.FACEBOOK_IMAGE_SOURCE_AUTHORIZATION_CANCELLED);
+		switch (requestCode) {
+		case AndroidSlideshow.FACEBOOK_AUTHENTICATION_RESULT_CODE: {
+			Toast.makeText(ass,
+					ass.getString(R.string.splashscreenLoginCancel),
+					Toast.LENGTH_LONG).show();
+			onInitializationStatusUpdate(InitializationEventType.FACEBOOK_IMAGE_SOURCE_AUTHORIZATION_CANCELLED);
 
-				break;
-			}
+			break;
+		}
 		}
 	}
 
-	public void onAuthenticationComplete(int requestCode)
-	{
+	public void onAuthenticationComplete(int requestCode) {
 		doingAuthentication = false;
 
-		switch (requestCode)
-		{
-			case AndroidSlideshow.FACEBOOK_AUTHENTICATION_RESULT_CODE:
-			{
-				onInitializationStatusUpdate(InitializationEventType.FACEBOOK_IMAGE_SOURCE_AUTHORIZED);
+		switch (requestCode) {
+		case AndroidSlideshow.FACEBOOK_AUTHENTICATION_RESULT_CODE: {
+			onInitializationStatusUpdate(InitializationEventType.FACEBOOK_IMAGE_SOURCE_AUTHORIZED);
 
-				break;
-			}
+			break;
+		}
 		}
 	}
 
-	public void onAuthenticationError(int requestCode, Throwable t)
-	{
+	public void onAuthenticationError(int requestCode, Throwable t) {
 		doingAuthentication = false;
 
-		switch (requestCode)
-		{
-			case AndroidSlideshow.FACEBOOK_AUTHENTICATION_RESULT_CODE:
-			{
-				onInitializationStatusUpdate(InitializationEventType.FACEBOOK_IMAGE_SOURCE_AUTHORIZATION_ERROR);
+		switch (requestCode) {
+		case AndroidSlideshow.FACEBOOK_AUTHENTICATION_RESULT_CODE: {
+			onInitializationStatusUpdate(InitializationEventType.FACEBOOK_IMAGE_SOURCE_AUTHORIZATION_ERROR);
 
-				break;
-			}
+			break;
+		}
 		}
 	}
 
-	public void showMain()
-	{
+	public void showMain() {
 		log.info("Showing main activity...");
 
 		startActivity(new Intent(this, MainActivity.class));
@@ -499,15 +445,14 @@ implements InitializationTaskListener, DialogInterface.OnClickListener, Authenti
 		finish();
 	}
 
-	public void showPreferences()
-	{
+	public void showPreferences() {
 		log.info("Showing settings activity...");
 
-		startActivityForResult(new Intent(this, SettingsActivity.class), AndroidSlideshow.PREFERENCES_ACTIVITY_RESULT_CODE);
+		startActivityForResult(new Intent(this, SettingsActivity.class),
+				AndroidSlideshow.PREFERENCES_ACTIVITY_RESULT_CODE);
 	}
 
-	public void initialize(InitializationPhase phase)
-	{
+	public void initialize(InitializationPhase phase) {
 		InitializationTask task = new InitializationTask();
 
 		task.setListener(this);
@@ -515,8 +460,7 @@ implements InitializationTaskListener, DialogInterface.OnClickListener, Authenti
 		task.execute(phase);
 	}
 
-	public void updateText(int stringId)
-	{
+	public void updateText(int stringId) {
 		log.info("Setting text: " + getString(stringId));
 
 		splashText.setText(getString(stringId));
@@ -524,33 +468,27 @@ implements InitializationTaskListener, DialogInterface.OnClickListener, Authenti
 		splashText.invalidate();
 	}
 
-	public AndroidSlideshow getAndroidSlideshow()
-	{
+	public AndroidSlideshow getAndroidSlideshow() {
 		return ass;
 	}
 
-	public void setAndroidSlideshow(AndroidSlideshow ass)
-	{
+	public void setAndroidSlideshow(AndroidSlideshow ass) {
 		this.ass = ass;
 	}
 
-	public SettingsManager getSettingsManager()
-	{
+	public SettingsManager getSettingsManager() {
 		return settingsManager;
 	}
 
-	public void setSettingsManager(SettingsManager settingsManager)
-	{
+	public void setSettingsManager(SettingsManager settingsManager) {
 		this.settingsManager = settingsManager;
 	}
 
-	public TextView getSplashText()
-	{
+	public TextView getSplashText() {
 		return splashText;
 	}
 
-	public void setSplashText(TextView splashText)
-	{
+	public void setSplashText(TextView splashText) {
 		this.splashText = splashText;
 	}
 }

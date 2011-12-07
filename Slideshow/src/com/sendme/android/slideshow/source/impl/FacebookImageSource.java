@@ -2,6 +2,9 @@ package com.sendme.android.slideshow.source.impl;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.SystemClock;
+import android.provider.Settings.System;
+
 import com.facebook.android.Facebook;
 import com.google.inject.Singleton;
 import com.sendme.android.logging.AndroidLogger;
@@ -15,6 +18,8 @@ import com.sendme.android.slideshow.source.MediaSource;
 import com.sendme.android.slideshow.source.MediaSourceException;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 import org.json.JSONArray;
@@ -302,6 +307,7 @@ extends MediaSource
 					break;
 				}
 			}
+			text += "\nUpdated on: " + DateFormat.getDateInstance().format(new Date());
 
 			photo.setText(text);
 

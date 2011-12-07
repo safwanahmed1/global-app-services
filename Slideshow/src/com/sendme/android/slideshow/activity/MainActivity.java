@@ -1,5 +1,7 @@
 package com.sendme.android.slideshow.activity;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
 
 import android.content.Context;
@@ -15,13 +17,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
+
 import com.sendme.android.slideshow.controller.UIEvent;
 import roboguice.activity.RoboActivity;
+
+import com.facebook.android.Facebook;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.inject.Inject;
 import com.sendme.android.logging.AndroidLogger;
 import com.sendme.android.slideshow.AndroidSlideshow;
 import com.sendme.android.slideshow.R;
+import com.sendme.android.slideshow.auth.AuthenticationException;
 import com.sendme.android.slideshow.auth.AuthenticationListener;
 import com.sendme.android.slideshow.auth.impl.FaceBookAuthenticator;
 import com.sendme.android.slideshow.controller.AdController;
@@ -215,6 +222,7 @@ public class MainActivity extends RoboActivity implements
 		super.onActivityResult(requestCode, resultCode, data);
 
 		switch (requestCode) {
+
 		case AndroidSlideshow.GALLERY_CHOSEN_VIDEO_RESULT_CODE: {
 			if (resultCode == RESULT_OK) {
 				// currImageURI = data.getData();
@@ -298,6 +306,7 @@ public class MainActivity extends RoboActivity implements
 		// Maybe restart stuff?
 		switch (requestCode) {
 		case AndroidSlideshow.FACEBOOK_AUTHENTICATION_RESULT_CODE: {
+
 			break;
 		}
 		}
@@ -335,6 +344,17 @@ public class MainActivity extends RoboActivity implements
 
 		case R.id.shareVideoMenuItem: {
 			// shareVideo();
+			try {
+				if (facebookAuthenticator.needsAuthentication()) {
+					Toast.makeText(ass,
+							ass.getString(R.string.slidescreenShareNotLogin),
+							Toast.LENGTH_LONG).show();
+					break;
+				}
+			} catch (AuthenticationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			Intent intent = new Intent();
 			intent.setType("video/*");
 			intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -348,7 +368,17 @@ public class MainActivity extends RoboActivity implements
 			break;
 		}
 		case R.id.shareImageMenuItem: {
-
+			try {
+				if (facebookAuthenticator.needsAuthentication()) {
+					Toast.makeText(ass,
+							ass.getString(R.string.slidescreenShareNotLogin),
+							Toast.LENGTH_LONG).show();
+					break;
+				}
+			} catch (AuthenticationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			Intent intent = new Intent();
 			intent.setType("image/*");
 			intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -372,14 +402,48 @@ public class MainActivity extends RoboActivity implements
 
 			break;
 		}
+		case R.id.logoutMenuItem: {
+			try {
+				Facebook fbApplication = getFacebookApplication();
+				if (fbApplication != null) {
+					fbApplication.logout(ass);
+					settingsManager.setFacebookAuthorizationToken(null);
+					settingsManager
+							.setFacebookAuthorizationTokenExpiration((long) 0);
+				}
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			showSplashScreen();
+
+			break;
+		}
 		}
 
 		return true;
 	}
 
+	private Facebook getFacebookApplication() {
+		// TODO Auto-generated method stub
+		Facebook output = new Facebook(
+				settingsManager.getFacebookApplicationId());
+
+		output.setAccessToken(settingsManager.getFacebookAuthorizationToken());
+
+		output.setAccessExpires(settingsManager
+				.getFacebookAuthorizationTokenExpiration());
+
+		return output;
+	}
+
 	private void shareVideo(String videoPath) {
 		// TODO Auto-generated method stub
-		FacebookVideoShare shareVideo = new FacebookVideoShare(MainActivity.this);
+		FacebookVideoShare shareVideo = new FacebookVideoShare(
+				MainActivity.this);
 		shareVideo.setActive(true);
 		shareVideo.setSettingsManager(settingsManager);
 		try {
@@ -392,7 +456,8 @@ public class MainActivity extends RoboActivity implements
 
 	private void shareImage(String imagePath) {
 		// TODO Auto-generated method stub
-		FacebookImageShare shareImage = new FacebookImageShare(MainActivity.this);
+		FacebookImageShare shareImage = new FacebookImageShare(
+				MainActivity.this);
 		shareImage.setActive(true);
 		shareImage.setSettingsManager(settingsManager);
 		shareImage.ShareImage(imagePath);

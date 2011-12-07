@@ -42,6 +42,7 @@
 	<string name="splashscreenPlaylistInitialized">Music Playlist Created!</string>
 
 	<string name="splashscreenInitialized">Initialized!</string>
+	<string name="splashscreenLoginCancel">Login Facebook has been dismissed. You only play slideshow photos on local.</string>
 
 <!-- 	<string name="aboutActivityName">Android Slideshow: About</string> -->
 

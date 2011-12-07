@@ -108,8 +108,17 @@ public class AudioPlaybackController extends Controller implements
 		}
 
 		case PAUSE:
+		{
+			if ((mediaPlayer != null) && (mediaPlayer.isPlaying())) {
+				pauseMusic();
+			}
+
+			break;
+		}
 		case PLAY: {
-			toggleMusic();
+			if (mediaPlayer != null) {
+				playMusic();
+			}
 
 			break;
 		}
