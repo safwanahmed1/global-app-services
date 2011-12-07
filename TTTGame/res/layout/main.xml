@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/transparent"
+    >
+    <EditText 
+    		android:layout_width="180dp" 
+        	android:layout_height="50dp"
+        	android:layout_marginTop="135dp"
+        	android:layout_marginLeft="110dp"
+        	android:maxLength="15"
+        	android:layout_gravity="top"        	
+        	android:padding="10dp"        
+        	android:background="@android:color/transparent"        	
+        	android:textColor="#FF000000"        
+        	android:hint="Enter your name" 
+        	android:id="@+id/name_enter"
+    />
+</LinearLayout>
