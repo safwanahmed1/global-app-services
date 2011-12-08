@@ -39,6 +39,7 @@ import com.sendme.android.slideshow.controller.UIController;
 import com.sendme.android.slideshow.controller.UIEventListener;
 import com.sendme.android.slideshow.image.ImageLoader;
 import com.sendme.android.slideshow.manager.SettingsManager;
+import com.sendme.android.slideshow.share.FacebookAlbumShare;
 import com.sendme.android.slideshow.share.FacebookImageShare;
 import com.sendme.android.slideshow.share.FacebookVideoShare;
 import com.sendme.android.slideshow.source.MediaSourceException;
@@ -332,7 +333,6 @@ public class MainActivity extends RoboActivity implements
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-
 		inflater.inflate(R.menu.options, menu);
 
 		return true;
@@ -341,7 +341,25 @@ public class MainActivity extends RoboActivity implements
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+		case R.id.shareMenuItem:
+		{
+			// share photos as an album on facebook;
+			try {
+				if (facebookAuthenticator.needsAuthentication()) {
+					Toast.makeText(ass,
+							ass.getString(R.string.slidescreenShareNotLogin),
+							Toast.LENGTH_LONG).show();
+					break;
+				}
+			} catch (AuthenticationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			shareAlbum();
+			break;
+		}
 
+		/*
 		case R.id.shareVideoMenuItem: {
 			// shareVideo();
 			try {
@@ -391,6 +409,7 @@ public class MainActivity extends RoboActivity implements
 			// shareImage();
 			break;
 		}
+		*/
 		case R.id.aboutMenuItem: {
 			showAbout();
 
@@ -461,6 +480,16 @@ public class MainActivity extends RoboActivity implements
 		shareImage.setActive(true);
 		shareImage.setSettingsManager(settingsManager);
 		shareImage.ShareImage(imagePath);
+
+	}
+	
+	private void shareAlbum() {
+		// TODO Auto-generated method stub
+		FacebookAlbumShare shareAlbum = new FacebookAlbumShare(
+				MainActivity.this);
+		shareAlbum.setActive(true);
+		shareAlbum.setSettingsManager(settingsManager);
+		shareAlbum.ShareAlbum();
 
 	}
 

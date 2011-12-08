@@ -67,7 +67,6 @@ public abstract class MediaSource
 			else
 			{
 				test.setLastSeenInUpdate(time);
-
 				test.setPerson(photo.getPerson());
 				test.setPhotoSource(photo.getPhotoSource());
 				test.setPhotoType(photo.getPhotoType());
