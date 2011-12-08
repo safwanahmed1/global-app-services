@@ -3,7 +3,7 @@
 <menu xmlns:a="http://schemas.android.com/apk/res/android">
  	<item a:id="@+id/shareMenuItem" a:title="@string/shareMenuItemTitle"
  		a:icon="@drawable/share">
- 		 <!-- "file" submenu -->
+ 		 <!-- "file" submenu 
         <menu>
             <item a:id="@+id/shareImageMenuItem"
                   a:title="@string/shareImageMenuItemTitle"
@@ -12,6 +12,7 @@
                   a:title="@string/shareVideoMenuItemTitle"
                   a:icon="@drawable/video" />
         </menu>
+        -->
         </item>
 	<item a:id="@+id/preferencesMenuItem" a:title="@string/preferencesMenuItemTitle"
 		a:icon="@drawable/settings" />
