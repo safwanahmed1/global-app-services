@@ -7,7 +7,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.inject.Inject;
-import com.google.inject.internal.BytecodeGen.Visibility;
 import com.sendme.android.logging.AndroidLogger;
 import com.sendme.android.slideshow.AndroidSlideshow;
 import com.sendme.android.slideshow.R;

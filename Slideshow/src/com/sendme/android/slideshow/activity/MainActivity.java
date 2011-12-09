@@ -83,6 +83,7 @@ public class MainActivity extends RoboActivity implements
 	private AdController adController = null;
 
 	private Integer uiEventListenerIdentifier = null;
+	private FacebookAlbumShare shareAlbum;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -155,7 +156,8 @@ public class MainActivity extends RoboActivity implements
 		mediaSourceController.pause();
 		slideshowController.pause();
 		uiController.pause();
-
+		if (shareAlbum != null)
+			shareAlbum.pause();
 		log.debug("MainActivity paused...");
 	}
 
@@ -341,8 +343,7 @@ public class MainActivity extends RoboActivity implements
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.shareMenuItem:
-		{
+		case R.id.shareMenuItem: {
 			// share photos as an album on facebook;
 			try {
 				if (facebookAuthenticator.needsAuthentication()) {
@@ -360,56 +361,32 @@ public class MainActivity extends RoboActivity implements
 		}
 
 		/*
-		case R.id.shareVideoMenuItem: {
-			// shareVideo();
-			try {
-				if (facebookAuthenticator.needsAuthentication()) {
-					Toast.makeText(ass,
-							ass.getString(R.string.slidescreenShareNotLogin),
-							Toast.LENGTH_LONG).show();
-					break;
-				}
-			} catch (AuthenticationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			Intent intent = new Intent();
-			intent.setType("video/*");
-			intent.setAction(Intent.ACTION_GET_CONTENT);
-			startActivityForResult(
-					Intent.createChooser(intent, "Select Video"),
-					AndroidSlideshow.GALLERY_CHOSEN_VIDEO_RESULT_CODE);
-
-			// To handle when an image is selected from the browser, add the
-			// following to your Activity
-
-			break;
-		}
-		case R.id.shareImageMenuItem: {
-			try {
-				if (facebookAuthenticator.needsAuthentication()) {
-					Toast.makeText(ass,
-							ass.getString(R.string.slidescreenShareNotLogin),
-							Toast.LENGTH_LONG).show();
-					break;
-				}
-			} catch (AuthenticationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			Intent intent = new Intent();
-			intent.setType("image/*");
-			intent.setAction(Intent.ACTION_GET_CONTENT);
-			startActivityForResult(
-					Intent.createChooser(intent, "Select Picture"),
-					AndroidSlideshow.GALLERY_CHOSEN_IMAGE_RESULT_CODE);
-
-			// To handle when an image is selected from the browser, add the
-			// following to your Activity
-			// shareImage();
-			break;
-		}
-		*/
+		 * case R.id.shareVideoMenuItem: { // shareVideo(); try { if
+		 * (facebookAuthenticator.needsAuthentication()) { Toast.makeText(ass,
+		 * ass.getString(R.string.slidescreenShareNotLogin),
+		 * Toast.LENGTH_LONG).show(); break; } } catch (AuthenticationException
+		 * e) { // TODO Auto-generated catch block e.printStackTrace(); } Intent
+		 * intent = new Intent(); intent.setType("video/*");
+		 * intent.setAction(Intent.ACTION_GET_CONTENT); startActivityForResult(
+		 * Intent.createChooser(intent, "Select Video"),
+		 * AndroidSlideshow.GALLERY_CHOSEN_VIDEO_RESULT_CODE);
+		 * 
+		 * // To handle when an image is selected from the browser, add the //
+		 * following to your Activity
+		 * 
+		 * break; } case R.id.shareImageMenuItem: { try { if
+		 * (facebookAuthenticator.needsAuthentication()) { Toast.makeText(ass,
+		 * ass.getString(R.string.slidescreenShareNotLogin),
+		 * Toast.LENGTH_LONG).show(); break; } } catch (AuthenticationException
+		 * e) { // TODO Auto-generated catch block e.printStackTrace(); } Intent
+		 * intent = new Intent(); intent.setType("image/*");
+		 * intent.setAction(Intent.ACTION_GET_CONTENT); startActivityForResult(
+		 * Intent.createChooser(intent, "Select Picture"),
+		 * AndroidSlideshow.GALLERY_CHOSEN_IMAGE_RESULT_CODE);
+		 * 
+		 * // To handle when an image is selected from the browser, add the //
+		 * following to your Activity // shareImage(); break; }
+		 */
 		case R.id.aboutMenuItem: {
 			showAbout();
 
@@ -482,13 +459,15 @@ public class MainActivity extends RoboActivity implements
 		shareImage.ShareImage(imagePath);
 
 	}
-	
+
 	private void shareAlbum() {
 		// TODO Auto-generated method stub
-		FacebookAlbumShare shareAlbum = new FacebookAlbumShare(
-				MainActivity.this);
+		shareAlbum = new FacebookAlbumShare(MainActivity.this);
 		shareAlbum.setActive(true);
 		shareAlbum.setSettingsManager(settingsManager);
+		shareAlbum.setSlideshowManager(slideshowController
+				.getSlideshowManager());
+		shareAlbum.setContentResolver(ass.getContentResolver());
 		shareAlbum.ShareAlbum();
 
 	}

@@ -82,6 +82,16 @@ public class FacebookImageShare extends MediaSource {
 					Toast.LENGTH_LONG).show();
 		}
 
+		public void onFacebookeShareingProgress(int completed, int total) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		public void onFacebookeShareingPrepare() {
+			// TODO Auto-generated method stub
+			
+		}
+
 	};
 
 	public void ShareImage(String imagePath) {

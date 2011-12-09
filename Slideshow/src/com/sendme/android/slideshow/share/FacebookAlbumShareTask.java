@@ -1,19 +1,22 @@
 package com.sendme.android.slideshow.share;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
-import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.ContentBody;
@@ -21,32 +24,44 @@ import org.apache.http.entity.mime.content.InputStreamBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.CoreProtocolPNames;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import roboguice.inject.InjectView;
+
 import com.facebook.android.Facebook;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.sendme.android.logging.AndroidLogger;
 import com.sendme.android.slideshow.AndroidSlideshow;
+import com.sendme.android.slideshow.R;
 import com.sendme.android.slideshow.manager.ORMException;
 import com.sendme.android.slideshow.manager.SettingsManager;
 import com.sendme.android.slideshow.manager.SlideshowManager;
 import com.sendme.android.slideshow.model.Photo;
 import com.sendme.android.slideshow.model.SlideshowEntry;
+import com.sendme.android.slideshow.runnable.AudioPlaybackUIAnimation;
+import com.sendme.android.slideshow.runnable.TextUpdater;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.widget.TextView;
 
 /**
  * 
  * @author Todd Tidwell <ttidwell@sendme.com>
  */
-public class FacebookAlbumShareTask extends AsyncTask<Void, Float, Void> {
+@Singleton
+public class FacebookAlbumShareTask extends AsyncTask<Void, Integer, Void> {
 	private final static AndroidLogger log = AndroidLogger
 			.getAndroidLogger(AndroidSlideshow.LOG_TAG);
 
@@ -55,8 +70,8 @@ public class FacebookAlbumShareTask extends AsyncTask<Void, Float, Void> {
 	@Inject
 	private SlideshowManager slideshowManager = null;
 	@Inject
-	private SettingsManager settingsManager = null;	
-	
+	private SettingsManager settingsManager = null;
+
 	private Facebook facebookApplication;
 	private String albumName = "Slideshow sharing album - "
 			+ DateFormat.getDateTimeInstance().format(new Date());
@@ -65,6 +80,13 @@ public class FacebookAlbumShareTask extends AsyncTask<Void, Float, Void> {
 	private String albumId;
 	private Integer photoId;
 
+	public ContentResolver getContentResolver() {
+		return contentResolver;
+	}
+
+	public void setContentResolver(ContentResolver contentResolver) {
+		this.contentResolver = contentResolver;
+	}
 
 	public SettingsManager getSettingsManager() {
 		return settingsManager;
@@ -72,6 +94,7 @@ public class FacebookAlbumShareTask extends AsyncTask<Void, Float, Void> {
 
 	public void setSettingsManager(SettingsManager settingsManager) {
 		this.settingsManager = settingsManager;
+
 	}
 
 	public Facebook getFacebookApplication() {
@@ -135,12 +158,31 @@ public class FacebookAlbumShareTask extends AsyncTask<Void, Float, Void> {
 	public FacebookAlbumShareTask(Facebook fbApp) {
 
 		facebookApplication = fbApp;
-		// imagePath = filePath;
+
+	}
+	
+	
+
+	@Override
+	protected void onPreExecute() {
+		// TODO Auto-generated method stub
+		super.onPreExecute();
+		if (listener != null)
+			listener.onFacebookeShareingPrepare();
+	}
+
+	@Override
+	protected void onProgressUpdate(Integer... values) {
+		// TODO Auto-generated method stub
+		super.onProgressUpdate(values);
+		if (listener != null)
+			listener.onFacebookeShareingProgress(values[0], values[1]);
 
 	}
 
 	@Override
 	protected Void doInBackground(Void... params) {
+
 		Bundle bundleParams = new Bundle();
 		bundleParams.putString("name", albumName);
 		String response = null;
@@ -166,19 +208,36 @@ public class FacebookAlbumShareTask extends AsyncTask<Void, Float, Void> {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		for (int i = 0; i < settingsManager.getSlideshowSize(); i++) {
-			try {
-				SlideshowEntry entry = slideshowManager.getNextEntry(photoId);
-				Photo photo = slideshowManager.getPhotoManager().find(entry.getPhotoId());
-				
-				//String photoPath = 
-				UploadPhoto(Uri.parse(photo.getURI()));
-				photoId = entry.getId();
-			} catch (ORMException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+
+		try {
+			List<Integer> ids = slideshowManager.getPhotoManager()
+					.getEligiblePhotosForSlideshow();
+
+			int limit = settingsManager.getSlideshowSize();
+
+			if (limit == 0 || limit > ids.size()) {
+				limit = ids.size();
 			}
-			//UploadPhoto("/mnt/sdcard/image/doremon.jpg");
+
+			for (int i = 0; i < limit; i++) {
+				if (isCancelled())
+					break;
+				publishProgress(i, limit);
+
+				SlideshowEntry entry = slideshowManager.getNextEntry(photoId);
+				Photo photo = slideshowManager.getPhotoManager().find(
+						entry.getPhotoId());
+
+				UploadPhoto(Uri.parse(photo.getURI()));
+
+				photoId = entry.getId();
+
+				// UploadPhoto("/mnt/sdcard/image/doremon.jpg");
+			}
+
+		} catch (ORMException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 		return null;
 	}
@@ -190,28 +249,52 @@ public class FacebookAlbumShareTask extends AsyncTask<Void, Float, Void> {
 		HttpPost httppost = new HttpPost("https://graph.facebook.com/"
 				+ albumId + "/photos");
 		Context ctx = settingsManager.getAndroidSlideshow();
-		
 		InputStream is = null;
-		try {
-			is = contentResolver.openInputStream(uri);
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		if (uri.getPath().contains("external")) {
+			try {
+				is = contentResolver.openInputStream(uri);
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+
+			HttpClient httpClient = new DefaultHttpClient();
+
+			HttpGet get = new HttpGet(uri.toString());
+
+			HttpResponse httpResponse;
+			
+			try {
+				httpResponse = httpClient.execute(get);
+				is = httpResponse.getEntity().getContent();
+			} catch (ClientProtocolException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+
+			} catch (IllegalStateException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			} catch (IOException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
 		}
-		//File file = new File(photoPath);
+
+		// File file = new File(photoPath);
 		String fbAccessToken = facebookApplication.getAccessToken();
 		// DEBUG
-		//Log.d("TSET", "FILE::" + file.exists()); // IT IS NOT NULL
+		// Log.d("TSET", "FILE::" + file.exists()); // IT IS NOT NULL
 		Log.d("TEST", "AT:" + fbAccessToken); // I GOT SOME ACCESS TOKEN
 
 		MultipartEntity mpEntity = new MultipartEntity();
-		//ContentBody cbFile = new FileBody(file, "image/png");
+		// ContentBody cbFile = new FileBody(file, "image/png");
 		ContentBody cbFile = new InputStreamBody(is, "Test");
 		ContentBody message = null;
 		ContentBody cbAccessToken = null;
 		try {
 			message = new StringBody(
-					"Photo shared via Slideshow Magic Maker application");
+					"Photo shared via Slideshow Magic Maker application (I'm testing my app, pls do not comment:)))");
 			cbAccessToken = new StringBody(fbAccessToken);
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
@@ -232,6 +315,7 @@ public class FacebookAlbumShareTask extends AsyncTask<Void, Float, Void> {
 		HttpResponse response = null;
 		try {
 			response = httpclient.execute(httppost);
+			is.close();
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -245,27 +329,8 @@ public class FacebookAlbumShareTask extends AsyncTask<Void, Float, Void> {
 			errMessage = e.getMessage();
 			return null;
 		}
-		HttpEntity resEntity = response.getEntity();
 
-		// DEBUG
-		System.out.println(response.getStatusLine());
-		if (resEntity != null) {
-			try {
-				System.out.println(EntityUtils.toString(resEntity));
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				retValue = false;
-				errMessage = e.getMessage();
-				return null;
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				retValue = false;
-				errMessage = e.getMessage();
-				return null;
-			}
-		} // end if
+		HttpEntity resEntity = response.getEntity();
 
 		if (resEntity != null) {
 			try {
@@ -299,8 +364,20 @@ public class FacebookAlbumShareTask extends AsyncTask<Void, Float, Void> {
 			}
 		}
 	}
-	
-	
 
+	/*
+	public String getRealPathFromImageURI(Uri contentUri) {
+		String[] proj = { MediaStore.Images.Media.DATA };
+		Cursor cursor = settingsManager.getAndroidSlideshow().managedQuery(
+				contentUri, proj, null, null, null);
+		if (cursor != null) {
+			int column_index = cursor
+					.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+			cursor.moveToFirst();
+			return cursor.getString(column_index);
+		}
+		return null;
+	}
+	*/
 
 }

@@ -1,17 +1,25 @@
 package com.sendme.android.slideshow.share;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.android.AsyncFacebookRunner;
 import com.facebook.android.AsyncFacebookRunner.RequestListener;
 import com.facebook.android.Facebook;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.sendme.android.logging.AndroidLogger;
 import com.sendme.android.slideshow.AndroidSlideshow;
 import com.sendme.android.slideshow.R;
+import com.sendme.android.slideshow.runnable.AudioPlaybackUIAnimation;
+import com.sendme.android.slideshow.runnable.TextUpdater;
 import com.sendme.android.slideshow.source.MediaSource;
 import com.sendme.android.slideshow.source.MediaSourceException;
 
@@ -20,6 +28,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+
+import roboguice.inject.InjectView;
 
 /**
  * 
@@ -30,8 +40,17 @@ public class FacebookAlbumShare extends MediaSource {
 	private final static AndroidLogger log = AndroidLogger
 			.getAndroidLogger(AndroidSlideshow.LOG_TAG);
 	private Context context;
+	private ContentResolver contentResolver = null;
+	private FacebookAlbumShareTask albumShareTask;
+
+	@InjectView(R.id.shareprogressText)
+	private TextView shareProgress;
+	@InjectView(R.id.shareprogressLayout)
+	private View shareProgressLayout = null;
+
 	public FacebookAlbumShare(Context context) {
 		this.context = context;
+
 	}
 
 	public Facebook getFacebookApplication() {
@@ -45,8 +64,10 @@ public class FacebookAlbumShare extends MediaSource {
 
 		return output;
 	}
-	
+
 	FacebookShareTaskListener listener = new FacebookShareTaskListener() {
+
+		private TextUpdater textUpdater;
 
 		public void onFacebookeShareingSuccess() {
 			// TODO Auto-generated method stub
@@ -54,22 +75,15 @@ public class FacebookAlbumShare extends MediaSource {
 																	// NULL
 			Toast.makeText(context,
 					context.getString(R.string.slidescreenShareImageSuccess),
-					Toast.LENGTH_LONG).show();
-
+					Toast.LENGTH_SHORT).show();
 			/*
-			 * TextUpdater textUpdater = new TextUpdater();
-			 * 
-			 * textUpdater.setTextView(slideMessage);
-			 * textUpdater.setText(slideMessage.getContext().getString(
-			 * R.string.slidescreenShareVideoSuccess));
-			 * slideMessage.post(textUpdater); AudioPlaybackUIAnimation anim =
-			 * new AudioPlaybackUIAnimation(); anim.setView(textLayout);
+			 * if (shareProgressLayout.getVisibility() != View.GONE) {
+			 * AudioPlaybackUIAnimation anim = new AudioPlaybackUIAnimation();
+			 * anim.setView(shareProgressLayout);
 			 * anim.setAnimation(AnimationUtils.loadAnimation(
-			 * textLayout.getContext(), R.anim.slide_menu_show));
-			 * anim.setFinalVisibility(View.VISIBLE); textLayout.post(anim);
-			 * anim.setAnimation(AnimationUtils.loadAnimation(
-			 * textLayout.getContext(), R.anim.slide_menu_hide));
-			 * anim.setFinalVisibility(View.GONE); textLayout.post(anim);
+			 * shareProgressLayout.getContext(), R.anim.slide_menu_hide));
+			 * anim.setFinalVisibility(View.GONE);
+			 * shareProgressLayout.post(anim); }
 			 */
 		}
 
@@ -82,72 +96,94 @@ public class FacebookAlbumShare extends MediaSource {
 					Toast.LENGTH_LONG).show();
 		}
 
+		public void onFacebookeShareingProgress(int completed, int total) {
+			// TODO Auto-generated method stub
+			Toast.makeText(
+					context,
+					context.getString(R.string.slidescreenShareProgress)
+							+ completed + "/" + total, Toast.LENGTH_SHORT)
+					.show();
+			/*
+			 * textUpdater = new TextUpdater();
+			 * 
+			 * textUpdater.setTextView(shareProgress);
+			 * textUpdater.setText(shareProgress.getContext().getString(
+			 * R.string.slidescreenShareProgress) + completed + "/" + total);
+			 * shareProgress.post(textUpdater);
+			 */
+		}
+
+		public void onFacebookeShareingPrepare() {
+			// TODO Auto-generated method stub
+			if (shareProgressLayout == null)
+				getView();
+			
+			textUpdater = new TextUpdater();
+
+			textUpdater.setTextView(shareProgress);
+			textUpdater.setText(shareProgress.getContext().getString(
+					R.string.slidescreenShareProgress));
+			shareProgress.post(textUpdater);
+			if (shareProgressLayout.getVisibility() != View.VISIBLE) {
+				AudioPlaybackUIAnimation anim = new AudioPlaybackUIAnimation();
+				anim.setView(shareProgressLayout);
+				anim.setAnimation(AnimationUtils.loadAnimation(
+						shareProgressLayout.getContext(),
+						R.anim.slide_menu_show));
+				anim.setFinalVisibility(View.VISIBLE);
+				shareProgressLayout.post(anim);
+			}
+
+		}
+
 	};
 
 	public void ShareAlbum() {
-		/*
-		String query = "me/photos";
-		
-		RequestListener reqListener = new FacebookRequestListener();
-		byte[] data = null;
-		
-		Facebook facebookApplication = getFacebookApplication();
-		
-		AsyncFacebookRunner mAsyncRunner = new AsyncFacebookRunner(
-				facebookApplication);
-		
-		InputStream is = null;
-		try {
-			is = new FileInputStream(imagePath);
-			data = readBytes(is);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Bundle params = new Bundle();
-		//params.putString("method", "photos.upload");
-		params.putByteArray("picture", data);
 
-		mAsyncRunner = new AsyncFacebookRunner(facebookApplication);
-		mAsyncRunner.request(query, params, "POST", reqListener, null);
-
-		// return output;
-		*/
 		Facebook facebookApplication = getFacebookApplication();
-		FacebookAlbumShareTask albumShareTask = new FacebookAlbumShareTask(facebookApplication);
+		albumShareTask = new FacebookAlbumShareTask(facebookApplication);
 		albumShareTask.setListener(listener);
-		//albumShareTask.setSettingsManager(settingsManager);
-		//albumShareTask.setSlideshowManager(slideshowManager);
+		albumShareTask.setSettingsManager(settingsManager);
+		albumShareTask.setSlideshowManager(slideshowManager);
+		albumShareTask.setContentResolver(contentResolver);
 		albumShareTask.execute();
-		 
-	}
 
-	public byte[] readBytes(InputStream inputStream) throws IOException {
-		// this dynamically extends to take the bytes you read
-		ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
-
-		// this is storage overwritten on each iteration with bytes
-		int bufferSize = 1024;
-		byte[] buffer = new byte[bufferSize];
-
-		// we need to know how may bytes were read to write them to the
-		// byteBuffer
-		int len = 0;
-		while ((len = inputStream.read(buffer)) != -1) {
-			byteBuffer.write(buffer, 0, len);
-		}
-
-		// and then we can return your byte array.
-		return byteBuffer.toByteArray();
 	}
 
 	@Override
 	public void checkForUpdates(Long time, boolean notify)
 			throws MediaSourceException {
 		// TODO Auto-generated method stub
+
+	}
+
+	public ContentResolver getContentResolver() {
+		return contentResolver;
+	}
+
+	public void setContentResolver(ContentResolver contentResolver) {
+		this.contentResolver = contentResolver;
+	}
+
+	public void pause() {
+		// TODO Auto-generated method stub
+		if (albumShareTask != null)
+			albumShareTask.cancel(false);
+
+	}
+
+	private void getView() {
+		LayoutInflater vi = (LayoutInflater) this.settingsManager
+				.getAndroidSlideshow().getSystemService(
+						Context.LAYOUT_INFLATER_SERVICE);
+		View shareProgressBar = vi.inflate(R.layout.share_slideshow_progress,
+				null);
+
+		// imagePath = filePath;
+		shareProgress = (TextView) shareProgressBar
+				.findViewById(R.id.shareprogressText);
+		shareProgressLayout = (View) shareProgressBar
+				.findViewById(R.id.shareprogressLayout);
 
 	}
 
