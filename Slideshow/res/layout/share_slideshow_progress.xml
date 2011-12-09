@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:a="http://schemas.android.com/apk/res/android"
+    a:id="@+id/shareprogressLayout"
+    a:layout_width="fill_parent"
+    a:layout_height="fill_parent"
+    a:layout_gravity="center"
+    a:orientation="vertical"
+  >
+
+    <TextView
+        a:id="@+id/shareprogressText"
+        a:layout_width="wrap_content"
+        a:layout_height="wrap_content"/>
+
+</RelativeLayout>

@@ -19,4 +19,5 @@
 
 	<include layout="@layout/audio_playback_bar"/>
 	<include layout="@layout/slidetext"/>
+	<include layout="@layout/share_slideshow_progress"/>
 </RelativeLayout>
