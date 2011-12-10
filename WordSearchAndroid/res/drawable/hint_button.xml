@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector
+  xmlns:android="http://schemas.android.com/apk/res/android">
+  <!--  Trang thai thu 2 cua button -->
+  <item android:state_focused="true" android:state_pressed="false" android:drawable="@drawable/theme_blackboard_hint2"/>
+  <!-- Trang thai thu 3 cua button -->
+  <item android:state_focused="true" android:state_pressed="true" android:drawable="@drawable/theme_blackboard_hint3"/>
+  <item android:state_focused="false" android:state_pressed="true" android:drawable="@drawable/theme_blackboard_hint3"/>
+  <!-- Trang thai ban dau cua button -->
+  <item  android:drawable="@drawable/theme_blackboard_hint"/>
+</selector>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+        <dimen name="grid_padding">0sp</dimen>
+        <dimen name="button">20sp</dimen>
+        <dimen name="wordlist_view">20sp</dimen>
+        <dimen name="grid_view">16sp</dimen>
+        <dimen name="word_box">16sp</dimen>
+        <dimen name="letter_box">15sp</dimen>
+        <dimen name="tutorial_heading_font">28sp</dimen> <dimen name="tutorial_heading_padding">5sp</dimen> <dimen name="tutorial_message_font">20sp</dimen> <dimen name="tutorial_message_padding">3sp</dimen>
+</resources>
+

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+        <string name="app_name">Word Search</string>
+
+        <string name="foods">Foods</string>
+        <string name="seasonal">Seasonal</string>
+        <string name="christmas">Christmas</string>
+        <string name="places">Places</string>
+        <string name="animals">Animals</string>
+        <string name="people">People</string>
+        <string name="adjectives">Adjectives</string>
+        <string name="german">German</string>
+        <string name="kids">Kids</string>
+        <string name="sat">SAT</string>
+        <string name="misc">Misc</string>
+        <string name="numbers">Numbers</string>
+        <string name="custom">Custom</string>
+        <string name="insane">Insane</string>
+        <string name="random">Random</string>
+
+        <string name="upgrade">Upgrade</string>
+        <string name="category">Word List</string>
+        <string name="reset">Reset</string>
+        <string name="ok">OK</string>
+        <string name="high_score">High Score</string>
+        <string name="new_game">New Game</string>
+        <string name="help">Help</string>
+        <string name="freegames">Free Games</string>
+        <string name="quit">Quit</string>
+
+        <string name="wordlist_name">Word Search Custom Word Bank Editor</string>
+        <string name="custom_empty">Your custom word bank has no words.\nClick menu then click new word</string>
+        <string name="no_words">No words could be found for this grid, please choose a different grid size or word bank.</string>
+        <string name="no_words_custom">There are no words available in your custom word bank, please go to the custom word bank editor and add some words or choose a different word bank.</string>
+        <string name="wordlist_no_words">There are no words currently in your custom word bank, please click menu then add word.</string>
+        <string name="new_word">New Word</string>
+        <string name="edit_word">Edit Word</string>
+        <string name="delete">Delete</string>
+        <string name="add_word">Add Word</string>
+        <string name="invalid_word">Words must be at least 4 letters</string>
+        <string name="size">Grid Size</string>
+        <string name="no_high_scores">No High Scores</string>
+        
+        <string name="input_type">Input Type</string>
+        <string name="drag">Drag</string>
+        <string name="tap">Tap</string>
+
+        <string name="game_over">Would you like to start a new game?</string>
+        
+        <string name="options">Settings</string>
+
+		
+        <string name="CRASH_MSG">"We are very sorry but Open WordSearch has crashed unexpectedly.\n\nPlease help us make our application better by sending us stack trace"</string>
+        <string name="CRASH_SENDING_WAIT">Sending Please wait...</string>
+        <string name="PREVIEW">Preview</string>
+        <string name="SEND">Send</string>
+        
+        <string name="CRASH_DETAILS_HINT">steps to reproduce [optional]</string>
+        <string name="INTRO">You can change the grid size, word bank, and how you highlight words by pushing the \"menu\" button and selecting \"preferences.\"  Or, you can pick how you highlight words now.\n- \"Tap\" means you tap on the first and last letters but nothing in between.\n- \"Drag\" means you highlight the entire word without lifting your finger.</string>
+
+        <string name="SCORE_CONGRATULATIONS">Congratulations, you won!\nYour score was %replaceme.</string>
+        <string name="SCORE_LOCAL_HIGH">\nLocal High Score #%replaceme</string>
+        <string name="SCORE_INITIALS">\nPlease enter your name/initials</string>
+
+
+        <string name="SAVE">Save</string>
+        <string name="SAVE_SUBMIT">Save &amp; Submit</string>
+
+        <string name="HIGH_SCORE_CALCULATING">Calculating High Score</string>
+ 
+        <string name="LOCAL_HIGH_SCORES">Local High Scores</string>
+ 
+        <string name="LOCAL">Local</string>
+        <string name="LOADING">Loading</string>
+        
+        <string name="THEME">Theme</string>
+        <string name="PREFS_THEME_SUMMARY">Current Theme: %replaceme</string>
+        <string name="ORIGINAL">Christmas</string>
+        <string name="NIGHTSKY">Black Board</string>
+        <string name="SKY">Blue Sky</string>
+        <string name="PINK">Parchment</string>
+        <string name="SEAGREEN">Note Paper</string>
+        
+        <string name="REPLAY">Replay</string>
+        <string name="DONATE">Upgrade</string>
+        
+        <string name="IMPORT">Import</string>
+        <string name="EXPORT">Export</string>
+        <string name="REPLACEALL">Replace All</string>
+        <string name="OVERWRITE">Overwrite</string>
+        <string name="IMPORT_OVERWRITE">Overwrite, Warning: this will remove existing custom words</string>
+        <string name="BROWSE">Browse</string>
+        <string name="DEFAULT">Default</string>
+        <string name="MISSING_FILE_MANAGER">Please install OI File Manager to pick a custom file location, else use the default location</string>
+		
+		<string name="sound_mode">Sound Effect</string>
+		<string name="prefs_size_summary">Current Grid Size: %replaceme</string>
+        <string name="prefs_category_summary">Current Word List: %replaceme</string>
+        <string name="prefs_touch_mode_summary">Current Input Type: %replaceme</string>
+        <string name="prefs_letter_case_summary">Current Letter Case: %replaceme</string>
+		<string name="prefs_level_summary">Current Level: %replaceme</string>
+		<string name="choice">Level</string>
+		<string name="upper_case">Upper Case</string>
+		<string name="lower_case">Lower Case</string>
+		<string name="letter_case_type">Letter Case</string>
+</resources>

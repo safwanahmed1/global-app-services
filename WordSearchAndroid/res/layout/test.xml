@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:paddingLeft="@dimen/grid_padding"
+                android:paddingRight="@dimen/grid_padding"
+                android:paddingBottom="@dimen/grid_padding"
+        android:layout_width="fill_parent" android:layout_height="fill_parent"
+        android:orientation="vertical" android:id="@+id/wordsearch_base">
+      
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/ad_layout" android:layout_width="fill_parent"
+                android:orientation="vertical"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/gridTable" android:layout_width="fill_parent"
+                android:orientation="vertical"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:layout_marginTop="50dip"
+                android:layout_marginBottom="10dip"
+                android:layout_weight="6"/>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="15dip"
+    android:layout_marginRight="15dip"
+    android:gravity="center_vertical"
+    >
+
+    <TableRow>
+        <TextView
+          android:id="@+id/text1"
+          android:text="text36123"
+          android:textSize="11dip"
+          android:paddingLeft="15dip" />
+       <TextView
+          android:id="@+id/text2"
+          android:text="text123"
+          android:textSize="11dip"
+          android:paddingLeft="20dip" />
+      <TextView
+          android:id="@+id/text3"
+          android:text="text345613"
+          android:textSize="11dip"
+          android:paddingLeft="20dip" />
+       <TextView
+          android:id="@+id/text4"
+          android:text="text123"
+          android:textSize="11dip"
+          android:paddingLeft="20dip" />
+    </TableRow>
+
+    <TableRow>
+        <TextView
+          android:id="@+id/text5"
+          android:text="text123"
+          android:textSize="11dip"
+          android:paddingLeft="15dip" />
+       <TextView
+          android:id="@+id/text6"
+          android:textSize="11dip"
+          android:text="text123"
+          android:paddingLeft="20dip" />
+       <TextView
+          android:id="@+id/text7"
+          android:text="text34623"
+          android:textSize="11dip"
+          android:paddingLeft="20dip" />
+      <TextView
+          android:id="@+id/text8"
+          android:text="text1223453"
+          android:textSize="11dip"
+          android:paddingLeft="20dip" />
+    </TableRow>
+    <TableRow>
+       <TextView
+         android:id="@+id/text9"
+         android:text="text123"
+         android:textSize="11dip"
+         android:paddingLeft="15dip" />
+       <TextView
+         android:id="@+id/text10"
+         android:text="text345123"
+         android:textSize="11dip"
+         android:paddingLeft="20dip" />
+        <TextView
+		 android:id="@+id/text11"          
+         android:text="text123"
+         android:textSize="11dip"
+         android:paddingLeft="20dip" />
+       <TextView
+         android:id="@+id/text12" 
+         android:text="text123"
+         android:textSize="11dip"
+         android:paddingLeft="20dip" />
+    </TableRow>
+    
+    <TableRow>
+       <TextView
+         android:id="@+id/text13"
+         android:text="text123"
+         android:textSize="11dip"
+         android:paddingLeft="15dip" />
+        <TextView
+         android:id="@+id/text14"
+         android:text="text123"
+         android:textSize="11dip"
+         android:paddingLeft="20dip" />
+       <TextView
+          android:id="@+id/text15"
+          android:textSize="11dip"
+          android:text="text356123"
+          android:paddingLeft="20dip" />
+       <TextView
+          android:id="@+id/text16"
+          android:textSize="11dip"
+          android:text="text123"
+          android:paddingLeft="20dip"
+          android:visibility="invisible"/>
+    </TableRow>
+   </TableLayout>
+            <FrameLayout 
+                android:layout_width="fill_parent"
+    			android:layout_height="wrap_content"
+    			android:layout_gravity="bottom"
+    			android:id="@+id/sublayout">
+     
+              <LinearLayout 
+                    android:layout_width="fill_parent"
+    				android:layout_height="wrap_content"
+    				android:gravity="bottom"
+	    			android:id="@+id/layout_button">
+                    <LinearLayout 
+                        android:layout_marginBottom="15dip"
+	                    android:layout_width="fill_parent"
+	    				android:layout_height="wrap_content"
+	    				android:orientation="horizontal"
+	    				android:gravity="center">
+                    	<Button 
+                    		android:id="@+id/new_button"
+                    	    android:layout_width="wrap_content"
+	    					android:layout_height="wrap_content"
+	    					android:layout_marginRight="10dip"
+	    					android:background="@drawable/newgame_button"
+	    					android:onClick="onClickButtonNew"/>
+                    	<Button
+                    		android:id="@+id/hint_button"
+                    	    android:layout_width="wrap_content"
+	    					android:layout_height="wrap_content"
+	    					android:layout_marginLeft="10dip"
+	    					android:background="@drawable/hint_button"
+	    					android:onClick="onClickButtonHint"/>
+                	</LinearLayout>
+                </LinearLayout>
+                <LinearLayout 
+                    android:layout_width="fill_parent"
+    				android:layout_height="fill_parent"
+    				android:id="@+id/toast_layout"
+    				
+    				android:gravity="bottom">
+                    <LinearLayout 
+                    android:layout_width="fill_parent"
+    				android:layout_height="wrap_content"
+    				android:gravity="center">
+	                    <TextView 
+	                        android:background="#ffffff"
+	                        android:text="aaa"
+	                        android:layout_width="wrap_content"
+	    					android:layout_height="wrap_content"
+	    					android:id="@+id/text_toast"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </FrameLayout>           
+</LinearLayout>

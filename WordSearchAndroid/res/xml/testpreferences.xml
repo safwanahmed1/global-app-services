@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceCategory android:title="Game">
+        <ListPreference android:key="@string/prefs_level_mode"
+                android:title="@string/choice" android:defaultValue="@string/CHOICE_DEFAULT"
+                android:summary="@string/prefs_level_summary"
+                android:entryValues="@array/choice_list_values"
+                android:entries="@array/choice_list_lables" />
+        <ListPreference android:key="@string/prefs_category"
+                android:title="@string/category" android:defaultValue="@string/RANDOM"
+                android:summary="@string/prefs_category_summary"
+                android:entryValues="@array/categories_list_values"
+                android:entries="@array/categories_list_labels" />
+         </PreferenceCategory>
+         <PreferenceCategory android:title="Options">
+          <CheckBoxPreference
+     		    android:key="vibrator_game"
+     			android:title="@string/sound_mode"
+      			android:defaultValue="true"
+  			  /> 
+        <ListPreference android:key="@string/prefs_letter_case_mode"
+                android:title="@string/letter_case_type" android:defaultValue="@string/UPPER_CASE"
+                android:summary="@string/prefs_letter_case_summary"
+                android:entryValues="@array/letter_case_values"
+                android:entries="@array/letter_case_lables" />
+        <ListPreference android:key="@string/PREFS_THEME"
+                android:title="@string/THEME" android:defaultValue="@string/THEME_ORIGINAL"
+                android:summary="@string/PREFS_THEME_SUMMARY"
+                android:entryValues="@array/THEME_VALUES"
+                android:entries="@array/THEME_LABELS" />
+        </PreferenceCategory>
+</PreferenceScreen>
+
