@@ -72,6 +72,8 @@ public class FacebookAlbumShareTask extends AsyncTask<Void, Integer, Void> {
 	@Inject
 	private SettingsManager settingsManager = null;
 
+	private String message;
+
 	private Facebook facebookApplication;
 	private String albumName = "Slideshow sharing album - "
 			+ DateFormat.getDateTimeInstance().format(new Date());
@@ -160,8 +162,6 @@ public class FacebookAlbumShareTask extends AsyncTask<Void, Integer, Void> {
 		facebookApplication = fbApp;
 
 	}
-	
-	
 
 	@Override
 	protected void onPreExecute() {
@@ -184,6 +184,8 @@ public class FacebookAlbumShareTask extends AsyncTask<Void, Integer, Void> {
 	protected Void doInBackground(Void... params) {
 
 		Bundle bundleParams = new Bundle();
+		if ((message != null) || (!message.equals("")))
+			albumName = message;
 		bundleParams.putString("name", albumName);
 		String response = null;
 		try {
@@ -218,18 +220,20 @@ public class FacebookAlbumShareTask extends AsyncTask<Void, Integer, Void> {
 			if (limit == 0 || limit > ids.size()) {
 				limit = ids.size();
 			}
-
-			for (int i = 0; i < limit; i++) {
+			//photoId = settingsManager.getCurrentSlideshowEntryId();
+			for (int i = 0; i < limit; ) {
 				if (isCancelled())
 					break;
-				publishProgress(i, limit);
-
+				
 				SlideshowEntry entry = slideshowManager.getNextEntry(photoId);
-				Photo photo = slideshowManager.getPhotoManager().find(
-						entry.getPhotoId());
+				if (entry.getPhotoId() != null) {
+					Photo photo = slideshowManager.getPhotoManager().find(
+							entry.getPhotoId());
 
-				UploadPhoto(Uri.parse(photo.getURI()));
-
+					UploadPhoto(Uri.parse(photo.getURI()));
+					i++;
+					publishProgress(i, limit);
+				}
 				photoId = entry.getId();
 
 				// UploadPhoto("/mnt/sdcard/image/doremon.jpg");
@@ -264,7 +268,7 @@ public class FacebookAlbumShareTask extends AsyncTask<Void, Integer, Void> {
 			HttpGet get = new HttpGet(uri.toString());
 
 			HttpResponse httpResponse;
-			
+
 			try {
 				httpResponse = httpClient.execute(get);
 				is = httpResponse.getEntity().getContent();
@@ -290,10 +294,11 @@ public class FacebookAlbumShareTask extends AsyncTask<Void, Integer, Void> {
 		MultipartEntity mpEntity = new MultipartEntity();
 		// ContentBody cbFile = new FileBody(file, "image/png");
 		ContentBody cbFile = new InputStreamBody(is, "Test");
-		ContentBody message = null;
+		ContentBody messageBody = null;
 		ContentBody cbAccessToken = null;
 		try {
-			message = new StringBody(
+
+			messageBody = new StringBody(
 					"Photo shared via Slideshow Magic Maker application (I'm testing my app, pls do not comment:)))");
 			cbAccessToken = new StringBody(fbAccessToken);
 		} catch (UnsupportedEncodingException e) {
@@ -306,7 +311,7 @@ public class FacebookAlbumShareTask extends AsyncTask<Void, Integer, Void> {
 
 		mpEntity.addPart("access_token", cbAccessToken);
 		mpEntity.addPart("source", cbFile);
-		mpEntity.addPart("message", message);
+		mpEntity.addPart("message", messageBody);
 
 		httppost.setEntity(mpEntity);
 
@@ -365,19 +370,22 @@ public class FacebookAlbumShareTask extends AsyncTask<Void, Integer, Void> {
 		}
 	}
 
-	/*
-	public String getRealPathFromImageURI(Uri contentUri) {
-		String[] proj = { MediaStore.Images.Media.DATA };
-		Cursor cursor = settingsManager.getAndroidSlideshow().managedQuery(
-				contentUri, proj, null, null, null);
-		if (cursor != null) {
-			int column_index = cursor
-					.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-			cursor.moveToFirst();
-			return cursor.getString(column_index);
-		}
-		return null;
+	public String getMessage() {
+		return message;
 	}
-	*/
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	/*
+	 * public String getRealPathFromImageURI(Uri contentUri) { String[] proj = {
+	 * MediaStore.Images.Media.DATA }; Cursor cursor =
+	 * settingsManager.getAndroidSlideshow().managedQuery( contentUri, proj,
+	 * null, null, null); if (cursor != null) { int column_index = cursor
+	 * .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+	 * cursor.moveToFirst(); return cursor.getString(column_index); } return
+	 * null; }
+	 */
 
 }

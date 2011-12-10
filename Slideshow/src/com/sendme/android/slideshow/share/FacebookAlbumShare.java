@@ -138,10 +138,11 @@ public class FacebookAlbumShare extends MediaSource {
 
 	};
 
-	public void ShareAlbum() {
+	public void ShareAlbum(String message) {
 
 		Facebook facebookApplication = getFacebookApplication();
 		albumShareTask = new FacebookAlbumShareTask(facebookApplication);
+		albumShareTask.setMessage(message);
 		albumShareTask.setListener(listener);
 		albumShareTask.setSettingsManager(settingsManager);
 		albumShareTask.setSlideshowManager(slideshowManager);

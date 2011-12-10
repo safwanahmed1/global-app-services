@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -17,6 +19,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.sendme.android.slideshow.controller.UIEvent;
@@ -33,6 +36,7 @@ import com.sendme.android.slideshow.auth.AuthenticationListener;
 import com.sendme.android.slideshow.auth.impl.FaceBookAuthenticator;
 import com.sendme.android.slideshow.controller.AdController;
 import com.sendme.android.slideshow.controller.AudioPlaybackController;
+import com.sendme.android.slideshow.controller.ExternalMemoryController;
 import com.sendme.android.slideshow.controller.MediaSourceController;
 import com.sendme.android.slideshow.controller.SlideshowController;
 import com.sendme.android.slideshow.controller.UIController;
@@ -82,6 +86,9 @@ public class MainActivity extends RoboActivity implements
 	@Inject
 	private AdController adController = null;
 
+	@Inject
+	private ExternalMemoryController memoryController = null;
+
 	private Integer uiEventListenerIdentifier = null;
 	private FacebookAlbumShare shareAlbum;
 
@@ -102,6 +109,7 @@ public class MainActivity extends RoboActivity implements
 		mediaSourceController.initialize();
 		slideshowController.initialize();
 		uiController.initialize();
+		memoryController.initialize();
 
 		log.debug("MainActivity created...");
 	}
@@ -124,6 +132,7 @@ public class MainActivity extends RoboActivity implements
 		mediaSourceController.start();
 		slideshowController.start();
 		uiController.start();
+		memoryController.start();
 
 		UIController.addListener(this);
 
@@ -141,7 +150,7 @@ public class MainActivity extends RoboActivity implements
 		mediaSourceController.resume();
 		slideshowController.resume();
 		uiController.resume();
-
+		memoryController.resume();
 		log.debug("MainActivity resumed...");
 	}
 
@@ -156,6 +165,7 @@ public class MainActivity extends RoboActivity implements
 		mediaSourceController.pause();
 		slideshowController.pause();
 		uiController.pause();
+		memoryController.pause();
 		if (shareAlbum != null)
 			shareAlbum.pause();
 		log.debug("MainActivity paused...");
@@ -177,7 +187,7 @@ public class MainActivity extends RoboActivity implements
 		mediaSourceController.stop();
 		slideshowController.stop();
 		uiController.stop();
-
+		memoryController.stop();
 		log.debug("MainActivity stopped...");
 	}
 
@@ -192,7 +202,7 @@ public class MainActivity extends RoboActivity implements
 		mediaSourceController.destroy();
 		slideshowController.destroy();
 		uiController.destroy();
-
+		memoryController.destroy();
 		log.debug("MainActivity destroyed...");
 	}
 
@@ -356,7 +366,29 @@ public class MainActivity extends RoboActivity implements
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			shareAlbum();
+			final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+			final EditText input = new EditText(this);
+			alert.setTitle("Album name");
+			alert.setView(input);
+			alert.setPositiveButton("Ok",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,
+								int whichButton) {
+							String value = input.getText().toString().trim();
+							shareAlbum(value);
+						}
+					});
+
+			alert.setNegativeButton("Cancel",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,
+								int whichButton) {
+							dialog.cancel();
+						}
+					});
+			alert.show();
+
+			
 			break;
 		}
 
@@ -460,7 +492,7 @@ public class MainActivity extends RoboActivity implements
 
 	}
 
-	private void shareAlbum() {
+	private void shareAlbum(String message) {
 		// TODO Auto-generated method stub
 		shareAlbum = new FacebookAlbumShare(MainActivity.this);
 		shareAlbum.setActive(true);
@@ -468,7 +500,7 @@ public class MainActivity extends RoboActivity implements
 		shareAlbum.setSlideshowManager(slideshowController
 				.getSlideshowManager());
 		shareAlbum.setContentResolver(ass.getContentResolver());
-		shareAlbum.ShareAlbum();
+		shareAlbum.ShareAlbum(message);
 
 	}
 
