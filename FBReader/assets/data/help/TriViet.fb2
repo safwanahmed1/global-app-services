@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FictionBook xmlns="http://www.gribuser.ru/xml/fictionbook/2.0" xmlns:l="http://www.w3.org/1999/xlink"><description><title-info><author><last-name>Trí Việt</last-name></author> <book-title>Trí Việt</book-title> <lang>vi</lang></title-info></description>
+<body>
+<subtitle><p>Giới thiệu</p></subtitle>
+<p>Trí Việt là kho sách điện tử trực tuyến dành cho người Việt tại địa chỉ <a l:href="http://www.triviet.com/"> http://www.triviet.com/</a>. Nguồn gốc của sách có thể do sưu tầm, mua bản quyền hoặc do cách thành viên của Trí Việt chia sẻ. Với phương trâm xâu dựng một cộng đồng độc giả online lớn mạnh, Trí việt không ngừng nâng cao số lượng và chất lượng đầu sách thuộc nhiều lĩnh vực khách nhau. Độc giả có thể đọc sách của Trí Việt thông qua nhiều chương trình khác nhau như trên web hay điện thoại. Đây là một chương trình trên điện thoại Android. Nó được phát triển dựa trên <a l:href="http://www.fbreader.org/">chương trình đọc sách điện tử FBReader</a>.
+<p>Bạn có thể tải sách trực tiếp trên server của Trí Việt bằng chương trình này tại <code>Trí Việt Sách</code>, hầu hết các bộ sách đều là miễn phí. Tất cả các cuốn sách bạn tải về đều được quản lý trong <code>Giá sách của bạn</code></p>
+<p>Bạn có thể tùy chỉnh FBReader để đọc sách theo ý thích. Màu sắc, phông chữ, các phím kết hợp và nhiều lựa chọn khác có thể thay đổi tại  <code>Bảng Tùy Chỉnh</code>.</p>
+<subtitle><p>Bắt đầu Như thế nào</p></subtitle>
+<p>Có 2 cách để thêm sách vào thư viện FBReaderJ.</p>
+<p>Cách thứ nhất là chép sách vào thiết bị của bạn ở thư mục <code>/sdcard/Books</code> (hoặc bất kỳ thư mục con của nó). FBReader sẽ tự động thêm cuốn sách đó.</p>
+<p>Cách thứ hai là nhấp vào 1 đường dẫn sách (vd vào 1được dẫn tới tập tin có định dạng <code>.epub</code>, <code>.oeb</code>, <code>.fb2</code> or <code>.fb2.zip</code>) trong trình duyệt mặc định của Android. Sách sẽ được tải về máy va mở trong FBReaderJ. Nếu bạn lại nhấp vào liên kết cũ, sách sẽ không được tải về nữa, nhưng bản trong máy sẽ được dùng để đọc .</p>
+<empty-line/>
+<subtitle><p>Các trang liên quan</p></subtitle>
+<p>Thêm thông tin về FBReader and FBReaderJ có thể tìm thấy ở <a l:href="http://www.fbreader.org">FBReader site</a>.</p>
+<p>Nếu bạn muốn được thông báo về các bản phát hành mới, vui lòng đăng ký tại <a l:href="http://freshmeat.net/projects/fbreaderj">Dự án FBReaderJ tại freshmeat</a>.</p>
+</body>
+</FictionBook>
