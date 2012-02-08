@@ -132,6 +132,14 @@
 		<url-pattern>/globalservices/highscores</url-pattern>
 	</servlet-mapping>
 
+<servlet>
+    <servlet-name>xmppreceiver</servlet-name>
+    <servlet-class>global.services.xmpp.XmppReceiverServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>xmppreceiver</servlet-name>
+    <url-pattern>/globalservices/xmpp</url-pattern>
+  </servlet-mapping>
 
 	<!-- Default page to serve -->
 	<welcome-file-list>
