@@ -1,0 +1,2 @@
+serviceClass: global.services.client.rpc.NotificationService
+path: 030D9A40CB126814D0CC0AC5470D2370.gwt.rpc
