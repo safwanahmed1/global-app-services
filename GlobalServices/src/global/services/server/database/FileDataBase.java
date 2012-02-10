@@ -2,7 +2,6 @@ package global.services.server.database;
 
 import global.services.server.PMF;
 import global.services.shared.Advertisement;
-import global.services.shared.AppScore;
 
 
 import java.io.Serializable;

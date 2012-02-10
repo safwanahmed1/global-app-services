@@ -11,7 +11,7 @@ import javax.jdo.annotations.PrimaryKey;
 import com.google.gwt.view.client.ProvidesKey;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class AppScore implements Serializable  {
+public class Application implements Serializable  {
 	/**
 	 * 
 	 */
@@ -31,15 +31,15 @@ public class AppScore implements Serializable  {
 	/**
      * The key provider that provides the unique ID of a contact.
      */
-    public static final ProvidesKey<AppScore> KEY_PROVIDER = new ProvidesKey<AppScore>() {
-      public Object getKey(AppScore app) {
+    public static final ProvidesKey<Application> KEY_PROVIDER = new ProvidesKey<Application>() {
+      public Object getKey(Application app) {
         return app == null ? null : app.getId();
       }
     };
     
     
-	public AppScore() {}
-	public AppScore(String userID) {
+	public Application() {}
+	public Application(String userID) {
 		userId_ = userID;
 	}
 	

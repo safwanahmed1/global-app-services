@@ -6,7 +6,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import global.services.server.PMF;
-import global.services.shared.AppScore;
 import global.services.shared.Notification;
 
 import javax.jdo.PersistenceManager;

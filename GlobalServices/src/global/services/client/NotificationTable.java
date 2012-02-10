@@ -1,12 +1,12 @@
 package global.services.client;
 
-import global.services.client.rpc.AppScoreService;
-import global.services.client.rpc.AppScoreServiceAsync;
+import global.services.client.rpc.ApplicationService;
+import global.services.client.rpc.ApplicationServiceAsync;
 import global.services.client.rpc.HighScoreService;
 import global.services.client.rpc.HighScoreServiceAsync;
 import global.services.client.rpc.NotificationService;
 import global.services.client.rpc.NotificationServiceAsync;
-import global.services.shared.AppScore;
+import global.services.shared.Application;
 import global.services.shared.HighScore;
 import global.services.shared.Notification;
 
@@ -57,7 +57,7 @@ public class NotificationTable {
 	Anchor myAppLink = new Anchor("<<My applications");
 	private NotificationServiceAsync noteSvc = GWT
 			.create(NotificationService.class);
-	static AppScoreServiceAsync appSvc = GWT.create(AppScoreService.class);
+	static ApplicationServiceAsync appSvc = GWT.create(ApplicationService.class);
 
 	private CellTable<Notification> notesCellTable = new CellTable<Notification>();
 	private List<Long> selectedNotes = new ArrayList<Long>();
@@ -109,14 +109,14 @@ public class NotificationTable {
 	public NotificationTable(String userId, Long appId) {
 		userId_ = userId;
 		appId_ = appId;
-		appSvc.SelectApp(userId, appId, new AsyncCallback<AppScore>() {
+		appSvc.SelectApp(userId, appId, new AsyncCallback<Application>() {
 			public void onFailure(Throwable caught) {
 				// TODO: Do something
 				// with
 				// errors.
 			}
 
-			public void onSuccess(AppScore result) {
+			public void onSuccess(Application result) {
 
 				appName_ = result.getAppName();
 				lblAppInfo.setText("Notification table of " + appName_
@@ -176,7 +176,7 @@ public class NotificationTable {
 		Column<Notification, String> noteIdColumn = new Column<Notification, String>(
 				new ClickableTextCell()) {
 			/*
-			 * @Override public String getValue(AppScore app) { return
+			 * @Override public String getValue(Application app) { return
 			 * app.getAppId(); }
 			 */
 

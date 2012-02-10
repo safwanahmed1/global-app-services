@@ -1,8 +1,8 @@
 package global.services.client;
 
-import global.services.client.rpc.AppScoreService;
-import global.services.client.rpc.AppScoreServiceAsync;
-import global.services.shared.AppScore;
+import global.services.client.rpc.ApplicationService;
+import global.services.client.rpc.ApplicationServiceAsync;
+import global.services.shared.Application;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -16,13 +16,13 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class CreateAppScores {
+public class CreateApplication {
 	private TextBox txtAppName = new TextBox();
 	private TextBox txtAppTitle = new TextBox();
 	private String userId_ = null;
-	private AppScore appObj = null;
+	private Application appObj = null;
 
-	private AppScoreServiceAsync appScoreSvc = GWT.create(AppScoreService.class);
+	private ApplicationServiceAsync appScoreSvc = GWT.create(ApplicationService.class);
 	
 	private Button btnAddApp= new Button("Create App", new ClickHandler() {
 
@@ -44,7 +44,7 @@ public class CreateAppScores {
 					}
 				};
 				if (appObj == null){
-					appObj = new AppScore(userId_);
+					appObj = new Application(userId_);
 					appObj.setAppName(appName);
 					appObj.setAppTittle(appTittle);
 					appScoreSvc.InsertApp(appObj, callback);
@@ -62,18 +62,18 @@ public class CreateAppScores {
 		}
 	});
 
-	public CreateAppScores(String userId) {
+	public CreateApplication(String userId) {
 		userId_ = userId;
 	}
 
-	public CreateAppScores(String userId, Long appId) {
+	public CreateApplication(String userId, Long appId) {
 		userId_ = userId;
-		appScoreSvc.SelectApp(userId, appId, new AsyncCallback<AppScore>() {
+		appScoreSvc.SelectApp(userId, appId, new AsyncCallback<Application>() {
 			public void onFailure(Throwable caught) {
 				// TODO: Do something with errors.
 			}
 
-			public void onSuccess(AppScore result) {
+			public void onSuccess(Application result) {
 				appObj = result;
 				btnAddApp.setText("Update app");
 				txtAppName.setText(appObj.getAppName());

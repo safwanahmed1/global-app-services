@@ -1,10 +1,10 @@
 package global.services.client;
 
-import global.services.client.rpc.AppScoreService;
-import global.services.client.rpc.AppScoreServiceAsync;
+import global.services.client.rpc.ApplicationService;
+import global.services.client.rpc.ApplicationServiceAsync;
 import global.services.client.rpc.HighScoreService;
 import global.services.client.rpc.HighScoreServiceAsync;
-import global.services.shared.AppScore;
+import global.services.shared.Application;
 import global.services.shared.HighScore;
 
 import java.util.ArrayList;
@@ -54,7 +54,7 @@ public class HighScoreTable {
 	private Label lblAppInfo = new Label("Highscore table of ... application.");
 	Anchor myAppLink = new Anchor("<<My applications");
 	static HighScoreServiceAsync scoreSvc = GWT.create(HighScoreService.class);
-	static AppScoreServiceAsync appSvc = GWT.create(AppScoreService.class);
+	static ApplicationServiceAsync appSvc = GWT.create(ApplicationService.class);
 	// HorizontalPanel tableGamesCtrPanel = new HorizontalPanel();
 	private Button crtScore = new Button("Create score", new ClickHandler() {
 
@@ -74,7 +74,7 @@ public class HighScoreTable {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			// TODO Auto-generated method stub
+
 			if (selectedScores.size() == 0) {
 				Window.alert("You have to chose at least an entry to delete.");
 			} else {
@@ -87,7 +87,7 @@ public class HighScoreTable {
 								}
 
 								public void onSuccess(Integer result) {
-									// TODO Auto-generated method stub
+
 									Window.alert(result
 											+ " Scores have been deleted successful.");
 									RefreshHighScoreTbl();
@@ -103,14 +103,14 @@ public class HighScoreTable {
 	public HighScoreTable(String userId, Long appId) {
 		userId_ = userId;
 		appId_ = appId;
-		appSvc.SelectApp(userId, appId, new AsyncCallback<AppScore>() {
+		appSvc.SelectApp(userId, appId, new AsyncCallback<Application>() {
 			public void onFailure(Throwable caught) {
 				// TODO: Do something
 				// with
 				// errors.
 			}
 
-			public void onSuccess(AppScore result) {
+			public void onSuccess(Application result) {
 
 				appName_ = result.getAppName();
 				lblAppInfo.setText("Highscore table of " + appName_
@@ -131,7 +131,7 @@ public class HighScoreTable {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				// TODO Auto-generated method stub
+
 				History.newItem("root-application");
 			}
 		});
@@ -145,13 +145,15 @@ public class HighScoreTable {
 		scoreCellTable.setSelectionModel(selectionAppModel,
 				DefaultSelectionEventManager
 						.<HighScore> createCheckboxManager());
+		scoreCellTable.setRowCount(5, false);
+		
 
 		Column<HighScore, Boolean> checkColumn = new Column<HighScore, Boolean>(
 				new CheckboxCell(true, false)) {
 
 			@Override
 			public Boolean getValue(HighScore score) {
-				// TODO Auto-generated method stub
+
 				if (selectionAppModel.isSelected(score)) {
 					if (!selectedScores.contains(score.getId()))
 						selectedScores.add(score.getId());
@@ -173,7 +175,7 @@ public class HighScoreTable {
 			@Override
 			public void render(Context context, HighScore object,
 					SafeHtmlBuilder sb) {
-				// TODO Auto-generated method stub
+
 				super.render(context, object, sb);
 				if (object != null) {
 					sb.appendHtmlConstant("<div class=\"clickableanchor\">");
@@ -185,7 +187,7 @@ public class HighScoreTable {
 			@Override
 			public void onBrowserEvent(Context context, Element elem,
 					HighScore object, NativeEvent event) {
-				// TODO Auto-generated method stub
+
 				super.onBrowserEvent(context, elem, object, event);
 				if (event.getType().equals("click")) {
 					/*
@@ -202,7 +204,7 @@ public class HighScoreTable {
 
 			@Override
 			public String getValue(HighScore object) {
-				// TODO Auto-generated method stub
+
 				return null;
 			}
 
@@ -224,7 +226,7 @@ public class HighScoreTable {
 		TextColumn<HighScore> playerColumn = new TextColumn<HighScore>() {
 			@Override
 			public String getValue(HighScore score) {
-				// TODO Auto-generated method stub
+
 				return score.getPlayer();
 			}
 
@@ -236,7 +238,7 @@ public class HighScoreTable {
 		TextColumn<HighScore> scoreColumn = new TextColumn<HighScore>() {
 			@Override
 			public String getValue(HighScore score) {
-				// TODO Auto-generated method stub
+
 				return String.valueOf(score.getHighScore());
 			}
 
@@ -248,7 +250,7 @@ public class HighScoreTable {
 		TextColumn<HighScore> duringColumn = new TextColumn<HighScore>() {
 			@Override
 			public String getValue(HighScore score) {
-				// TODO Auto-generated method stub
+
 				Long time = score.getDuring();
 				StringBuilder sb = new StringBuilder();
 				int hour = (int) (time / 3600000);
@@ -284,7 +286,7 @@ public class HighScoreTable {
 		TextColumn<HighScore> locationColumn = new TextColumn<HighScore>() {
 			@Override
 			public String getValue(HighScore score) {
-				// TODO Auto-generated method stub
+
 				return String.valueOf(score.getLocation());
 			}
 
@@ -296,7 +298,7 @@ public class HighScoreTable {
 		TextColumn<HighScore> commentColumn = new TextColumn<HighScore>() {
 			@Override
 			public String getValue(HighScore score) {
-				// TODO Auto-generated method stub
+
 				return score.getComment();
 			}
 
@@ -307,10 +309,10 @@ public class HighScoreTable {
 		TextColumn<HighScore> dateColumn = new TextColumn<HighScore>() {
 			@Override
 			public String getValue(HighScore score) {
-				// TODO Auto-generated method stub
-				
+
 				Date date = new Date(score.getDate());
-				String dateString = DateTimeFormat.getMediumDateFormat().format(date);
+				String dateString = DateTimeFormat.getMediumDateFormat()
+						.format(date);
 				return dateString;
 			}
 
@@ -342,7 +344,7 @@ public class HighScoreTable {
 	}
 
 	private void RefreshHighScoreTbl() {
-		// TODO Auto-generated method stub
+
 		scoreSvc.SelectScores(userId_, appId_,
 				new AsyncCallback<List<HighScore>>() {
 					public void onFailure(Throwable caught) {

@@ -3,15 +3,15 @@ package global.services.server.rpc;
 import java.util.ArrayList;
 import java.util.List;
 
-import global.services.client.rpc.AppScoreService;
-import global.services.server.database.AppScoreDataBase;
-import global.services.shared.AppScore;
+import global.services.client.rpc.ApplicationService;
+import global.services.server.database.ApplicationDataBase;
+import global.services.shared.Application;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
-public class AppScoreServiceImpl extends RemoteServiceServlet implements
-		AppScoreService {
+public class ApplicationServiceImpl extends RemoteServiceServlet implements
+		ApplicationService {
 
 	/**
 	 * 
@@ -23,7 +23,7 @@ public class AppScoreServiceImpl extends RemoteServiceServlet implements
 		// TODO Auto-generated method stub
 		Long ret = null;
 		if (userId != null) {
-			AppScoreDataBase appDB = new AppScoreDataBase();
+			ApplicationDataBase appDB = new ApplicationDataBase();
 			ret = appDB.DeleteApp(userId, appId);
 			appDB.Finalize();
 		}
@@ -35,7 +35,7 @@ public class AppScoreServiceImpl extends RemoteServiceServlet implements
 	public Long DeleteApps(String userId) {
 		// TODO Auto-generated method stub
 		Long ret = null;
-		AppScoreDataBase appDB = new AppScoreDataBase();
+		ApplicationDataBase appDB = new ApplicationDataBase();
 		ret = appDB.DeleteApps(userId);
 		appDB.Finalize();
 		return ret;
@@ -44,41 +44,41 @@ public class AppScoreServiceImpl extends RemoteServiceServlet implements
 
 	
 	@Override
-	public Long InsertApp(AppScore app) {
+	public Long InsertApp(Application app) {
 		// TODO Auto-generated method stub
 		Long ret = null;
 
-		AppScoreDataBase appDB = new AppScoreDataBase();
+		ApplicationDataBase appDB = new ApplicationDataBase();
 		ret = appDB.InsertApp(app);
 		appDB.Finalize();
 		return ret;
 	}
 
 	@Override
-	public Long UpdateApp(AppScore app) {
+	public Long UpdateApp(Application app) {
 		// TODO Auto-generated method stub
-		AppScoreDataBase appDB = new AppScoreDataBase();
+		ApplicationDataBase appDB = new ApplicationDataBase();
 		Long ret = appDB.UpdateApp(app);
 		appDB.Finalize();
 		return ret;
 	}
 
 	@Override
-	public AppScore SelectApp(String userId, Long appId) {
+	public Application SelectApp(String userId, Long appId) {
 		// TODO Auto-generated method stub
-		AppScoreDataBase appDB = new AppScoreDataBase();
-		AppScore appRet = appDB.SelectApp(userId, appId);
+		ApplicationDataBase appDB = new ApplicationDataBase();
+		Application appRet = appDB.SelectApp(userId, appId);
 		appDB.Finalize();
 		return appRet;
 	}
 
 	@Override
-	public List<AppScore> SelectApps(String userId) {
+	public List<Application> SelectApps(String userId) {
 		// TODO Auto-generated method stub
-		AppScoreDataBase appDB = new AppScoreDataBase();
-		List<AppScore> selectedApps = appDB.SelectApps(userId);
-		List<AppScore> retApps = new ArrayList<AppScore>();
-		for (AppScore app : selectedApps) {
+		ApplicationDataBase appDB = new ApplicationDataBase();
+		List<Application> selectedApps = appDB.SelectApps(userId);
+		List<Application> retApps = new ArrayList<Application>();
+		for (Application app : selectedApps) {
 			retApps.add(app);
 		}
 		appDB.Finalize();
@@ -90,7 +90,7 @@ public class AppScoreServiceImpl extends RemoteServiceServlet implements
 		// TODO Auto-generated method stub
 		Long tmpRet = (long) 0;
 		int ret = 0;
-		AppScoreDataBase appDB = new AppScoreDataBase();
+		ApplicationDataBase appDB = new ApplicationDataBase();
 		for (Long appId : listAppId) {
 			tmpRet = appDB.DeleteApp(userId, appId);
 			if (tmpRet != null) 
