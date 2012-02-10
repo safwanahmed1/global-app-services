@@ -82,7 +82,7 @@
 	<!-- RPC server implemention -->
 	<servlet>
 		<servlet-name>AppScoreServiceImpl</servlet-name>
-		<servlet-class>global.services.server.rpc.AppScoreServiceImpl</servlet-class>
+		<servlet-class>global.services.server.rpc.ApplicationServiceImpl</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
@@ -131,15 +131,6 @@
 		<servlet-name>HighScoreServiceImpl</servlet-name>
 		<url-pattern>/globalservices/highscores</url-pattern>
 	</servlet-mapping>
-
-<servlet>
-    <servlet-name>xmppreceiver</servlet-name>
-    <servlet-class>global.services.xmpp.XmppReceiverServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>xmppreceiver</servlet-name>
-    <url-pattern>/globalservices/xmpp</url-pattern>
-  </servlet-mapping>
 
 	<!-- Default page to serve -->
 	<welcome-file-list>
