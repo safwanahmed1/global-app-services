@@ -1,7 +1,7 @@
 package global.services.server.database;
 
 import global.services.server.PMF;
-import global.services.shared.AppScore;
+import global.services.shared.Application;
 import global.services.shared.HighScore;
 import global.services.shared.Notification;
 
@@ -18,17 +18,17 @@ import org.apache.tools.ant.taskdefs.condition.Not;
 
 import com.google.gwt.user.client.Window;
 
-public class AppScoreDataBase {
+public class ApplicationDataBase {
 	private static final Logger LOG = Logger
 			.getLogger(AdvertisementDataBase.class.getName());
-	private AppScore application_;
+	private Application application_;
 	private PersistenceManager pm_;
 
-	public AppScoreDataBase() {
+	public ApplicationDataBase() {
 		pm_ = PMF.get().getPersistenceManager();
 	}
 
-	public AppScoreDataBase(AppScore app) {
+	public ApplicationDataBase(Application app) {
 		application_ = app;
 		pm_ = PMF.get().getPersistenceManager();
 	}
@@ -40,7 +40,7 @@ public class AppScoreDataBase {
 	public Long DeleteApp(String userId, Long appId) {
 		// TODO Auto-generated method stub
 		Long ret = null;
-		Query query = pm_.newQuery(AppScore.class);
+		Query query = pm_.newQuery(Application.class);
 		if ((userId != null) && !userId.isEmpty())
 			query.setFilter("userId_ == \"" + userId + "\"");
 		if (appId != null)
@@ -53,7 +53,7 @@ public class AppScoreDataBase {
 	public Long DeleteApps(String userId) {
 		// TODO Auto-generated method stub
 		Long ret = null;
-		Query query = pm_.newQuery(AppScore.class);
+		Query query = pm_.newQuery(Application.class);
 		if ((userId != null) && !userId.isEmpty())
 			query.setFilter("userId_ == \"" + userId + "\"");
 		ret = query.deletePersistentAll();
@@ -61,7 +61,7 @@ public class AppScoreDataBase {
 
 	}
 
-	public Long InsertApp(AppScore app) {
+	public Long InsertApp(Application app) {
 		// TODO Auto-generated method stub
 		Long ret = null;
 
@@ -69,17 +69,17 @@ public class AppScoreDataBase {
 		return ret;
 	}
 
-	public Long UpdateApp(AppScore app) {
+	public Long UpdateApp(Application app) {
 		// TODO Auto-generated method stub
-		AppScore appScore = pm_.getObjectById(AppScore.class, app.getId());
-		appScore.setAppName(app.getAppName());
-		appScore.setAppTittle(app.getAppTittle());
+		Application Application = pm_.getObjectById(Application.class, app.getId());
+		Application.setAppName(app.getAppName());
+		Application.setAppTittle(app.getAppTittle());
 		return app.getId();
 	}
 
-	public AppScore SelectApp(String userId, Long appId) {
+	public Application SelectApp(String userId, Long appId) {
 		// TODO Auto-generated method stub
-		String strQuery = "select from " + AppScore.class.getName();
+		String strQuery = "select from " + Application.class.getName();
 		// + HighScore.class.getName() ;
 		Query query = pm_.newQuery(strQuery);
 		// query.setOrdering("highScore desc, during asc");
@@ -88,29 +88,29 @@ public class AppScoreDataBase {
 		if (appId != null)
 			query.setFilter("id == " + appId);
 
-		List<AppScore> appscores = (List<AppScore>) query.execute();
+		List<Application> appscores = (List<Application>) query.execute();
 
 		return appscores.get(0);
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<AppScore> SelectApps(String userId) {
+	public List<Application> SelectApps(String userId) {
 		// TODO Auto-generated method stub
 		Transaction tx = pm_.currentTransaction();
 		tx.begin();
-		String strQuery = "select from " + AppScore.class.getName();
+		String strQuery = "select from " + Application.class.getName();
 		// + HighScore.class.getName() ;
 		Query query = pm_.newQuery(strQuery);
 		// query.setOrdering("highScore desc, during asc");
 		if (userId != null)
 			query.setFilter("userId_ == \"" + userId + "\"");
-		List<AppScore> retApps = new ArrayList<AppScore>();
+		List<Application> retApps = new ArrayList<Application>();
 		// (List<Question>)pm.detachCopyAll((List<Question>)query.execute());
-		// List<AppScore> selectedApps =
-		// (List<AppScore>)pm_.detachCopyAll((List<AppScore>) query.execute());
-		List<AppScore> selectedApps = (List<AppScore>) query.execute();
+		// List<Application> selectedApps =
+		// (List<Application>)pm_.detachCopyAll((List<Application>) query.execute());
+		List<Application> selectedApps = (List<Application>) query.execute();
 		tx.commit();
-		for (AppScore app : selectedApps) {
+		for (Application app : selectedApps) {
 			tx.begin();
 			strQuery = "select from " + HighScore.class.getName();
 			query = pm_.newQuery(strQuery);

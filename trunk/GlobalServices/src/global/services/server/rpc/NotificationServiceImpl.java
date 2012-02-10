@@ -3,7 +3,7 @@ package global.services.server.rpc;
 import java.util.List;
 
 import global.services.client.rpc.NotificationService;
-import global.services.server.database.AppScoreDataBase;
+import global.services.server.database.ApplicationDataBase;
 import global.services.server.database.NotificationDataBase;
 import global.services.shared.Notification;
 

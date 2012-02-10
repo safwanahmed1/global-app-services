@@ -3,7 +3,7 @@ package global.services.server.rpc;
 import java.util.List;
 
 import global.services.client.rpc.HighScoreService;
-import global.services.server.database.AppScoreDataBase;
+import global.services.server.database.ApplicationDataBase;
 import global.services.server.database.ScoreDataBase;
 import global.services.shared.HighScore;
 

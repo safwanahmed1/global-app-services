@@ -6,7 +6,7 @@ import java.util.List;
 
 import global.services.server.PMF;
 import global.services.shared.Advertisement;
-import global.services.shared.AppScore;
+import global.services.shared.Application;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;

@@ -6,16 +6,14 @@ import java.util.List;
 
 import global.services.server.PMF;
 import global.services.shared.HighScore;
-import global.services.shared.Notification;
-
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
-
-import org.eclipse.jdt.internal.compiler.ast.ArrayAllocationExpression;
 
 public class ScoreDataBase {
 	private HighScore score_;
 	private PersistenceManager pm_;
+	private int pageIdx = 0;
+	private int pageSize = 10;
 
 	public ScoreDataBase() {
 		pm_ = PMF.get().getPersistenceManager();
@@ -25,10 +23,10 @@ public class ScoreDataBase {
 		setScore(score);
 		pm_ = PMF.get().getPersistenceManager();
 	}
+
 	public void Finalize() {
 		pm_.close();
 	}
-
 
 	public HighScore SelectScore(String userId, Long scoreId) {
 		// TODO Auto-generated method stub
@@ -42,7 +40,7 @@ public class ScoreDataBase {
 		return scores.get(0);
 
 	}
-	
+
 	public void setScore(HighScore score) {
 		this.score_ = score;
 	}
@@ -61,6 +59,7 @@ public class ScoreDataBase {
 			query.setFilter("userId_ == \"" + userId + "\"");
 		if (appId != null)
 			query.setFilter("appId_ == " + appId);
+		query.setRange(pageIdx * pageSize, pageSize);
 		List<HighScore> scores = (List<HighScore>) query.execute();
 		for (HighScore score : scores) {
 			retScores.add(score);
@@ -71,8 +70,8 @@ public class ScoreDataBase {
 
 	public Long InsertScore(HighScore score) {
 		// TODO Auto-generated method stub
-		
-			return pm_.makePersistent(score).getId();
+
+		return pm_.makePersistent(score).getId();
 
 	}
 
@@ -92,12 +91,12 @@ public class ScoreDataBase {
 
 	public Long DeleteScore(String userId, Long id) {
 		// TODO Auto-generated method stub
-		
+
 		Query query = pm_.newQuery(HighScore.class);
 		if ((userId != null) && !userId.isEmpty())
 			query.setFilter("userId_ == \"" + userId + "\"");
 		if (id != null)
-			query.setFilter("id == " + id );
+			query.setFilter("id == " + id);
 		return query.deletePersistentAll();
 
 	}
@@ -112,7 +111,5 @@ public class ScoreDataBase {
 		return query.deletePersistentAll();
 
 	}
-
-
 
 }
