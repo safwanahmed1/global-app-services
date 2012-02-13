@@ -15,6 +15,22 @@ public class ScoreDataBase {
 	private int pageIdx = 0;
 	private int pageSize = 10;
 
+	public int getPageIdx() {
+		return pageIdx;
+	}
+
+	public void setPageIdx(int pageIdx) {
+		this.pageIdx = pageIdx;
+	}
+
+	public int getPageSize() {
+		return pageSize;
+	}
+
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
+	}
+
 	public ScoreDataBase() {
 		pm_ = PMF.get().getPersistenceManager();
 	}
@@ -59,7 +75,9 @@ public class ScoreDataBase {
 			query.setFilter("userId_ == \"" + userId + "\"");
 		if (appId != null)
 			query.setFilter("appId_ == " + appId);
-		query.setRange(pageIdx * pageSize, pageSize);
+
+		query.setOrdering("score_ desc");
+		query.setRange(pageIdx * pageSize, (pageIdx + 1) * pageSize);
 		List<HighScore> scores = (List<HighScore>) query.execute();
 		for (HighScore score : scores) {
 			retScores.add(score);

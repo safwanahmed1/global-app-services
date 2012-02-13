@@ -20,6 +20,6 @@ public interface HighScoreServiceAsync {
 			AsyncCallback<Long> callback);
 	public void SelectScore(String userId, long scoreId,
 			AsyncCallback<HighScore> callback);
-	public void SelectScores(String userId, long appId,
+	public void SelectScores(String userId, long appId, int pageIdx, int pageSize,
 			AsyncCallback<List<HighScore>> callback);
 }
