@@ -81,13 +81,13 @@
 
 	<!-- RPC server implemention -->
 	<servlet>
-		<servlet-name>AppScoreServiceImpl</servlet-name>
+		<servlet-name>ApplicationServiceImpl</servlet-name>
 		<servlet-class>global.services.server.rpc.ApplicationServiceImpl</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>AppScoreServiceImpl</servlet-name>
-		<url-pattern>/globalservices/appScores</url-pattern>
+		<servlet-name>ApplicationServiceImpl</servlet-name>
+		<url-pattern>/globalservices/applications</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
