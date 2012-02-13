@@ -6,7 +6,6 @@ import global.services.client.rpc.HighScoreService;
 import global.services.client.rpc.HighScoreServiceAsync;
 import global.services.shared.Application;
 import global.services.shared.HighScore;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,6 +31,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -45,8 +46,11 @@ public class HighScoreTable {
 	private String userId_ = null;
 	private Long appId_ = null;
 	private String appName_ = null;
+	private int scoreEntries_ = 0;
+	private int pageIdx_ = 0;
+	private int pageSize_ = 10;
 	private AbsolutePanel headerTblPanel = new AbsolutePanel();
-	private AbsolutePanel tableGamesCtrPanel = new AbsolutePanel();
+	private AbsolutePanel tableAppsCtrPanel = new AbsolutePanel();
 	private CellTable<HighScore> scoreCellTable = new CellTable<HighScore>();
 	private List<Long> selectedScores = new ArrayList<Long>();
 	private VerticalPanel mainContent = new VerticalPanel();
@@ -54,7 +58,8 @@ public class HighScoreTable {
 	private Label lblAppInfo = new Label("Highscore table of ... application.");
 	Anchor myAppLink = new Anchor("<<My applications");
 	static HighScoreServiceAsync scoreSvc = GWT.create(HighScoreService.class);
-	static ApplicationServiceAsync appSvc = GWT.create(ApplicationService.class);
+	static ApplicationServiceAsync appSvc = GWT
+			.create(ApplicationService.class);
 	// HorizontalPanel tableGamesCtrPanel = new HorizontalPanel();
 	private Button crtScore = new Button("Create score", new ClickHandler() {
 
@@ -69,6 +74,12 @@ public class HighScoreTable {
 			History.newItem("highscore-" + appId_);
 		}
 	});
+	HorizontalPanel pagingCtr = new HorizontalPanel();
+	private Anchor firstPage = new Anchor("First");
+	private Anchor previousPage = new Anchor("Pre");
+	private Label curPage = new Label();
+	private Anchor nextPage = new Anchor("Next");
+	private Anchor lastPage = new Anchor("Last");
 
 	private Button delScore = new Button("Delete score", new ClickHandler() {
 
@@ -103,6 +114,7 @@ public class HighScoreTable {
 	public HighScoreTable(String userId, Long appId) {
 		userId_ = userId;
 		appId_ = appId;
+
 		appSvc.SelectApp(userId, appId, new AsyncCallback<Application>() {
 			public void onFailure(Throwable caught) {
 				// TODO: Do something
@@ -115,6 +127,11 @@ public class HighScoreTable {
 				appName_ = result.getAppName();
 				lblAppInfo.setText("Highscore table of " + appName_
 						+ " application.");
+				scoreEntries_ = result.getScoreEntries();
+				int pageNum = scoreEntries_ / pageSize_
+						+ (scoreEntries_ % pageSize_ != 0 ? 1 : 0);
+				curPage.setText(pageIdx_ + 1 + "/" + pageNum);
+
 			}
 		});
 		RefreshHighScoreTbl();
@@ -124,8 +141,70 @@ public class HighScoreTable {
 
 		mainContent.setStyleName("contentBackgroud");
 
-		tableGamesCtrPanel.setStyleName("header-footer");
+		tableAppsCtrPanel.setStyleName("header-footer");
 		headerTblPanel.setStyleName("header-footer");
+		firstPage.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				// TODO Auto-generated method stub
+				if (pageIdx_ != 0) {
+					pageIdx_ = 0;
+					int pageNum = scoreEntries_ / pageSize_
+							+ (scoreEntries_ % pageSize_ != 0 ? 1 : 0);
+					curPage.setText(pageIdx_ + 1 + "/" + pageNum);
+					RefreshHighScoreTbl();
+				}
+
+			}
+		});
+
+		previousPage.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				// TODO Auto-generated method stub
+				if (pageIdx_ != 0) {
+					pageIdx_--;
+					int pageNum = scoreEntries_ / pageSize_
+							+ (scoreEntries_ % pageSize_ != 0 ? 1 : 0);
+					curPage.setText(pageIdx_ + 1 + "/" + pageNum);
+					RefreshHighScoreTbl();
+				}
+
+			}
+		});
+		nextPage.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				// TODO Auto-generated method stub
+				int pageNum = scoreEntries_ / pageSize_
+						+ (scoreEntries_ % pageSize_ != 0 ? 1 : 0);
+				if (pageNum != pageIdx_ + 1) {
+					pageIdx_++;
+
+					curPage.setText(pageIdx_ + 1 + "/" + pageNum);
+					RefreshHighScoreTbl();
+				}
+			}
+		});
+		lastPage.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				// TODO Auto-generated method stub
+				int pageNum = scoreEntries_ / pageSize_
+						+ (scoreEntries_ % pageSize_ != 0 ? 1 : 0);
+				if (pageNum != pageIdx_ + 1) {
+					pageIdx_ = pageNum - 1;
+
+					curPage.setText(pageIdx_ + 1 + "/" + pageNum);
+					RefreshHighScoreTbl();
+				}
+
+			}
+		});
 
 		myAppLink.addClickHandler(new ClickHandler() {
 
@@ -146,7 +225,6 @@ public class HighScoreTable {
 				DefaultSelectionEventManager
 						.<HighScore> createCheckboxManager());
 		scoreCellTable.setRowCount(5, false);
-		
 
 		Column<HighScore, Boolean> checkColumn = new Column<HighScore, Boolean>(
 				new CheckboxCell(true, false)) {
@@ -333,11 +411,23 @@ public class HighScoreTable {
 		RefreshHighScoreTbl();
 
 		mainContent.add(scoreCellTable);
+		tableAppsCtrPanel.setWidth("100%");
+		tableAppsCtrPanel.add(crtScore);
+		tableAppsCtrPanel.add(delScore);
 
-		tableGamesCtrPanel.add(crtScore);
-		tableGamesCtrPanel.add(delScore);
+		pagingCtr.setSpacing(5);
+		pagingCtr.add(firstPage);
+		pagingCtr.add(previousPage);
+		pagingCtr.add(curPage);
+		pagingCtr.add(nextPage);
+		pagingCtr.add(lastPage);
 
-		mainContent.add(tableGamesCtrPanel);
+		tableAppsCtrPanel.add(pagingCtr);
+		tableAppsCtrPanel.setWidgetPosition(pagingCtr,
+				tableAppsCtrPanel.getOffsetWidth() - pagingCtr.getOffsetWidth()
+						- 5, 5);
+
+		mainContent.add(tableAppsCtrPanel);
 
 		return mainContent;
 
@@ -345,7 +435,7 @@ public class HighScoreTable {
 
 	private void RefreshHighScoreTbl() {
 
-		scoreSvc.SelectScores(userId_, appId_,
+		scoreSvc.SelectScores(userId_, appId_, pageIdx_, pageSize_,
 				new AsyncCallback<List<HighScore>>() {
 					public void onFailure(Throwable caught) {
 						// TODO: Do something
@@ -363,10 +453,14 @@ public class HighScoreTable {
 								myAppLink,
 								headerTblPanel.getOffsetWidth()
 										- myAppLink.getOffsetWidth(), 5);
-						tableGamesCtrPanel.setWidth(scoreCellTable
+						tableAppsCtrPanel.setWidth(scoreCellTable
 								.getOffsetWidth() + "");
-						tableGamesCtrPanel.setWidgetPosition(delScore,
+						tableAppsCtrPanel.setWidgetPosition(delScore,
 								crtScore.getOffsetWidth() + 5, 5);
+						tableAppsCtrPanel.setWidgetPosition(
+								pagingCtr,
+								tableAppsCtrPanel.getOffsetWidth()
+										- pagingCtr.getOffsetWidth() - 5, 5);
 					}
 				});
 	}

@@ -15,5 +15,4 @@ public interface ApplicationServiceAsync {
 	 public void DeleteApps(String userId, AsyncCallback<Long> callback);
 	 public void SelectApp(String userId, Long appId, AsyncCallback<Application> callback);
 	 public void SelectApps(String userId, AsyncCallback<List<Application>> callback);
-	 // Thu edit cho nay xem sao
 }

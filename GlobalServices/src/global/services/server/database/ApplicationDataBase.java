@@ -7,16 +7,11 @@ import global.services.shared.Notification;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 import javax.jdo.Transaction;
-
-import org.apache.tools.ant.taskdefs.condition.Not;
-
-import com.google.gwt.user.client.Window;
 
 public class ApplicationDataBase {
 	private static final Logger LOG = Logger

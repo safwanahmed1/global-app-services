@@ -84,9 +84,11 @@ public class HighScoreServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public List<HighScore> SelectScores(String userId, long appId) {
+	public List<HighScore> SelectScores(String userId, long appId, int pageIdx, int pageSize) {
 		// TODO Auto-generated method stub
 		ScoreDataBase scoreDB = new ScoreDataBase();
+		scoreDB.setPageIdx(pageIdx);
+		scoreDB.setPageSize(pageSize);
 		List<HighScore> scoreListRet = scoreDB.SelectScores(userId, appId);
 		scoreDB.Finalize();
 		return scoreListRet;

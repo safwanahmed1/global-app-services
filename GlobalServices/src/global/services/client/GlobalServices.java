@@ -50,7 +50,6 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
@@ -68,7 +67,6 @@ import com.google.gwt.view.client.SelectionModel;
  */
 
 public class GlobalServices implements EntryPoint {
-	
 
 	/**
 	 * Create a remote service proxy to talk to the server-side Greeting
@@ -79,27 +77,21 @@ public class GlobalServices implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	static LoginInfo loginInfo = null;
-	private VerticalPanel loginPanel = new VerticalPanel();
-	private Label loginLabel = new Label(
-			"Please sign in to your Google Account to access the StockWatcher application.");
 	private Anchor signOutLink = new Anchor("Sign Out");
 
-	private RootPanel rootPanel;
 	public static DockLayoutPanel mainPanel = new DockLayoutPanel(Unit.PX);
 	public static TabLayoutPanel servicesTabPanel = new TabLayoutPanel(1.5,
 			Unit.EM);
-	private CellTable<Application> gamesCellTable = new CellTable<Application>();
+	private CellTable<Application> appsCellTable = new CellTable<Application>();
 	private CellTable<Advertisement> advsCellTable = new CellTable<Advertisement>();
-	private CellTable<Notification> notesCellTable = new CellTable<Notification>();
 	private CellTable<FileInfo> filesCellTable = new CellTable<FileInfo>();
 
 	public static HorizontalPanel headerPanel = new HorizontalPanel();
 	private HorizontalPanel accountPanel = new HorizontalPanel();
 	public static HorizontalPanel footerPanel = new HorizontalPanel();
-	private VerticalPanel scoresPanel = new VerticalPanel();
-	private VerticalPanel gamesPanel = new VerticalPanel();
 
-	static ApplicationServiceAsync appScoreSvc = GWT.create(ApplicationService.class);
+	static ApplicationServiceAsync applicationSvc = GWT
+			.create(ApplicationService.class);
 	static AdvertisementServiceAsync advSvc = GWT
 			.create(AdvertisementService.class);
 
@@ -130,7 +122,6 @@ public class GlobalServices implements EntryPoint {
 
 	private List<Long> selectedApps = new ArrayList<Long>();
 	private List<Long> selectedAdvs = new ArrayList<Long>();
-	private List<Long> selectedNotes = new ArrayList<Long>();
 	private List<Long> selectedFiles = new ArrayList<Long>();
 	/*
 	 * static String rootToken = "Homepage"; static String appScoreToken =
@@ -164,7 +155,6 @@ public class GlobalServices implements EntryPoint {
 
 			@Override
 			public void onSelection(SelectionEvent<Integer> event) {
-				
 
 				switch (event.getSelectedItem()) {
 				case 0:
@@ -199,9 +189,9 @@ public class GlobalServices implements EntryPoint {
 					}
 					if (tokenList[0].equals("application")) {
 						if (tokenList[1] != null) {
-							CreateAppScoresPage(Long.parseLong(tokenList[1]));
+							CreateApplicationsPage(Long.parseLong(tokenList[1]));
 						} else {
-							CreateAppScoresPage(null);
+							CreateApplicationsPage(null);
 						}
 
 					}
@@ -216,7 +206,7 @@ public class GlobalServices implements EntryPoint {
 					}
 
 					if (tokenList[0].equals("highscore")) {
-						if (tokenList[2] != null) {
+						if (tokenList.length >= 3) {
 							UpdateHighscorePage(Long.parseLong(tokenList[2]));
 						} else
 
@@ -231,7 +221,7 @@ public class GlobalServices implements EntryPoint {
 					}
 
 					if (tokenList[0].equals("notification")) {
-						if (tokenList[2] != null) {
+						if (tokenList.length >= 3) {
 							UpdateNotificationPage(Long.parseLong(tokenList[2]));
 						} else {
 							if (tokenList[1] != null) {
@@ -252,7 +242,22 @@ public class GlobalServices implements EntryPoint {
 							NotificationListPage(Long.parseLong(tokenList[1]));
 						}
 					}
+					/*
+					if (tokenList[0].equals("highscore")) {
+						if (tokenList[1] != null) {
+							CreateHighScore createScore = new CreateHighScore(
+									loginInfo.getEmailAddress(), Long
+											.parseLong(tokenList[1]));
 
+							mainPanel.clear();
+							mainPanel.addNorth(headerPanel, 50);
+							mainPanel.addSouth(footerPanel, 50);
+
+							mainPanel.add(createScore.Initialize());
+						}
+
+					}
+					*/
 				} catch (IndexOutOfBoundsException e) {
 
 				}
@@ -291,7 +296,7 @@ public class GlobalServices implements EntryPoint {
 
 		// Building services tabs
 		// HighScore tab
-		CreateAppScorePanel();
+		CreateApplicationPanel();
 
 		// Advertisement tab
 		CreateAdvertisementPanel();
@@ -303,87 +308,87 @@ public class GlobalServices implements EntryPoint {
 
 		// Add panels to RootLayout
 		// GlobalServices.ComebackHome(false);
-		/*
-		 * mainPanel.addNorth(headerPanel, 50); mainPanel.addSouth(footerPanel,
-		 * 50); mainPanel.add(servicesTabPanel);
-		 */
-		rootPanel = RootPanel.get("content");
 
 		RootLayoutPanel.get().add(mainPanel);
 		// History.newItem(rootToken);
 		History.newItem("root-application");
 	}
 
-	public void CreateAppScorePanel() {
+	public void CreateApplicationPanel() {
 		VerticalPanel highScorePanel = new VerticalPanel();
 		highScorePanel.setStyleName("tabBackgroud");
 
-		HorizontalPanel tableGamesHeaderPanel = new HorizontalPanel();
+		HorizontalPanel tableApplicationsHeaderPanel = new HorizontalPanel();
 
-		VerticalPanel tableGamesFooterPanel = new VerticalPanel();
+		VerticalPanel tableApplicationsFooterPanel = new VerticalPanel();
 		HorizontalPanel tableGamesInfoPanel = new HorizontalPanel();
 		tableGamesInfoPanel.add(lblAppRemaining);
-		HorizontalPanel tableGamesCtrPanel = new HorizontalPanel();
-		tableGamesCtrPanel.add(new Button("Create app", new ClickHandler() {
+		HorizontalPanel tableApplicationsCtrPanel = new HorizontalPanel();
+		tableApplicationsCtrPanel.add(new Button("Create app",
+				new ClickHandler() {
 
-			@Override
-			public void onClick(ClickEvent event) {
+					@Override
+					public void onClick(ClickEvent event) {
 
-				if (numAppRemaining <= 0) {
-					Window.alert("You can not create more appplication.");
-				} else {
-					CreateAppScoresPage(null);
+						if (numAppRemaining <= 0) {
+							Window.alert("You can not create more appplication.");
+						} else {
+							CreateApplicationsPage(null);
 
-				}
+						}
 
-			}
-		}));
-
-		tableGamesCtrPanel.add(new Button("Delete app", new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				if (selectedApps.size() == 0) {
-					Window.alert("You have to chose at least an application to delete.");
-				} else {
-					if (Window.confirm("Would you want to delete applications")) {
-						ApplicationServiceAsync appScoreService = GWT
-								.create(ApplicationService.class);
-						appScoreService.DeleteApps(loginInfo.getEmailAddress(),
-								selectedApps, new AsyncCallback<Integer>() {
-									public void onFailure(Throwable caught) {
-									}
-
-									public void onSuccess(Integer result) {
-										Window.alert(result
-												+ " Applications have been deleted successful.");
-										RefreshAppScoreTbl();
-									}
-								});
-						selectedApps.clear();
 					}
-				}
+				}));
 
-			}
-		}));
-		tableGamesFooterPanel.add(tableGamesInfoPanel);
-		tableGamesFooterPanel.add(tableGamesCtrPanel);
+		tableApplicationsCtrPanel.add(new Button("Delete app",
+				new ClickHandler() {
 
-		highScorePanel.add(tableGamesHeaderPanel);
+					@Override
+					public void onClick(ClickEvent event) {
+						if (selectedApps.size() == 0) {
+							Window.alert("You have to chose at least an application to delete.");
+						} else {
+							if (Window
+									.confirm("Would you want to delete applications")) {
+								ApplicationServiceAsync applicationService = GWT
+										.create(ApplicationService.class);
+								applicationService.DeleteApps(
+										loginInfo.getEmailAddress(),
+										selectedApps,
+										new AsyncCallback<Integer>() {
+											public void onFailure(
+													Throwable caught) {
+											}
+
+											public void onSuccess(Integer result) {
+												Window.alert(result
+														+ " Applications have been deleted successful.");
+												RefreshApplicationTbl();
+											}
+										});
+								selectedApps.clear();
+							}
+						}
+
+					}
+				}));
+		tableApplicationsFooterPanel.add(tableGamesInfoPanel);
+		tableApplicationsFooterPanel.add(tableApplicationsCtrPanel);
+
+		highScorePanel.add(tableApplicationsHeaderPanel);
 
 		final SelectionModel<Application> selectionAppModel = new MultiSelectionModel<Application>(
 				Application.KEY_PROVIDER);
-		gamesCellTable
-				.setSelectionModel(selectionAppModel,
-						DefaultSelectionEventManager
-								.<Application> createCheckboxManager());
+		appsCellTable.setSelectionModel(selectionAppModel,
+				DefaultSelectionEventManager
+						.<Application> createCheckboxManager());
 
 		Column<Application, Boolean> checkColumn = new Column<Application, Boolean>(
 				new CheckboxCell(true, false)) {
 
 			@Override
 			public Boolean getValue(Application app) {
-				
+
 				if (selectionAppModel.isSelected(app)) {
 					if (!selectedApps.contains(app.getId()))
 						selectedApps.add(app.getId());
@@ -394,9 +399,9 @@ public class GlobalServices implements EntryPoint {
 				return selectionAppModel.isSelected(app);
 			}
 		};
-		gamesCellTable.addColumn(checkColumn,
+		appsCellTable.addColumn(checkColumn,
 				SafeHtmlUtils.fromSafeConstant("<br/>"));
-		gamesCellTable.setColumnWidth(checkColumn, 40, Unit.PX);
+		appsCellTable.setColumnWidth(checkColumn, 40, Unit.PX);
 
 		// Create appId column.
 		Column<Application, String> appIdColumn = new Column<Application, String>(
@@ -405,7 +410,7 @@ public class GlobalServices implements EntryPoint {
 			@Override
 			public void render(Context context, Application object,
 					SafeHtmlBuilder sb) {
-				
+
 				super.render(context, object, sb);
 				if (object != null) {
 					sb.appendHtmlConstant("<div class=\"clickableanchor\">");
@@ -417,7 +422,7 @@ public class GlobalServices implements EntryPoint {
 			@Override
 			public void onBrowserEvent(Context context, Element elem,
 					Application object, NativeEvent event) {
-				
+
 				super.onBrowserEvent(context, elem, object, event);
 				if (event.getType().equals("click")) {
 					// CreateAppScoresPage(object.getId());
@@ -429,13 +434,13 @@ public class GlobalServices implements EntryPoint {
 
 			@Override
 			public String getValue(Application object) {
-				
+
 				return null;
 			}
 
 		};
 		appIdColumn.setSortable(true);
-		gamesCellTable.addColumn(appIdColumn, "AppId");
+		appsCellTable.addColumn(appIdColumn, "AppId");
 
 		// Create appName column.
 		TextColumn<Application> appNameColumn = new TextColumn<Application>() {
@@ -445,7 +450,7 @@ public class GlobalServices implements EntryPoint {
 			}
 		};
 		appNameColumn.setSortable(true);
-		gamesCellTable.addColumn(appNameColumn, "App Name");
+		appsCellTable.addColumn(appNameColumn, "App Name");
 
 		// Create appTittle column.
 		TextColumn<Application> appTittleColumn = new TextColumn<Application>() {
@@ -455,7 +460,7 @@ public class GlobalServices implements EntryPoint {
 			}
 		};
 		appTittleColumn.setSortable(true);
-		gamesCellTable.addColumn(appTittleColumn, "Description");
+		appsCellTable.addColumn(appTittleColumn, "Description");
 
 		// Create Score entries column
 		Column<Application, String> scoreEntriesColumn = new Column<Application, String>(
@@ -464,7 +469,7 @@ public class GlobalServices implements EntryPoint {
 			@Override
 			public void render(Context context, Application object,
 					SafeHtmlBuilder sb) {
-				
+
 				super.render(context, object, sb);
 				if (object != null) {
 					sb.appendHtmlConstant("<div class=\"clickableanchor\">");
@@ -476,7 +481,7 @@ public class GlobalServices implements EntryPoint {
 			@Override
 			public void onBrowserEvent(Context context, Element elem,
 					Application object, NativeEvent event) {
-				
+
 				super.onBrowserEvent(context, elem, object, event);
 				if (event.getType().equals("click")) {
 					appId = object.getId();
@@ -494,7 +499,7 @@ public class GlobalServices implements EntryPoint {
 
 		};
 		scoreEntriesColumn.setSortable(true);
-		gamesCellTable.addColumn(scoreEntriesColumn, "Score entries");
+		appsCellTable.addColumn(scoreEntriesColumn, "Score entries");
 
 		// Create notification entries column
 		Column<Application, String> noteEntriesColumn = new Column<Application, String>(
@@ -503,7 +508,7 @@ public class GlobalServices implements EntryPoint {
 			@Override
 			public void render(Context context, Application object,
 					SafeHtmlBuilder sb) {
-				
+
 				super.render(context, object, sb);
 				if (object != null) {
 					sb.appendHtmlConstant("<div class=\"clickableanchor\">");
@@ -515,7 +520,7 @@ public class GlobalServices implements EntryPoint {
 			@Override
 			public void onBrowserEvent(Context context, Element elem,
 					Application object, NativeEvent event) {
-				
+
 				super.onBrowserEvent(context, elem, object, event);
 				if (event.getType().equals("click")) {
 					appId = object.getId();
@@ -527,28 +532,28 @@ public class GlobalServices implements EntryPoint {
 
 			@Override
 			public String getValue(Application object) {
-				
+
 				return null;
 			}
 
 		};
 		noteEntriesColumn.setSortable(true);
-		gamesCellTable.addColumn(noteEntriesColumn, "Note entries");
+		appsCellTable.addColumn(noteEntriesColumn, "Note entries");
 
 		// Create a data provider.
 		ListDataProvider<Application> dataProvider = new ListDataProvider<Application>();
 
 		// Connect the table to the data provider.
-		dataProvider.addDataDisplay(gamesCellTable);
+		dataProvider.addDataDisplay(appsCellTable);
 
 		// Add the data to the data provider, which automatically pushes it to
 		// the
 		// widget.
 		listApp = dataProvider.getList();
-		RefreshAppScoreTbl();
+		RefreshApplicationTbl();
 
-		highScorePanel.add(gamesCellTable);
-		highScorePanel.add(tableGamesFooterPanel);
+		highScorePanel.add(appsCellTable);
+		highScorePanel.add(tableApplicationsFooterPanel);
 		servicesTabPanel.add(highScorePanel, "HighScores");
 	}
 
@@ -581,7 +586,7 @@ public class GlobalServices implements EntryPoint {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				
+
 				if (selectedAdvs.size() == 0) {
 					Window.alert("You have to chose at least an advertisement to delete.");
 				} else {
@@ -596,7 +601,7 @@ public class GlobalServices implements EntryPoint {
 									}
 
 									public void onSuccess(Integer result) {
-										
+
 										Window.alert(result
 												+ " Advertisements have been deleted successful.");
 										RefreshAdvertisementTbl();
@@ -624,7 +629,7 @@ public class GlobalServices implements EntryPoint {
 
 			@Override
 			public Boolean getValue(Advertisement adv) {
-				
+
 				if (selectionAdvModel.isSelected(adv)) {
 					if (!selectedAdvs.contains(adv.getId()))
 						selectedAdvs.add(adv.getId());
@@ -639,7 +644,7 @@ public class GlobalServices implements EntryPoint {
 				SafeHtmlUtils.fromSafeConstant("<br/>"));
 		advsCellTable.setColumnWidth(checkColumn, 40, Unit.PX);
 		// Create icon column.
-		
+
 		// Create appId column.
 		Column<Advertisement, String> appIdColumn = new Column<Advertisement, String>(
 				new ClickableTextCell()) {
@@ -651,7 +656,7 @@ public class GlobalServices implements EntryPoint {
 			@Override
 			public void render(Context context, Advertisement object,
 					SafeHtmlBuilder sb) {
-				
+
 				super.render(context, object, sb);
 				if (object != null) {
 					sb.appendHtmlConstant("<div class=\"clickableanchor\">");
@@ -663,7 +668,7 @@ public class GlobalServices implements EntryPoint {
 			@Override
 			public void onBrowserEvent(Context context, Element elem,
 					Advertisement object, NativeEvent event) {
-				
+
 				super.onBrowserEvent(context, elem, object, event);
 				if (event.getType().equals("click")) {
 					// CreateAdvertisementPage(object.getId());
@@ -675,7 +680,7 @@ public class GlobalServices implements EntryPoint {
 
 			@Override
 			public String getValue(Advertisement object) {
-				
+
 				return null;
 			}
 
@@ -694,7 +699,7 @@ public class GlobalServices implements EntryPoint {
 			@Override
 			public void render(Context context, Advertisement object,
 					SafeHtmlBuilder sb) {
-				
+
 				super.render(context, object, sb);
 				if (object != null) {
 					String iconUrl = "http://global-app-services.appspot.com/globalservices/fileservlet?fileid=";
@@ -707,7 +712,7 @@ public class GlobalServices implements EntryPoint {
 
 			@Override
 			public String getValue(Advertisement object) {
-				
+
 				return null;
 			}
 
@@ -798,7 +803,7 @@ public class GlobalServices implements EntryPoint {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				
+
 				if (selectedFiles.size() == 0) {
 					Window.alert("You have to chose at least a file to delete.");
 				} else {
@@ -811,7 +816,7 @@ public class GlobalServices implements EntryPoint {
 									}
 
 									public void onSuccess(Integer result) {
-										
+
 										Window.alert(result
 												+ " files have been deleted successful.");
 										RefreshFileTbl();
@@ -839,7 +844,7 @@ public class GlobalServices implements EntryPoint {
 
 			@Override
 			public Boolean getValue(FileInfo file) {
-				
+
 				if (selectionFileModel.isSelected(file)) {
 					if (!selectedFiles.contains(file.getId()))
 						selectedFiles.add(file.getId());
@@ -924,11 +929,11 @@ public class GlobalServices implements EntryPoint {
 
 	private Long appId;
 
-	static void RefreshAppScoreTbl() {
-		appScoreSvc.SelectApps(loginInfo.getEmailAddress(),
+	static void RefreshApplicationTbl() {
+		applicationSvc.SelectApps(loginInfo.getEmailAddress(),
 				new AsyncCallback<List<Application>>() {
 					public void onFailure(Throwable caught) {
-						
+
 						// with
 						// errors.
 					}
@@ -949,7 +954,7 @@ public class GlobalServices implements EntryPoint {
 		advSvc.SelectAdvs(loginInfo.getEmailAddress(),
 				new AsyncCallback<List<Advertisement>>() {
 					public void onFailure(Throwable caught) {
-						
+
 						// with
 						// errors.
 					}
@@ -970,7 +975,7 @@ public class GlobalServices implements EntryPoint {
 		fileSvc.SelectFiles(loginInfo.getEmailAddress(),
 				new AsyncCallback<List<FileInfo>>() {
 					public void onFailure(Throwable caught) {
-						
+
 						// with
 						// errors.
 					}
@@ -989,7 +994,7 @@ public class GlobalServices implements EntryPoint {
 	static void ComebackHome(boolean reload) {
 
 		if (reload) {
-			RefreshAppScoreTbl();
+			RefreshApplicationTbl();
 			RefreshAdvertisementTbl();
 			RefreshFileTbl();
 		}
@@ -1000,8 +1005,8 @@ public class GlobalServices implements EntryPoint {
 
 	}
 
-	private void CreateAppScoresPage(Long id) {
-		
+	private void CreateApplicationsPage(Long id) {
+
 		mainPanel.clear();
 		mainPanel.addNorth(headerPanel, 50);
 		mainPanel.addSouth(footerPanel, 50);
@@ -1040,7 +1045,7 @@ public class GlobalServices implements EntryPoint {
 	}
 
 	private void CreateAdvertisementPage(Long id) {
-		
+
 		mainPanel.clear();
 		mainPanel.addNorth(headerPanel, 50);
 		mainPanel.addSouth(footerPanel, 50);
@@ -1055,7 +1060,7 @@ public class GlobalServices implements EntryPoint {
 	}
 
 	private void CreateHighscorePage(Long appId) {
-		
+
 		mainPanel.clear();
 		mainPanel.addNorth(headerPanel, 50);
 		mainPanel.addSouth(footerPanel, 50);
@@ -1070,7 +1075,7 @@ public class GlobalServices implements EntryPoint {
 	}
 
 	private void UpdateHighscorePage(Long scoreId) {
-		
+
 		mainPanel.clear();
 		mainPanel.addNorth(headerPanel, 50);
 		mainPanel.addSouth(footerPanel, 50);
@@ -1079,7 +1084,7 @@ public class GlobalServices implements EntryPoint {
 
 					@Override
 					public void onFailure(Throwable caught) {
-						
+
 						CreateHighScore createHighscore = null;
 						if (appId != null) {
 							createHighscore = new CreateHighScore(loginInfo
@@ -1092,7 +1097,7 @@ public class GlobalServices implements EntryPoint {
 
 					@Override
 					public void onSuccess(HighScore result) {
-						
+
 						if (result != null) {
 							CreateHighScore createHighscore = new CreateHighScore(
 									result);
@@ -1106,7 +1111,7 @@ public class GlobalServices implements EntryPoint {
 	}
 
 	private void CreateNotificationPage(Long appId) {
-		
+
 		mainPanel.clear();
 		mainPanel.addNorth(headerPanel, 50);
 		mainPanel.addSouth(footerPanel, 50);
@@ -1120,7 +1125,7 @@ public class GlobalServices implements EntryPoint {
 	}
 
 	private void UpdateNotificationPage(Long noteId) {
-		
+
 		mainPanel.clear();
 		mainPanel.addNorth(headerPanel, 50);
 		mainPanel.addSouth(footerPanel, 50);
@@ -1130,20 +1135,19 @@ public class GlobalServices implements EntryPoint {
 
 					@Override
 					public void onFailure(Throwable caught) {
-						
+
 						CreateHighScore createHighscore = null;
 						if (appId != null) {
-							createHighscore = new CreateHighScore(loginInfo
-									.getEmailAddress(), appId);
-
-							mainPanel.add(createHighscore.Initialize());
+							CreateNotification createNote = new CreateNotification(
+									loginInfo.getEmailAddress(), appId);
+							mainPanel.add(createNote.Initialize());
 						}
 
 					}
 
 					@Override
 					public void onSuccess(Notification result) {
-						
+
 						if (result != null) {
 							CreateNotification createNote = new CreateNotification(
 									result);
@@ -1155,5 +1159,5 @@ public class GlobalServices implements EntryPoint {
 
 		// History.newItem("notification-" + appId);
 	}
-	
+
 }

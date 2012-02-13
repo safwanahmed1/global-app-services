@@ -17,5 +17,5 @@ public interface HighScoreService extends RemoteService {
 	public int DeleteScores(String userId, List<Long> listScoreId);
 	public Long DeleteScores(String userId, Long appId);
 	public HighScore SelectScore(String userId, long scoreId);
-	public List<HighScore> SelectScores(String userId, long appId);
+	public List<HighScore> SelectScores(String userId, long appId, int pageIdx, int pageSize);
 }

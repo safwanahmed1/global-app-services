@@ -7,7 +7,7 @@ import java.util.List;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
-@RemoteServiceRelativePath("appScores")
+@RemoteServiceRelativePath("applications")
 public interface ApplicationService extends RemoteService {
 
 	public Long InsertApp(Application app);
