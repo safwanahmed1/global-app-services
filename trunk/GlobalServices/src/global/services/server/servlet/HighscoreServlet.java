@@ -77,58 +77,60 @@ public class HighscoreServlet extends HttpServlet {
 
 	private void GetScore(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
-		String userId = null;
-		Long appId = null;
-		userId = req.getParameter("userid");
-		appId = Long.parseLong(req.getParameter("appid"));
+		String  userId = req.getParameter("userid");
+		Long appId = Long.parseLong(req.getParameter("appid"));
+		int pageIdx = Integer.parseInt(req.getParameter("pageindex"));
+		int pageSize = Integer.parseInt(req.getParameter("pagesize"));
 
 		ScoreDataBase scoreDB = new ScoreDataBase();
+		scoreDB.setPageIdx(pageIdx);
+		scoreDB.setPageSize(pageSize);
 		ServletOutputStream stream = null;
 		try {
 			List<HighScore> highscore = scoreDB.SelectScores(userId, appId);
 
 			if (!highscore.isEmpty()) {
-				resp.setContentType("text/xml; charset=UTF-8");
-				resp.setHeader("Content-Disposition",
-						"attachment; filename=globalscore.xml");
+				resp.setContentType("application/json; charset=UTF-8");
+//				resp.setHeader("Content-Disposition",
+//						"attachment; filename=globalscore.xml");
 				// resp.setLocale(arg0)
 				stream = resp.getOutputStream();
-				stream.print("<?xml version=\"1.0\" encoding=\"utf-8\" ?>");
-				stream.print("<scores>");
+				
+				stream.print("{\"scorelist\":[");
 
 				for (HighScore score : highscore) {
-					stream.print("<score ");
+					
 					if (score.getId() != null)
-						stream.print(" id=\"" + score.getId() + "\"");
+						stream.print("{ \"id\":\"" + score.getId() + "\",");
 					if (score.getUserID() != null)
-						stream.print(" userid=\"" + score.getUserID() + "\"");
+						stream.print("\"userid\":\"" + score.getUserID() + "\",");
 					if (score.getSubBoard() != null)
-						stream.print(" subboard=\"" + score.getSubBoard()
-								+ "\"");
+						stream.print("\"subboard\":\"" + score.getSubBoard()
+								+ "\",");
 					if (score.getGameID() != null)
-						stream.print(" appid=\"" + score.getGameID()
-								+ "\"");
+						stream.print("\"appid\":\"" + score.getGameID()
+								+ "\",");
 					if (score.getPlayer() != null)
-						stream.print(" player=\"" + score.getPlayer() + "\"");
+						stream.print("\"player\":\"" + score.getPlayer() + "\",");
 					if (score.getHighScore() != 0)
-						stream.print(" highscore=\"" + score.getHighScore()
-								+ "\"");
+						stream.print("\"highscore\":\"" + score.getHighScore()
+								+ "\",");
 					if (score.getDuring() != 0)
-						stream.print(" during=\"" + score.getDuring() + "\"");
+						stream.print("\"during\":\"" + score.getDuring() + "\",");
 					if (score.getComment() != null)
-						stream.print(" comment=\"" + score.getComment() + "\"");
+						stream.print("\"comment\":\"" + score.getComment() + "\",");
 					if (score.getDate() != 0)
-						stream.print(" date=\"" + score.getDate() + "\"");
+						stream.print("\"date\":\"" + score.getDate() + "\",");
 					if (score.getLocation() != null)
-						stream.print(" location=\"" + score.getLocation()
-								+ "\"");
+						stream.print("\"location\":\"" + score.getLocation()
+								+ "\"}");
 					/*
 					 * Not support yet if (score.getAvatar() != null)
 					 * stream.print(" avatar=\"" + score.getAvatar() + "\"");
 					 */
-					stream.println("/>");
+					stream.println(",");
 				}
-				stream.print("</scores>");
+				stream.print("]}");
 
 			}
 		} finally {
