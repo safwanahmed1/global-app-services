@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.json.JSONArray;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -19,6 +21,8 @@ public class HighscoreFactory {
 	private static final String REQUEST_TYPE_GET = "getscore";
 	private String userId_;
 	private Long appId_;
+	private int pageIdx_;
+	private int pageSize_;
 	private RestClient highScoreRest;
 	public HighscoreFactory(String userId, Long appId) {
 		userId_ = userId;
@@ -51,11 +55,13 @@ public class HighscoreFactory {
 			// textView.setText(e.getMessage());
 		}
 	}
-	public String GetScoresXMLContent() {
+	public String GetScoresJSONContent() {
 		highScoreRest.ClearParams();
 		highScoreRest.AddParam("requesttype", REQUEST_TYPE_GET);
 		highScoreRest.AddParam("userid", userId_);
 		highScoreRest.AddParam("appid", String.valueOf(appId_));
+		highScoreRest.AddParam("pageindex", String.valueOf(pageIdx_));
+		highScoreRest.AddParam("pagesize", String.valueOf(pageSize_));
 
 		try {
 			highScoreRest.Execute(RequestMethod.POST);
@@ -81,7 +87,9 @@ public class HighscoreFactory {
 		//String avatar; Not support yet
 		String date;
 
-		String strResponse = GetScoresXMLContent();
+		String strResponse = GetScoresJSONContent();
+
+		
 		strResponse = strResponse.replace("\n", "");
 		XmlPullParser scores;
 		try {
@@ -150,6 +158,22 @@ public class HighscoreFactory {
 			}
 		}
 		return scoreList;
+	}
+
+	public int getPageIdx() {
+		return pageIdx_;
+	}
+
+	public void setPageIdx(int pageIdx_) {
+		this.pageIdx_ = pageIdx_;
+	}
+
+	public int getPageSize() {
+		return pageSize_;
+	}
+
+	public void setPageSize(int pageSize_) {
+		this.pageSize_ = pageSize_;
 	}
 
 }
