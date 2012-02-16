@@ -1,39 +1,25 @@
 package global.services.sample.android.adapters;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Date;
-
 import org.apache.http.util.ByteArrayBuffer;
 
 import global.services.lib.android.factories.FileInfoFactory;
 import global.services.lib.android.objects.Advertisement;
-import global.services.lib.android.objects.Highscore;
 import global.services.sample.android.R;
-import global.services.sample.android.R.id;
-import global.services.sample.android.R.layout;
-import global.services.sample.android.tasks.DownloadAdvToLocal;
-import global.services.sample.android.tasks.DownloadFileToLocal;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 public class AdvArrayAdapter extends ArrayAdapter<Advertisement> {
