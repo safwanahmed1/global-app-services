@@ -208,7 +208,7 @@ public class FilesActivity extends ListActivity {
 	private OnTaskFinishedListener mOnTaskFinishedListener = new OnTaskFinishedListener() {
 
 		@Override
-		public void onTaskFinished(boolean successful) {
+		public void onTaskFinished(Object result) {
 			fileList = LoadFileInfoFromFileToListView();
 			if (fileList != null) {
 				adapter = new FileArrayAdapter(getApplicationContext(),

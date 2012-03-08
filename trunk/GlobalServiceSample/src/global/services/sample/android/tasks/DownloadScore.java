@@ -1,22 +1,26 @@
 package global.services.sample.android.tasks;
 
 import global.services.lib.android.factories.HighscoreFactory;
+import global.services.lib.android.objects.Highscore;
 import global.services.sample.android.tasks.TaskListener.OnTaskFinishedListener;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 
-public class DownloadScoreToLocal extends AsyncTask<String, Integer, Boolean> {
+public class DownloadScore extends AsyncTask<String, Integer, Boolean> {
 	private static final String SCORE_FILE = "highscore.xml";
 	private Context context;
 	private ProgressDialog dialog;
 	private OnTaskFinishedListener mOnTaskFinishedListener;
+	private List<Highscore> scoreList;
 
-	public DownloadScoreToLocal(Context ctx) {
+	public DownloadScore(Context ctx) {
 		context = ctx;
 		dialog = new ProgressDialog(context);
 
@@ -38,8 +42,8 @@ public class DownloadScoreToLocal extends AsyncTask<String, Integer, Boolean> {
 		super.onPostExecute(result);
 		if (dialog.isShowing())
 			dialog.dismiss();
-		if (mOnTaskFinishedListener != null)
-			mOnTaskFinishedListener.onTaskFinished(result);
+		if ((mOnTaskFinishedListener != null) && (result))
+			mOnTaskFinishedListener.onTaskFinished(scoreList);
 
 	}
 
@@ -55,28 +59,13 @@ public class DownloadScoreToLocal extends AsyncTask<String, Integer, Boolean> {
 	protected Boolean doInBackground(String... params) {
 		HighscoreFactory scoreFactory = new HighscoreFactory(params[0],
 				Long.parseLong(params[1]));
-		String scoresXML = scoreFactory.GetScoresXMLContent();
-		FileOutputStream fos = null;
-		if (scoresXML != null) {
-			try {
-				fos = context.openFileOutput(SCORE_FILE, Context.MODE_PRIVATE);
-				fos.write(scoresXML.getBytes());
-				fos.close();
-
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return false;
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return false;
-			}
-		}
-
+		if (params.length > 2)
+			scoreFactory.setPageIdx(Integer.parseInt(params[2]));
+		if (params.length > 3)
+			scoreFactory.setPageSize(Integer.parseInt(params[3]));
+		scoreList = scoreFactory.GetScores();
 		return true;
-	}
 
-	
+	}
 
 }

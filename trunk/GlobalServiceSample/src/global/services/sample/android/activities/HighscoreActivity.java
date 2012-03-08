@@ -46,7 +46,7 @@ public class HighscoreActivity extends TabActivity {
 		submitTabSpec.setIndicator(createIndicatorView(tabHost,"Submit score",
 				getResources().getDrawable(R.drawable.ic_submit_score)))
 				.setContent(submitScore);
-		Intent getScore = new Intent(this, GetScoreActivity.class);
+		Intent getScore = new Intent(this, ViewScoreActivity.class);
 		getTabSpec.setIndicator(createIndicatorView(tabHost,"Get score",
 				getResources().getDrawable(R.drawable.ic_get_score)))
 				.setContent(getScore);

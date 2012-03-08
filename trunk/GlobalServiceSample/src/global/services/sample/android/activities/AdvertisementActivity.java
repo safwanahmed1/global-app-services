@@ -197,7 +197,7 @@ public class AdvertisementActivity extends ListActivity {
 	private OnTaskFinishedListener mOnTaskFinishedListener = new OnTaskFinishedListener() {
 
 		@Override
-		public void onTaskFinished(boolean successful) {
+		public void onTaskFinished(Object result) {
 			advList = LoadAdvFromFileToListView();
 			if (advList != null) {
 				adapter = new AdvArrayAdapter(getApplicationContext(),
