@@ -10,27 +10,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import com.google.gson.Gson;
+
 public class HighscoreFactory {
-	
+
 	private static final String HIGHSCORE_SERVLET = "http://global-app-services.appspot.com/globalservices/scoreservlet";
 	private static final String REQUEST_TYPE_SUBMIT = "submitscore";
 	private static final String REQUEST_TYPE_GET = "getscore";
 	private String userId_;
 	private Long appId_;
-	private int pageIdx_;
-	private int pageSize_;
+	private int pageIdx_ = 0;
+	private int pageSize_ = 15;
 	private RestClient highScoreRest;
+
 	public HighscoreFactory(String userId, Long appId) {
 		userId_ = userId;
 		appId_ = appId;
 		highScoreRest = new RestClient(HIGHSCORE_SERVLET);
-		
+
 	}
-	
+
 	public void SubmitScore(Highscore score) {
 		highScoreRest.ClearParams();
 		highScoreRest.AddParam("requesttype", REQUEST_TYPE_SUBMIT);
@@ -43,11 +49,11 @@ public class HighscoreFactory {
 		highScoreRest.AddParam("location", score.getLocation());
 		highScoreRest.AddParam("comment", score.getComment());
 		highScoreRest.AddParam("date", String.valueOf(score.getDate()));
-		//highScoreRest.AddParam("avatar", score.getAvatar()); Not support yet
+		// highScoreRest.AddParam("avatar", score.getAvatar()); Not support yet
 		/*
-		long now = System.currentTimeMillis();
-		highScoreRest.AddParam("Date", String.valueOf(now));
-		*/
+		 * long now = System.currentTimeMillis(); highScoreRest.AddParam("Date",
+		 * String.valueOf(now));
+		 */
 
 		try {
 			highScoreRest.Execute(RequestMethod.POST);
@@ -55,6 +61,7 @@ public class HighscoreFactory {
 			// textView.setText(e.getMessage());
 		}
 	}
+
 	public String GetScoresJSONContent() {
 		highScoreRest.ClearParams();
 		highScoreRest.AddParam("requesttype", REQUEST_TYPE_GET);
@@ -74,89 +81,25 @@ public class HighscoreFactory {
 
 	public List<Highscore> GetScores() {
 		List<Highscore> scoreList = new ArrayList<Highscore>();
-		String strElemName; 
-		String id;
-		String userId;
-		String appId;
-		String level;
-		String player;
-		String score;
-		String during;
-		String comment;
-		String location;
-		//String avatar; Not support yet
-		String date;
+		// String avatar; Not support yet
 
 		String strResponse = GetScoresJSONContent();
 
-		
-		strResponse = strResponse.replace("\n", "");
-		XmlPullParser scores;
 		try {
-
-			scores = XmlPullParserFactory.newInstance().newPullParser();
-			scores.setInput(new StringReader(strResponse));
-		} catch (XmlPullParserException e) {
-			scores = null;
-		}
-		if (scores != null) {
-			int eventType = -1;
-			// boolean bFoundScores = false;
-
-			// Find Score records from XML
-			while (eventType != XmlPullParser.END_DOCUMENT) {
-				if (eventType == XmlPullParser.START_TAG) {
-
-					// Get the name of the tag (eg scores or score)
-					strElemName = scores.getName();
-
-					if (strElemName.equals("score")) {
-						// bFoundScores = true;
-						Highscore scoreObj = new Highscore();
-						id = scores.getAttributeValue(null, "id");
-						scoreObj.setId(Long.parseLong(id));
-						userId = scores.getAttributeValue(null, "useid");
-						scoreObj.setUserID(userId);
-						appId = scores.getAttributeValue(null, "appid");
-						scoreObj.setGameID(Long.parseLong(appId));
-						level = scores.getAttributeValue(null,
-								"subboard");
-						scoreObj.setSubBoard(level);
-						player = scores
-								.getAttributeValue(null, "player");
-						scoreObj.setPlayer(player);
-						score = scores.getAttributeValue(null, "score");
-						scoreObj.setHighScore(Integer.parseInt(score));
-						during = scores
-								.getAttributeValue(null, "during");
-						scoreObj.setDuring(Long.parseLong(during));
-						comment = scores.getAttributeValue(null,
-								"comment");
-						scoreObj.setComment(comment);
-						location = scores.getAttributeValue(null,
-								"location");
-						scoreObj.setLocation(location);
-						//avatar = scores.getAttributeValue(null, "avatar"); Not support yet
-						//scoreObj.setAvatar(avatar);Not support yet
-						date = scores.getAttributeValue(null, "date");
-						scoreObj.setDate(Long.parseLong(date));
-						
-						scoreList.add(scoreObj);
-						
-					}
-				}
-				try {
-					eventType = scores.next();
-				} catch (XmlPullParserException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
+			JSONArray scoresList = new JSONArray(strResponse);
+			for (int i = 0; i < scoresList.length(); i++) {
+				JSONObject jsonScore = scoresList.getJSONObject(i);
+				Gson scoreParse = new Gson();
+				Highscore scoreObj = scoreParse.fromJson(jsonScore.toString(),
+						Highscore.class);
+				scoreList.add(scoreObj);
 			}
+
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
+
 		return scoreList;
 	}
 
