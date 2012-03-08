@@ -3,8 +3,11 @@ package global.services.server.database;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import global.services.server.PMF;
+import global.services.server.servlet.HighscoreServlet;
 import global.services.shared.HighScore;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
@@ -14,6 +17,8 @@ public class ScoreDataBase {
 	private PersistenceManager pm_;
 	private int pageIdx = 0;
 	private int pageSize = 10;
+	private static Logger logger = Logger.getLogger(ScoreDataBase.class
+			.getName());
 
 	public int getPageIdx() {
 		return pageIdx;
@@ -46,12 +51,12 @@ public class ScoreDataBase {
 
 	public HighScore SelectScore(String userId, Long scoreId) {
 		// TODO Auto-generated method stub
-		String strQuery = "select from " + HighScore.class.getName();
+		String strQuery = "select from " + HighScore.class.getSimpleName();
 		Query query = pm_.newQuery(strQuery);
 		if (userId != null)
-			query.setFilter("userId_ == \"" + userId + "\"");
+			query.setFilter("userId_ = \"" + userId + "\"");
 		if (scoreId != null)
-			query.setFilter("id == " + scoreId);
+			query.setFilter("id = " + scoreId);
 		List<HighScore> scores = (List<HighScore>) query.execute();
 		return scores.get(0);
 
@@ -65,7 +70,6 @@ public class ScoreDataBase {
 		return score_;
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<HighScore> SelectScores(String userId, Long appId) {
 		// TODO Auto-generated method stub
 		List<HighScore> retScores = new ArrayList<HighScore>();
@@ -78,6 +82,7 @@ public class ScoreDataBase {
 
 		query.setOrdering("score_ desc");
 		query.setRange(pageIdx * pageSize, (pageIdx + 1) * pageSize);
+		//logger.warning("Query :" + query.toString());
 		List<HighScore> scores = (List<HighScore>) query.execute();
 		for (HighScore score : scores) {
 			retScores.add(score);

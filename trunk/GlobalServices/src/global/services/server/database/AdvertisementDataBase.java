@@ -66,9 +66,9 @@ public class AdvertisementDataBase {
 		String strQuery = "select from " + Advertisement.class.getName();
 		Query query = pm_.newQuery(strQuery);
 		if ((userId != null) && !userId.isEmpty())
-			query.setFilter("userId_ == \"" + userId + "\"");
+			query.setFilter("userId_ = \"" + userId + "\"");
 		if (appId != null)
-			query.setFilter("id == " + appId);
+			query.setFilter("id = " + appId);
 		List<Advertisement> retAdv = (List<Advertisement>) query.execute();
 		return retAdv.get(0);
 
