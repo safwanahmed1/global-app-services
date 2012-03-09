@@ -40,8 +40,7 @@ public class DownloadScore extends AsyncTask<String, Integer, Boolean> {
 	protected void onPostExecute(Boolean result) {
 		// TODO Auto-generated method stub
 		super.onPostExecute(result);
-		if (dialog.isShowing())
-			dialog.dismiss();
+
 		if ((mOnTaskFinishedListener != null) && (result))
 			mOnTaskFinishedListener.onTaskFinished(scoreList);
 
@@ -51,8 +50,6 @@ public class DownloadScore extends AsyncTask<String, Integer, Boolean> {
 	protected void onPreExecute() {
 		// TODO Auto-generated method stub
 		super.onPreExecute();
-		dialog.setMessage("Downloading data...");
-		dialog.show();
 	}
 
 	@Override

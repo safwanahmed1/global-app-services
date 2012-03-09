@@ -23,19 +23,46 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.Window;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.ListView;
 
 public class ViewScoreActivity extends ListActivity {
 	private static final String SCORE_FILE = "highscore.xml";
 	private ScoreArrayAdapter adapter;
-	private List<Highscore> scoreList;
+	private List<Highscore> scoreList = new ArrayList<Highscore>();
 	private boolean refreshList = false;
 	private int pageIdx = 0;
 	private int pageSize = 20;
+	private boolean isFirstLoad = true;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		setContentView(R.layout.score_list);
+		ListView scoreListView = getListView();
+		scoreListView.setOnScrollListener(new OnScrollListener() {
+
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem,
+					int visibleItemCount, int totalItemCount) {
+
+				boolean loadMore = firstVisibleItem + visibleItemCount >= totalItemCount;
+
+				if (loadMore) {
+					DownloadScores();
+				}
+			}
+		});
+
 		DownloadScores();
 
 	}
@@ -48,27 +75,20 @@ public class ViewScoreActivity extends ListActivity {
 
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.get_score_menu, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle item selection
-		switch (item.getItemId()) {
-		case R.id.refresh_score:
-
-			DownloadScores();
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
-
+	/*
+	 * 
+	 * @Override public boolean onCreateOptionsMenu(Menu menu) { MenuInflater
+	 * inflater = getMenuInflater(); inflater.inflate(R.menu.get_score_menu,
+	 * menu); return true; }
+	 * 
+	 * @Override public boolean onOptionsItemSelected(MenuItem item) { // Handle
+	 * item selection switch (item.getItemId()) { case R.id.refresh_score:
+	 * 
+	 * DownloadScores(); return true; default: return
+	 * super.onOptionsItemSelected(item); } }
+	 */
 	private void DownloadScores() {
+		getParent().setProgressBarIndeterminateVisibility(true);
 		DownloadScore downScore = new DownloadScore(this);
 		downScore.setOnTaskFinishedListener(mOnTaskFinishedListener);
 		downScore.execute(getResources().getString(R.string.userid),
@@ -85,10 +105,18 @@ public class ViewScoreActivity extends ListActivity {
 
 			scoreList.addAll((List<Highscore>) result);
 			if (scoreList != null) {
-				adapter = new ScoreArrayAdapter(getApplicationContext(),
-						R.layout.score_list, (ArrayList<Highscore>) scoreList);
+				if (isFirstLoad) {
+					adapter = new ScoreArrayAdapter(getApplicationContext(),
+							R.layout.score_list,
+							(ArrayList<Highscore>) scoreList);
 
-				setListAdapter(adapter);
+					setListAdapter(adapter);
+					isFirstLoad = false;
+				} else {
+					adapter.notifyDataSetChanged();
+				}
+				getParent().setProgressBarIndeterminateVisibility(false);
+				pageIdx++;
 
 			}
 
