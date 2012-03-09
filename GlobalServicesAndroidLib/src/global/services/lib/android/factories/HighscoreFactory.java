@@ -4,6 +4,7 @@ import global.services.lib.android.httpclient.RequestMethod;
 import global.services.lib.android.httpclient.RestClient;
 import global.services.lib.android.objects.Highscore;
 
+import java.awt.JobAttributes;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -89,9 +90,17 @@ public class HighscoreFactory {
 			JSONArray scoresList = new JSONArray(strResponse);
 			for (int i = 0; i < scoresList.length(); i++) {
 				JSONObject jsonScore = scoresList.getJSONObject(i);
-				Gson scoreParse = new Gson();
-				Highscore scoreObj = scoreParse.fromJson(jsonScore.toString(),
-						Highscore.class);
+				Highscore scoreObj = new Highscore(
+						jsonScore.getString("userid"),
+						jsonScore.getLong("appid"));
+				scoreObj.setId(jsonScore.getLong("id"));
+				scoreObj.setSubBoard(jsonScore.getString("subboard"));
+				scoreObj.setPlayer(jsonScore.getString("player"));
+				scoreObj.setHighScore(jsonScore.getInt("highscore"));
+				scoreObj.setDuring(jsonScore.getLong("during"));
+				scoreObj.setComment(jsonScore.getString("comment"));
+				scoreObj.setDate(jsonScore.getLong("date"));
+				scoreObj.setLocation(jsonScore.getString("location"));
 				scoreList.add(scoreObj);
 			}
 
