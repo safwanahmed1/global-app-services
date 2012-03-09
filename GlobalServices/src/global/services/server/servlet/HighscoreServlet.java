@@ -96,7 +96,7 @@ public class HighscoreServlet extends HttpServlet {
 				// resp.setLocale(arg0)
 				stream = resp.getOutputStream();
 
-				stream.print("{\"scorelist\":[");
+				stream.print("[");
 				boolean isFirst = true;
 				for (HighScore score : highscore) {
 					if (isFirst) {
@@ -138,7 +138,7 @@ public class HighscoreServlet extends HttpServlet {
 					 */
 					
 				}
-				stream.print("]}");
+				stream.print("]");
 
 			}
 		} finally {
